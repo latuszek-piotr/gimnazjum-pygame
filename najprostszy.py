@@ -6,6 +6,8 @@ from pygame.locals import QUIT
 pygame.init()
 # utworzenie okna
 window = pygame.display.set_mode((999, 660))
+# ustawiamy tytul okna
+pygame.display.set_caption('najprostszy')
 
 
 def input(events):
