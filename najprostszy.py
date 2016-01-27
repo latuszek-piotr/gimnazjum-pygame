@@ -5,15 +5,19 @@ from pygame.locals import QUIT
 
 pygame.init()
 # utworzenie okna
-window = pygame.display.set_mode((999, 660))
+window = pygame.display.set_mode((1500, 660))
 # ustawiamy tytul okna
 pygame.display.set_caption('najprostszy')
-# ladujemy plik graficzny
-moja_grafika = pygame.image.load('sun.jpg')
+
 # pobieramy informacje o ekranie - tle
 screen = pygame.display.get_surface()
+
+# ladujemy pliki graficzne
+grafika_slonca = pygame.image.load('sun.jpg')
+grafika_jablko = pygame.image.load('jablko.jpg')
 # przypisanie grafiki do okreslonego miejsca ekranu
-screen.blit(moja_grafika, (0,0))
+screen.blit(grafika_slonca, (0,0))
+screen.blit(grafika_jablko, (1000,0))
 # pokaz grafike, odswiez zawartosc ekranu
 pygame.display.flip()
 
