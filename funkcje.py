@@ -1,20 +1,17 @@
 # obliczam powierzchnie 3 okien
 
-szerokosc = 1.2 # [m]
-wysokosc = 1.2
-powierzchnia = szerokosc * wysokosc
+def oblicz_powierznie_prostokata(szerokosc, wysokosc):
+    powierzchnia = szerokosc * wysokosc
+    return powierzchnia
+
+
+powierzchnia = oblicz_powierznie_prostokata(1.2, 1.2)
 print powierzchnia
 
-szerokosc2 = 1.1 # [m]
-wysokosc2 = 1.3
-powierzchnia2 = szerokosc2 * wysokosc2
-
+powierzchnia2 = oblicz_powierznie_prostokata(1.1, 1.3)
 print powierzchnia2
 
-szerokosc3 = 1.5 # [m]
-wysokosc3 = 1.3
-powierzchnia3 = szerokosc3 * wysokosc3
-
+powierzchnia3 = oblicz_powierznie_prostokata(1.5, 1.3)
 print powierzchnia3
 
 suma_powierzni = powierzchnia + powierzchnia2 + powierzchnia3
