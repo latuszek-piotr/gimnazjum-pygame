@@ -1,0 +1,15 @@
+Wiktor:
+animacja ludzika
+stwórz plik "ludzik.py"
+
+Piotr:
+animacja łuku
+stwórz plik "luk.py"
+
+Dawid:
+animacja lotu kuli po łuku
+stwórz plik "kula.py"
+
+Dominik:
+animacja rozwalającego się muru
+stwórz plik "mur.py"
