@@ -17,7 +17,7 @@ grafika_slonca = pygame.image.load('sun.jpg')
 grafika_jablko = pygame.image.load('jablko.jpg')
 # przypisanie grafiki do okreslonego miejsca ekranu
 screen.blit(grafika_slonca, (0,0))
-screen.blit(grafika_jablko, (1000,0))
+screen.blit(grafika_jablko, (1000,100))
 # pokaz grafike, odswiez zawartosc ekranu
 pygame.display.flip()
 
