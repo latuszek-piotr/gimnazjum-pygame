@@ -1,13 +1,8 @@
 import pygame
 import sys
 from pygame.locals import QUIT
-import os
 import time
-cwd = os.getcwd()
-print cwd
-print "Current directory = %s" % cwd
-print "Directory contains: %s" % os.listdir(cwd)
-print "'grafika' subdirectory contains: %s" % os.listdir(cwd+'/grafika')
+
 # utworzenie okna
 window = pygame.display.set_mode((1000, 660))
 # ustawiamy tytul okna
