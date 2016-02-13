@@ -14,10 +14,10 @@ window = pygame.display.set_mode((1000, 660))
 pygame.display.set_caption('animacja ludzika')
 # pobieramy informacje o ekranie - tle
 screen = pygame.display.get_surface()
-
 pygame.display.flip()
-for numer_ludzika in [1, 2, 3, 4, 5]:
-    nazwa_pliku = 'grafika/ludzik%s.png' % numer_ludzika
+
+for numer_ludzika in range(5):
+    nazwa_pliku = 'grafika/ludzik%s.png' % (numer_ludzika+1)
     grafika_ludzik = pygame.image.load(nazwa_pliku)
     screen.blit(grafika_ludzik, (0,0))
     pygame.display.flip()
