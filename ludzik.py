@@ -15,8 +15,8 @@ pygame.display.set_caption('animacja ludzika')
 screen = pygame.display.get_surface()
 
 pygame.display.flip()
-
-for nazwa_pliku in ['grafika/ludzik1.png', 'grafika/ludzik2.png', 'grafika/ludzik3.png', 'grafika/ludzik4.png','grafika/ludzik5.png']:
+for numer_ludzika in [1, 2, 3, 4, 5]:
+    nazwa_pliku = 'grafika/ludzik%s.png' % numer_ludzika
     grafika_ludzik = pygame.image.load(nazwa_pliku)
     screen.blit(grafika_ludzik, (0,0))
     pygame.display.flip()
