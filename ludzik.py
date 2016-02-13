@@ -2,6 +2,7 @@ import pygame
 import sys
 from pygame.locals import QUIT
 import os
+import time
 cwd = os.getcwd()
 print cwd
 print "Current directory = %s" % cwd
@@ -20,6 +21,7 @@ for numer_ludzika in [1, 2, 3, 4, 5]:
     grafika_ludzik = pygame.image.load(nazwa_pliku)
     screen.blit(grafika_ludzik, (0,0))
     pygame.display.flip()
+    time.sleep(0.5)
 
 def input(events):
     for event in events:
