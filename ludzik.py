@@ -16,22 +16,10 @@ screen = pygame.display.get_surface()
 
 pygame.display.flip()
 
-
-grafika_ludzik = pygame.image.load('grafika/ludzik1.png')
-screen.blit(grafika_ludzik, (0,0))
-pygame.display.flip()
-grafika_ludzik = pygame.image.load('grafika/ludzik2.png')
-screen.blit(grafika_ludzik, (0,0))
-pygame.display.flip()
-grafika_ludzik = pygame.image.load('grafika/ludzik3.png')
-screen.blit(grafika_ludzik, (0,0))
-pygame.display.flip()
-grafika_ludzik = pygame.image.load('grafika/ludzik4.png')
-screen.blit(grafika_ludzik, (0,0))
-pygame.display.flip()
-grafika_ludzik = pygame.image.load('grafika/ludzik5.png')
-screen.blit(grafika_ludzik, (0,0))
-pygame.display.flip()
+for nazwa_pliku in ['grafika/ludzik1.png', 'grafika/ludzik2.png', 'grafika/ludzik3.png', 'grafika/ludzik4.png','grafika/ludzik5.png']:
+    grafika_ludzik = pygame.image.load(nazwa_pliku)
+    screen.blit(grafika_ludzik, (0,0))
+    pygame.display.flip()
 
 def input(events):
     for event in events:
