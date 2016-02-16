@@ -9,7 +9,7 @@ print "Current directory = %s" % cwd
 print "Directory contains: %s" % os.listdir(cwd)
 print "'grafika' subdirectory contains: %s" % os.listdir(cwd+'/grafika')
 # utworzenie okna
-window = pygame.display.set_mode((1000, 660))
+window = pygame.display.set_mode((1100, 1600))
 # ustawiamy tytul okna
 pygame.display.set_caption('animacja ludzika')
 # pobieramy informacje o ekranie - tle
@@ -21,7 +21,7 @@ for numer_ludzika in range(7):
     grafika_ludzik = pygame.image.load(nazwa_pliku)
     screen.blit(grafika_ludzik, (0,0))
     pygame.display.flip()
-    time.sleep(0.25)
+    time.sleep(0.76)
 
 def input(events):
     for event in events:
