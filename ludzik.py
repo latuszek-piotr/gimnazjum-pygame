@@ -27,7 +27,7 @@ for powturzenia in range(50):
 def input(events):
     for event in events:
         if event.type == QUIT:
-            print "harakiri"
+            print "harakiiiiiiri"
             sys.exit(0)
 
 while True:
