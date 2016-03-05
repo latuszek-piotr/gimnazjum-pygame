@@ -11,13 +11,13 @@ pygame.display.set_caption('animacja luku')
 screen = pygame.display.get_surface()
 pygame.display.flip()
 
-for (x, y) in [(0, 0), (15, 15), (30, 30), (45, 45), (60, 60)]:
-    for numer_luku in range(5):
-        nazwa_pliku = 'grafika/luk_%s.jpg' % (numer_luku+1)
-        grafika_luku = pygame.image.load(nazwa_pliku)
-        screen.blit(grafika_luku, (x, y))
-        pygame.display.flip()
-        time.sleep(0.1)
+# for (x, y) in [(0, 0), (15, 15), (30, 30), (45, 45), (60, 60)]:
+#     for numer_luku in range(5):
+#         nazwa_pliku = 'grafika/luk_%s.jpg' % (numer_luku+1)
+#         grafika_luku = pygame.image.load(nazwa_pliku)
+#         screen.blit(grafika_luku, (x, y))
+#         pygame.display.flip()
+#         time.sleep(0.1)
 
 def input(events):
     for event in events:
@@ -27,3 +27,9 @@ def input(events):
 
 while True:
     input(pygame.event.get())
+    nazwa_pliku = 'grafika/fugu.png'
+    grafika_ryby = pygame.image.load(nazwa_pliku)
+    x = 10
+    y = 10
+    screen.blit(grafika_ryby, (x, y))
+    pygame.display.flip()
