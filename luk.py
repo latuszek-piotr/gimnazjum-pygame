@@ -28,10 +28,13 @@ def input(events):
 black = (0,0,0)
 nazwa_pliku = 'grafika/fugu.png'
 grafika_ryby = pygame.image.load(nazwa_pliku).convert_alpha()
-
+szerokosc_ryby = grafika_ryby.get_width()
+wysokosc_ryby = grafika_ryby.get_height()
+pygame.mixer.init()
+pygame.mixer.music.load()
 while True:
     input(pygame.event.get())
     screen.fill((black))
     x, y = pygame.mouse.get_pos()
-    screen.blit(grafika_ryby, (x, y))
+    screen.blit(grafika_ryby, (x-szerokosc_ryby/2, y-wysokosc_ryby/2))
     pygame.display.flip()

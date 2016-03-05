@@ -17,12 +17,12 @@ screen = pygame.display.get_surface()
 pygame.display.flip()
 
 for powturzenia in range(50):
- for numer_ludzika in range(7):
-    nazwa_pliku = 'grafika/ludzik%s.png' % (numer_ludzika+1)
-    grafika_ludzik = pygame.image.load(nazwa_pliku)
-    screen.blit(grafika_ludzik, (0,0))
-    pygame.display.flip()
-    time.sleep(0.76)
+    for numer_ludzika in range(7):
+        nazwa_pliku = 'grafika/ludzik%s.png' % (numer_ludzika+1)
+        grafika_ludzik = pygame.image.load(nazwa_pliku)
+        screen.blit(grafika_ludzik, (0,0))
+        pygame.display.flip()
+        time.sleep(0.76)
 
 def input(events):
     for event in events:
@@ -35,7 +35,7 @@ while True:
     import numpy
 
     def sound_data(frequency, length, amplitude=1, sample_rate=44100):
-     time_points = numpy.linspace(0, length, length*sample_rate)    # lista kolejnych punktow czasowych
+        time_points = numpy.linspace(0, length, length*sample_rate)    # lista kolejnych punktow czasowych
 
     data = numpy.sin(2*numpy.pi*frequency*time_points)             # lista wartosci sin dla kolejnych czasow
     data = amplitude*data
