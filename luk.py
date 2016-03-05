@@ -25,11 +25,13 @@ def input(events):
             print "harakiri"
             sys.exit(0)
 
+black = (0,0,0)
+nazwa_pliku = 'grafika/fugu.png'
+grafika_ryby = pygame.image.load(nazwa_pliku).convert_alpha()
+
 while True:
     input(pygame.event.get())
-    nazwa_pliku = 'grafika/fugu.png'
-    grafika_ryby = pygame.image.load(nazwa_pliku)
-    x = 10
-    y = 10
+    screen.fill((black))
+    x, y = pygame.mouse.get_pos()
     screen.blit(grafika_ryby, (x, y))
     pygame.display.flip()
