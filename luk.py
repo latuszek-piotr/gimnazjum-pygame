@@ -25,7 +25,7 @@ def input(events):
             print "harakiri"
             sys.exit(0)
 
-black = (0,0,0)
+blue = (0,0,255)
 red = (255,0,0)
 nazwa_pliku = 'grafika/fugu.png'
 grafika_ryby = pygame.image.load(nazwa_pliku).convert_alpha()
@@ -39,7 +39,7 @@ sound = pygame.mixer.Sound('dzwiek/jesterdie_03.wav')
 sound.play()
 while True:
     input(pygame.event.get())
-    screen.fill((black))
+    screen.fill((blue))
     x, y = pygame.mouse.get_pos()
     pygame.draw.rect(screen,red , (0,0,500,660))
     screen.blit(grafika_ryby, (x-szerokosc_ryby/2, y-wysokosc_ryby/2))
