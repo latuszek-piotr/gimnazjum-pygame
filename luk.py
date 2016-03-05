@@ -26,6 +26,7 @@ def input(events):
             sys.exit(0)
 
 black = (0,0,0)
+red = (255,0,0)
 nazwa_pliku = 'grafika/fugu.png'
 grafika_ryby = pygame.image.load(nazwa_pliku).convert_alpha()
 szerokosc_ryby = grafika_ryby.get_width()
@@ -40,6 +41,7 @@ while True:
     input(pygame.event.get())
     screen.fill((black))
     x, y = pygame.mouse.get_pos()
+    pygame.draw.rect(screen,red , (0,0,500,660))
     screen.blit(grafika_ryby, (x-szerokosc_ryby/2, y-wysokosc_ryby/2))
     pygame.display.flip()
     if x < 500 :
