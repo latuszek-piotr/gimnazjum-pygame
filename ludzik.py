@@ -32,12 +32,3 @@ def input(events):
 
 while True:
     input(pygame.event.get())
-    import numpy
-
-    def sound_data(frequency, length, amplitude=1, sample_rate=44100):
-        time_points = numpy.linspace(0, length, length*sample_rate)    # lista kolejnych punktow czasowych
-
-    data = numpy.sin(2*numpy.pi*frequency*time_points)             # lista wartosci sin dla kolejnych czasow
-    data = amplitude*data
-
-    'return'(data)

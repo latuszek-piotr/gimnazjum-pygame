@@ -33,6 +33,10 @@ def input(events):
             pygame.display.flip()
             if x < 500 :
                 sound.play()
+            else:
+                screen.blit(grafika_ogien, (500,330))
+                pygame.display.flip()
+
 
 blue = (0,0,255)
 red = (255,0,0)
@@ -42,7 +46,7 @@ szerokosc_ryby = grafika_ryby.get_width()
 wysokosc_ryby = grafika_ryby.get_height()
 nazwa_pliku = 'grafika/woda.jpg'
 grafika_wody = pygame.image.load(nazwa_pliku)
-
+grafika_ogien = pygame.image.load('grafika/ogien.jpg')
 dz = open('dzwiek/jesterdie_03.wav')
 
 pygame.mixer.init()
