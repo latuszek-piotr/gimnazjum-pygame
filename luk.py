@@ -31,6 +31,10 @@ def input(events):
             pygame.draw.rect(screen, red, (0,0,500,660))
             screen.blit(grafika_ryby, (x-szerokosc_ryby/2, y-wysokosc_ryby/2))
             pygame.display.flip()
+                #if x < 530 :
+                #y < 630
+
+                #sounds.play('dzwiek/burn1.wav')
             if x < 500 :
                 sound.play()
             else:
@@ -48,11 +52,10 @@ nazwa_pliku = 'grafika/woda.jpg'
 grafika_wody = pygame.image.load(nazwa_pliku)
 grafika_ogien = pygame.image.load('grafika/ogien.jpg')
 dz = open('dzwiek/jesterdie_03.wav')
+#dz = open('dzwiek/burn1.wav')
 
 pygame.mixer.init()
-sound = pygame.mixer.Sound('dzwiek/jesterdie_03.wav')
-
+sounds = pygame.mixer.Sound('dzwiek/jesterdie_03.wav')
+sound = pygame.mixer.Sound('dzwiek/burn1.wav')
 while True:
-    input(pygame.event.get())
-
-
+     input(pygame.event.get())
