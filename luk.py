@@ -31,10 +31,6 @@ def input(events):
             pygame.draw.rect(screen, red, (0,0,500,660))
             screen.blit(grafika_ryby, (x-szerokosc_ryby/2, y-wysokosc_ryby/2))
             pygame.display.flip()
-                #if x < 530 :
-                #y < 630
-
-                #sounds.play('dzwiek/burn1.wav')
             if x < 500 :
                 sound.play()
             else:
@@ -44,7 +40,7 @@ def input(events):
 
 blue = (0,0,255)
 red = (255,0,0)
-nazwa_pliku = 'grafika/fugu.png'
+nazwa_pliku = 'grafika/piotrek fugu.png'
 grafika_ryby = pygame.image.load(nazwa_pliku).convert_alpha()
 szerokosc_ryby = grafika_ryby.get_width()
 wysokosc_ryby = grafika_ryby.get_height()
@@ -55,7 +51,7 @@ dz = open('dzwiek/jesterdie_03.wav')
 #dz = open('dzwiek/burn1.wav')
 
 pygame.mixer.init()
-sounds = pygame.mixer.Sound('dzwiek/jesterdie_03.wav')
-sound = pygame.mixer.Sound('dzwiek/burn1.wav')
+sound = pygame.mixer.Sound('dzwiek/jesterdie_03.wav')
+#sound = pygame.mixer.Sound('dzwiek/burn1.wav')
 while True:
      input(pygame.event.get())
