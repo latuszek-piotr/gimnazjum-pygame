@@ -38,10 +38,8 @@ def input(events):
                 pygame.display.flip()
 
 
-
 blue = (0,0,255)
 red = (255,0,0)
-
 nazwa_pliku = 'grafika/fugu.png'
 grafika_ryby = pygame.image.load(nazwa_pliku).convert_alpha()
 szerokosc_ryby = grafika_ryby.get_width()
@@ -50,9 +48,11 @@ nazwa_pliku = 'grafika/woda.jpg'
 grafika_wody = pygame.image.load(nazwa_pliku)
 grafika_ogien = pygame.image.load('grafika/ogien.jpg')
 dz = open('dzwiek/jesterdie_03.wav')
-#dz = open('dzwiek/burn1.wav')
+
 pygame.mixer.init()
 sound = pygame.mixer.Sound('dzwiek/jesterdie_03.wav')
-#sound = pygame.mixer.Sound('dzwiek/burn1.wav')
+
 while True:
-     input(pygame.event.get())
+    input(pygame.event.get())
+
+
