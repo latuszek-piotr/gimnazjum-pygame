@@ -2,6 +2,23 @@ import pygame
 import sys
 from pygame.locals import QUIT
 import time
+def pobierz_wspolrzedne(event, x, y):
+    if event.type == pygame.KEYDOWN:
+        delta_x = 0
+        delta_y = 0
+        if event.key == pygame.K_LEFT:
+            delta_x = -20
+        if event.key == pygame.K_RIGHT:
+            delta_x = 20
+        if event.key == pygame.K_UP:
+            delta_y = -20
+        if event.key == pygame.K_DOWN:
+            delta_y = 20
+        x = x + delta_x
+        y = y + delta_y
+    elif event.type == pygame.MOUSEMOTION:
+        x, y = pygame.mouse.get_pos()
+    return x, y
 
 nazwa_pliku = 'grafika/fugu.png'
 
@@ -35,18 +52,25 @@ pygame.display.flip()
 #         pygame.display.flip()
 #         time.sleep(0.1)
 
+ostatnio_x = 0
+ostatnio_y = 0
+
 def input(events):
+    global ostatnio_x
+    global ostatnio_y
     for event in events:
         if event.type == QUIT:
             print "harakiri"
             sys.exit(0)
         else:
             screen.fill((blue))
-            x, y = pygame.mouse.get_pos()
+            #x, y = pygame.mouse.get_pos()
+            x, y = pobierz_wspolrzedne(event, ostatnio_x, ostatnio_y)
             screen.blit(grafika_wody, (0, 0))
             pygame.draw.rect(screen, red, (0,0,500,660))
             #screen.blit(grafika_ryby, (x-szerokosc_ryby/2, y-wysokosc_ryby/2))
             draw_figure(event, screen, x, y)
+            ostatnio_x, ostatnio_y = x, y
 
 
 
@@ -72,7 +96,7 @@ sound = pygame.mixer.Sound('dzwiek/jesterdie_03.wav')
 
 while True:
     input(pygame.event.get())
-
+x,y = pygame.mouse.get_pos()
 
 
 
