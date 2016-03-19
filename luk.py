@@ -3,6 +3,22 @@ import sys
 from pygame.locals import QUIT
 import time
 
+nazwa_pliku = 'grafika/fugu.png'
+
+def draw_figure(event, screen, x, y):
+    global nazwa_pliku
+    if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_f:
+            nazwa_pliku = 'grafika/fugu.png'
+
+        elif event.key == pygame.K_l:
+            nazwa_pliku = 'grafika/ludzik1.png'
+
+    grafika = pygame.image.load(nazwa_pliku).convert_alpha()
+    szerokosc = grafika.get_width()
+    wysokosc = grafika.get_height()
+    screen.blit(grafika, (x-szerokosc/2, y-wysokosc/2))
+
 # utworzenie okna
 window = pygame.display.set_mode((1000, 660))
 # ustawiamy tytul okna
@@ -29,7 +45,11 @@ def input(events):
             x, y = pygame.mouse.get_pos()
             screen.blit(grafika_wody, (0, 0))
             pygame.draw.rect(screen, red, (0,0,500,660))
-            screen.blit(grafika_ryby, (x-szerokosc_ryby/2, y-wysokosc_ryby/2))
+            #screen.blit(grafika_ryby, (x-szerokosc_ryby/2, y-wysokosc_ryby/2))
+            draw_figure(event, screen, x, y)
+
+
+
             pygame.display.flip()
             if x < 500 :
                 sound.play()
@@ -38,14 +58,12 @@ def input(events):
                 pygame.display.flip()
 
 
+
+
 blue = (0,0,255)
 red = (255,0,0)
-nazwa_pliku = 'grafika/fugu.png'
-grafika_ryby = pygame.image.load(nazwa_pliku).convert_alpha()
-szerokosc_ryby = grafika_ryby.get_width()
-wysokosc_ryby = grafika_ryby.get_height()
-nazwa_pliku = 'grafika/woda.jpg'
-grafika_wody = pygame.image.load(nazwa_pliku)
+
+grafika_wody = pygame.image.load('grafika/woda.jpg')
 grafika_ogien = pygame.image.load('grafika/ogien.jpg')
 dz = open('dzwiek/jesterdie_03.wav')
 
@@ -54,5 +72,9 @@ sound = pygame.mixer.Sound('dzwiek/jesterdie_03.wav')
 
 while True:
     input(pygame.event.get())
+
+
+
+
 
 
