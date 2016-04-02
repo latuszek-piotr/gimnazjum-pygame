@@ -25,6 +25,8 @@ nazwa_pliku = 'grafika/fugu.png'
 def draw_figure(event, screen, x, y):
     global nazwa_pliku
     if event.type == pygame.KEYDOWN:
+        if event.key == pygame.K_p:
+            nazwa_pliku = 'grafika/piotrek fugu'
         if event.key == pygame.K_f:
             nazwa_pliku = 'grafika/fugu.png'
 
