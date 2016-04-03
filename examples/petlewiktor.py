@@ -11,3 +11,4 @@ for zwierze in zwierzenta:
     elif zwierze in zwierzenta_miesozerne:
         okrzyk = 'zjem ich'
     print zwierze + " " + okrzyk
+
