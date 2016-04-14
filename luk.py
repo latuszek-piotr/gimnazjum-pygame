@@ -53,7 +53,6 @@ pygame.display.flip()
 #         screen.blit(grafika_luku, (x, y))
 #         pygame.display.flip()
 #         time.sleep(0.1)
-
 ostatnio_x = 0
 ostatnio_y = 0
 
@@ -64,6 +63,9 @@ def input(events):
         if event.type == QUIT:
             print "harakiri"
             sys.exit(0)
+
+
+
         else:
             screen.fill((blue))
             #x, y = pygame.mouse.get_pos()
@@ -82,8 +84,6 @@ def input(events):
             else:
                 screen.blit(grafika_ogien, (500,330))
                 pygame.display.flip()
-
-
 
 
 blue = (0,0,255)
