@@ -15,5 +15,13 @@ grafika_lanc_menu = pygame.image.load('grafika/lanckorona_menu_glowne.jpg')
 screen.blit(grafika_lanc_menu, (50,50))
 # pokaz grafike, odswiez zawartosc ekranu
 pygame.display.flip()
+
+def input(events):
+    for event in events:
+        if event.type == QUIT:
+            print event
+            sys.exit(0)
+        else:
+            print event
 while True:
     input(pygame.event.get())
