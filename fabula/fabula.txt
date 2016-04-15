@@ -55,4 +55,5 @@ f3 pogoda fabula jocker : deszcz osmiornic deszcz bieszaranczy pani kowalska obr
 f4wirus komputerowy wirus wylacza po koleji koniec wylacznie pradu przgrywa tylko dominik i wiktor w kuputerze
 f5 zmnieszona i skradziona szkola pani kowalska
  alchemik bursztyn uratowal bursztyn
+ f6 biblioteka slugie pulki dzieci zgubily sie w regalach nic arriany
 
