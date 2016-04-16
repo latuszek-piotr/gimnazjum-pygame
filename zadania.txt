@@ -19,3 +19,6 @@ dla wszystkich:
   ryba ma krzyczec (dzwiek a łała) gdy wejdzie na ogien
   ryba ma wydac inny dzwiek gdy nacisniemy lewy przycisk myszy
   ryba ma wydac inny dzwiek gdy nacisniemy prawy przycisk myszy
+
+  Od wiktora :
+  http://pyopengl.sourceforge.net/

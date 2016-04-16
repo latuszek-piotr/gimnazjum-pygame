@@ -52,7 +52,7 @@ misje
 f1 kuchnia
 f2 oblezenie kazdy walczy przgrana
 f3 pogoda fabula jocker : deszcz osmiornic deszcz bieszaranczy pani kowalska obrona kwiatkow plaga nudy ! nauczyciele  nudni epidemia
-f4wirus komputerowy wirus wylacza po koleji koniec wylacznie pradu przgrywa tylko dominik i wiktor w kuputerze
+f4 wirus komputerowy wirus wylacza po koleji koniec wylacznie pradu przgrywa tylko dominik i wiktor w kuputerze
 f5 zmnieszona i skradziona szkola pani kowalska
  alchemik bursztyn uratowal bursztyn
  f6 biblioteka slugie pulki dzieci zgubily sie w regalach nic arriany
