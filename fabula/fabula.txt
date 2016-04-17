@@ -37,7 +37,13 @@ Burza mózgu:
 17.spagetti powieksz uczen dawal eksperymenty genetyczne
 18. Oblezenie szkoly my bronimy zawsze przegramy
 19.Przegrana misja ogluszeni nowy poziom
-20.
+20.     Misja w piekarnii zdobycie Pełnokaratowego zlotego chlebka dla pani kucharki
+21.W piekrani jakies magazyn i strych to jakis dungeon
+22.
+Trudniejsze zagadnienia (od wiktora)
+Jakieś minigry?
+gra 3d lub 2d ?
+Zrobienie wlasnego silnika?
 
 
 
@@ -51,9 +57,15 @@ Termity i dziniiki zniszczone
 misje
 f1 kuchnia
 f2 oblezenie kazdy walczy przgrana
-f3 pogoda fabula jocker : deszcz osmiornic deszcz bieszaranczy pani kowalska obrona kwiatkow plaga nudy ! nauczyciele  nudni epidemia
+f3 pogoda fabula jocker : deszcz osmiornic deszcz szaranczy pani kowalska obrona kwiatkow plaga nudy ! nauczyciele  nudni epidemia
 f4 wirus komputerowy wirus wylacza po koleji koniec wylacznie pradu przgrywa tylko dominik i wiktor w kuputerze
 f5 zmnieszona i skradziona szkola pani kowalska
  alchemik bursztyn uratowal bursztyn
  f6 biblioteka slugie pulki dzieci zgubily sie w regalach nic arriany
 
+ Poczatek gry
+0.Pani kowalska zleca piotrkowi rozejrzec sie po szkole i znalesc kolegow (nasza 4)
+1.Zbudowanie druzyny (zaczniemy od piotrka moze) kibel dominik
+2Pani kowalska zleca nam poszukanie kluczy do tajemnych portali
+ 3. w biurkach we wszystkich klasach znajduje sie po 1 kluczu po znalezieniu kluczy gdy wychodzimy z z ostatniej klasy rozpoczyna sie walka z Klucznikiem Szkolnego zła!!! po wygranej walce szukamy portali poznajemy mape i mechanike gry   te klucze beda potrzebne nam by otworzyc tajemne portale (drewniane kibelki)
+4.Pozniej moze byc misja HERBATA!!!! i misja Ucieczka przed kucharką!!!
