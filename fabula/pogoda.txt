@@ -1,31 +1,22 @@
 Pogoda
 
-1.pogoda fabula jocker : deszcz szaranczy .pani kowalska obrona kwiatkow.
+Zadania:
+1) uzupełnić fabułę: dalsze losy ucieczki i jak  pokonać szarańcze
+2) pomysły na grafikę
+3) pomysły na filmiki
+4) pomysły na nazwy zmiennych, np. dowodca_szaranczy
+
+Misja: pogoda fabula jocker : deszcz szaranczy .pani kowalska obrona kwiatkow.
 
 
-2.Zbudowanie druzyny (zaczniemy od piotrka moze) wiktor sala informatyczna dominik kibel dawid sala wf
-6.Poszukiwanie zaginionej herbatki(misja z herbatka)
-7.Roznorakie questy i poziomy
-8.miejsca w lanckoronie z fabula
-12.kibel drewniany kurek do latuszkow portal
-13.sklepik szkolny
-15.Crafting
-18. Oblezenie szkoly my bronimy szarancza szyba i ich okrzyk jejejeejje
-22.szkola podziemia zapada na dol
-25.przyjazd strazakow
-
-
-
-
-Zbieranie druzyny obrazki z ich życia:
-
-
-fabula:
+========= fabula ==============
+--------- Filmik "intro" -------
 1.Telewizja prognoza pogody
 2.Ciemnosc krzyki prezenterki zmiana prezentera
 3.Pogoda na świecie (kontynenty)
 4.Intynesywne opady szarańczy 7 w skali buforta 200kg/s
-5.Litery na tle przedstawienie postaci.
+5.Litery na tle przedstawienie postaci ( obrazki z ich życia)
+---------- poczatek gry ---------
 6.Telefon od pani kowalskiej (ratujcie rośliny) podzial ekranu
 7.przemiana w bohaterow
 7.1 przemiana na sali
@@ -35,12 +26,25 @@ fabula:
 7.5 upload progamowania
 8.dobijaja sie do szyby inwazja pani kowalska kwiatki na taczke ewakuacja
 9.Pani kowalska 1 linia obrony
-10Przejmowanie monitoringu wiktor
-11. Zaczarowany olowek piotrek
-12. dawid rambo
-13.Dominik Chemia ataki mikstury i mutacje
-14 Pomylka dominika powiekszacz zamiast pomniejszacza
+Zdolności superbohaterów
+    10 Przejmowanie monitoringu wiktor (przez monitoring obraca kamerki i widzi co sie dzieje w sali)
+    11. Zaczarowany olowek piotrek
+    12. dawid rambo
+    13.Dominik Chemia ataki mikstury i mutacje
+        14 Pomylka dominika powiekszacz zamiast pomniejszacza
 15.wycowyfanie sie do sal
-16.ucieczka
+16.ucieczka do różnych miejsc w Lanckoronie
 
+
+
+----------------- inne elementy do wykorzystania ---------------------------
+6.Poszukiwanie zaginionej herbatki(misja z herbatka)
+7.Roznorakie questy i poziomy
+8.miejsca w lanckoronie z fabula
+12.kibel drewniany kurek do latuszkow portal
+13.sklepik szkolny
+15.Crafting
+18. Oblezenie szkoly my bronimy szarancza szyba i ich okrzyk jejejeejje
+22.szkola podziemia zapada na dol
+25.przyjazd strazakow
 
