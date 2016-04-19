@@ -73,7 +73,7 @@ f4 zmnieszona i skradziona szkola pani kowalska alchemik uratowal bursztyn.
  f5 biblioteka polki dzieci zgubily sie w regalach nic arrianny
  f6 Fabula piaskowa podziemny swiat strazacy zapadajace sciany dzieci z lopatkami na potwora piaskowego
 
- Poczatek gry
+ Poczatek gry (nie)
 0.Pani kowalska zleca piotrkowi rozejrzec sie po szkole i znalesc kolegow (nasza 4)
 1.Zbudowanie druzyny (zaczniemy od piotrka moze) kibel dominik
 2Pani kowalska zleca nam poszukanie kluczy do tajemnych portali
