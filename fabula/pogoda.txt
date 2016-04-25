@@ -14,7 +14,7 @@ Misja: pogoda fabula jocker : deszcz szaranczy .pani kowalska obrona kwiatkow.
 1.Telewizja prognoza pogody
 2.Ciemnosc krzyki prezenterki zmiana prezentera
 3.Pogoda na świecie (kontynenty)
-4.Intynesywne opady szarańczy 7 w skali buforta 200kg/s
+4.bIntynesywne opady szarańczy 7 w skali buforta 200kg/s
 5.Litery na tle przedstawienie postaci ( obrazki z ich życia)
 ---------- poczatek gry ---------
 6.Telefon od pani kowalskiej (ratujcie rośliny) podzial ekranu
