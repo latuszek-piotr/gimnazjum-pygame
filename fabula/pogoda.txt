@@ -13,7 +13,7 @@ Misja: pogoda fabula jocker : deszcz szaranczy .pani kowalska obrona kwiatkow.
 --------- Filmik "intro" -------
 1.Telewizja prognoza pogody
 1.1 obrobić filmik pogodynki
-1.2 wyciac fragment
+1.2 wyciac fragment wiktor
 1.3 Ciemnosc krzyki prezenterki
 1.4 podmiana twarzy na anonymusa
 1.5 tekst progozy pogody przez anonymusa
@@ -30,7 +30,7 @@ Misja: pogoda fabula jocker : deszcz szaranczy .pani kowalska obrona kwiatkow.
 5.1 zdjecia waszych twarzy - wszyscy
 5.2 program do patyczakow - http://pivotanimator.net/Download.php
 5.3 treść napisów czołówki
-5.4 Tutuł gry + producent
+5.4 Tutuł gry ('Heroes of PyGame') + producent = pividoda animations presents ...
 
 ---------- poczatek gry ---------
 6.Telefon od pani kowalskiej (ratujcie rośliny) podzial ekranu

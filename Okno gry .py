@@ -6,7 +6,7 @@ pygame.init()
 # utworzenie okna
 window = pygame.display.set_mode((1000, 660))
 # ustawiamy tytul okna
-pygame.display.set_caption('Heroes of Village')
+pygame.display.set_caption('Heroes of PyGame')
 # pobieramy informacje o ekranie - tle
 screen = pygame.display.get_surface()
 # ladujemy pliki graficzne
@@ -25,3 +25,4 @@ def input(events):
             print event
 while True:
     input(pygame.event.get())
+
