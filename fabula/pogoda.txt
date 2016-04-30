@@ -12,10 +12,26 @@ Misja: pogoda fabula jocker : deszcz szaranczy .pani kowalska obrona kwiatkow.
 ========= fabula ==============
 --------- Filmik "intro" -------
 1.Telewizja prognoza pogody
+1.1 obrobić filmik pogodynki
+1.2 wyciac fragment
+1.3 Ciemnosc krzyki prezenterki
+1.4 podmiana twarzy na anonymusa
+1.5 tekst progozy pogody przez anonymusa
+    w okolicach lanckorony spodziewane przelotne opady...(krzyk) a na czyms my to skonczyli ? aha przelotne opady .....  SZARANCZY!!!!
+1.6 nagranie glosu anonymusa - GL
+1.7 program do obróbki filmów
+1.8 python do odtworzenia mp4
+
 2.Ciemnosc krzyki prezenterki zmiana prezentera
 3.Pogoda na świecie (kontynenty)
-4.bIntynesywne opady szarańczy 7 w skali buforta 200kg/s
+4.Intynesywne opady szarańczy 7 w skali buforta 200kg/s
+
 5.Litery na tle przedstawienie postaci ( obrazki z ich życia)
+5.1 zdjecia waszych twarzy - wszyscy
+5.2 program do patyczakow - http://pivotanimator.net/Download.php
+5.3 treść napisów czołówki
+5.4 Tutuł gry + producent
+
 ---------- poczatek gry ---------
 6.Telefon od pani kowalskiej (ratujcie rośliny) podzial ekranu
 7.przemiana w bohaterow
@@ -31,20 +47,20 @@ Zdolności superbohaterów
     11. Zaczarowany olowek piotrek
     12. dawid rambo
     13.Dominik Chemia ataki mikstury i mutacje
-        14. Pomylka dominika powiekszacz zamiast pomniejszacza
+        14 Pomylka dominika powiekszacz zamiast pomniejszacza
 15.wycowyfanie sie do sal
 16.ucieczka do różnych miejsc w Lanckoronie
 
 
 
 ----------------- inne elementy do wykorzystania ---------------------------
-* Poszukiwanie zaginionej herbatki(misja z herbatka)
-* Roznorakie questy i poziomy
-* miejsca w lanckoronie z fabula
-* kibel drewniany kurek do latuszkow portal
-* sklepik szkolny
-* Crafting
-* Oblezenie szkoly my bronimy szarancza szyba i ich okrzyk jejejeejje
-* szkola podziemia zapada na dol
-* przyjazd strazakow
+6.Poszukiwanie zaginionej herbatki(misja z herbatka)
+7.Roznorakie questy i poziomy
+8.miejsca w lanckoronie z fabula
+12.kibel drewniany kurek do latuszkow portal
+13.sklepik szkolny
+15.Crafting
+18. Oblezenie szkoly my bronimy szarancza szyba i ich okrzyk jejejeejje
+22.szkola podziemia zapada na dol
+25.przyjazd strazakow
 
