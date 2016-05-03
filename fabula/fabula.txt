@@ -3,6 +3,7 @@ Pomysły na fabułę:
 1.Gra lokalna szkola i lanckorona mapka
 2.Zdjecia z lanckorony jako dymki na mapie z zaskakujacymi sytuacjami
 3.Miejsca z odgrawynami filmiki (cutscenki)
+4. w sali komputerowej wczytywanie poziomow jak w matrixie np wiktor jest tym wybrancem dominik wczytuje poziomy
 
 
 
