@@ -37,6 +37,21 @@ def draw_figure(event, screen, x, y):
     szerokosc = grafika.get_width()
     wysokosc = grafika.get_height()
     screen.blit(grafika, (x-szerokosc/2, y-wysokosc/2))
+    rysuj_ludzik(screen,x,y)
+
+def rysuj_ludzik(screen,x,y):
+    grubosclini = 10
+    lewa_reka = [(x-30,y-10),(x-20,y-10),(x,y-40)]
+    lewa_noga = [(x+10,y+60),(x,y+60),(x+10,y+30),(x,y)]
+    prawa_noga = [(x+40,y+60),(x+30,y+50),(x+30,y+20),(x,y)]
+    korpus = [(x,y),(x,y-40),(x,y-50)]
+    prawa_reka = [(x,y-40),(x+20,y-30),(x+30,y-50),(x+30,y-60)]
+    pygame.draw.lines (screen, blue, False, lewa_noga,grubosclini)
+    pygame.draw.lines (screen, blue, False, prawa_noga,grubosclini)
+    pygame.draw.lines (screen, blue, False, korpus,grubosclini)
+    pygame.draw.lines (screen, blue, False, prawa_reka,grubosclini)
+    pygame.draw.circle(screen, blue, (x,y-70), 20, grubosclini)
+    pygame.draw.lines (screen, blue, False, lewa_reka,grubosclini)
 
 # utworzenie okna
 window = pygame.display.set_mode((1000, 660))
@@ -88,7 +103,8 @@ def input(events):
 
 blue = (0,0,255)
 red = (255,0,0)
-
+green = (0,255,0)
+jakis = (69,69,69)
 grafika_wody = pygame.image.load('grafika/woda.jpg')
 grafika_ogien = pygame.image.load('grafika/ogien.jpg')
 dz = open('dzwiek/jesterdie_03.wav')
