@@ -3,7 +3,7 @@ import sys
 from pygame.locals import QUIT
 import time
 import math
-
+import sale
 
 ostatnio_x = 0
 ostatnio_y = 0
@@ -11,6 +11,7 @@ blue = (0,0,255)
 red = (255,0,0)
 green = (0,255,0)
 grafika_wody = pygame.image.load('grafika/woda.jpg')
+
 
 def pobierz_wspolrzedne(event, x, y):
     if event.type == pygame.KEYDOWN:
@@ -29,7 +30,6 @@ def pobierz_wspolrzedne(event, x, y):
     elif event.type == pygame.MOUSEMOTION:
         x, y = pygame.mouse.get_pos()
     return x, y
-
 
 kat = 90
 kierunek = 1
@@ -105,6 +105,8 @@ def input(events):
 
             # draw_figure(event, screen, x, y)
             draw_ludek(screen, x, y)
+
+            sale.draw_mapa(screen)
             ostatnio_x, ostatnio_y = x, y
 
             pygame.display.flip()
