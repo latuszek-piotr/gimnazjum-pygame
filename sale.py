@@ -24,3 +24,4 @@ def draw_mapa (screen):
     pygame.draw.lines(screen, kolor_sciany, False, wielka_sala2, grubosc)
     pygame.draw.lines(screen, kolor_sciany, False, duza_sala1, grubosc)
     pygame.draw.lines(screen, kolor_sciany, False, duza_sala2, grubosc)
+
