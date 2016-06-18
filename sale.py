@@ -14,9 +14,6 @@ def draw_mapa (screen):
     duza_sala1= [(450,650),(450,450), (700,450)]
     duza_sala2= [(810,450),(990,450)]
 
-
-
-
     pygame.draw.lines(screen, kolor_sciany, False, gorna_sciana, grubosc)
     pygame.draw.lines(screen, kolor_sciany, False, lewa_sciana, grubosc)
     pygame.draw.lines(screen, kolor_sciany, False,dolna_sciana, grubosc)
