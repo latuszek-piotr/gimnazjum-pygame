@@ -37,15 +37,22 @@ def draw_figure(event, screen, x, y):
     grafika = pygame.image.load(nazwa_pliku).convert_alpha()
     szerokosc = grafika.get_width()
     wysokosc = grafika.get_height()
-    grubosc = 5
-    # screen.blit(grafika, (x-szerokosc/2, y-wysokosc/2))
-    noga_l = [(x-10,y+40),(x+10,y+20),(x,y),(x,y-30),(x+10,y-20),(x+40,y-30),]
-    noga_p = [(x+60,y+10),(x+30,y-10),(x,y),(x,y-30),(x-20,y-20),(x-30,y+10)]
-    srodek_glowy = (x,y-45)
-    promien_g = 15
-    pygame.draw.lines(screen, blue, False, noga_p, grubosc )
-    pygame.draw.lines(screen, blue, False, noga_l, grubosc )
-    pygame.draw.circle(screen, blue, srodek_glowy, promien_g, grubosc)
+    screen.blit(grafika, (x-szerokosc/2, y-wysokosc/2))
+    rysuj_ludzik(screen,x,y)
+
+def rysuj_ludzik(screen,x,y):
+    grubosclini = 10
+    lewa_reka = [(x-30,y-10),(x-20,y-10),(x,y-40)]
+    lewa_noga = [(x+10,y+60),(x,y+60),(x+10,y+30),(x,y)]
+    prawa_noga = [(x+40,y+60),(x+30,y+50),(x+30,y+20),(x,y)]
+    korpus = [(x,y),(x,y-40),(x,y-50)]
+    prawa_reka = [(x,y-40),(x+20,y-30),(x+30,y-50),(x+30,y-60)]
+    pygame.draw.lines (screen, blue, False, lewa_noga,grubosclini)
+    pygame.draw.lines (screen, blue, False, prawa_noga,grubosclini)
+    pygame.draw.lines (screen, blue, False, korpus,grubosclini)
+    pygame.draw.lines (screen, blue, False, prawa_reka,grubosclini)
+    pygame.draw.circle(screen, blue, (x,y-70), 20, grubosclini)
+    pygame.draw.lines (screen, blue, False, lewa_reka,grubosclini)
 
 # utworzenie okna
 window = pygame.display.set_mode((1000, 660))
@@ -84,8 +91,6 @@ def input(events):
             ostatnio_x, ostatnio_y = x, y
             Mapa.draw_pietro(screen)
 
-
-
             pygame.display.flip()
             if x < 500 :
                 sound.play()
@@ -93,10 +98,10 @@ def input(events):
                 # screen.blit(grafika_ogien, (500,330))
                 pygame.display.flip()
 
-
 blue = (0,0,255)
 red = (255,0,0)
-
+green = (0,255,0)
+jakis = (69,69,69)
 grafika_wody = pygame.image.load('grafika/woda.jpg')
 grafika_ogien = pygame.image.load('grafika/ogien.jpg')
 dz = open('dzwiek/jesterdie_03.wav')
