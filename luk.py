@@ -1,3 +1,4 @@
+import Mapa
 import pygame
 import sys
 from pygame.locals import QUIT
@@ -36,7 +37,15 @@ def draw_figure(event, screen, x, y):
     grafika = pygame.image.load(nazwa_pliku).convert_alpha()
     szerokosc = grafika.get_width()
     wysokosc = grafika.get_height()
-    screen.blit(grafika, (x-szerokosc/2, y-wysokosc/2))
+    grubosc = 5
+    # screen.blit(grafika, (x-szerokosc/2, y-wysokosc/2))
+    noga_l = [(x-10,y+40),(x+10,y+20),(x,y),(x,y-30),(x+10,y-20),(x+40,y-30),]
+    noga_p = [(x+60,y+10),(x+30,y-10),(x,y),(x,y-30),(x-20,y-20),(x-30,y+10)]
+    srodek_glowy = (x,y-45)
+    promien_g = 15
+    pygame.draw.lines(screen, blue, False, noga_p, grubosc )
+    pygame.draw.lines(screen, blue, False, noga_l, grubosc )
+    pygame.draw.circle(screen, blue, srodek_glowy, promien_g, grubosc)
 
 # utworzenie okna
 window = pygame.display.set_mode((1000, 660))
@@ -64,17 +73,16 @@ def input(events):
             print "harakiri"
             sys.exit(0)
 
-
-
         else:
             screen.fill((blue))
             #x, y = pygame.mouse.get_pos()
             x, y = pobierz_wspolrzedne(event, ostatnio_x, ostatnio_y)
             screen.blit(grafika_wody, (0, 0))
-            pygame.draw.rect(screen, red, (0,0,500,660))
+            # pygame.draw.rect(screen, red, (0,0,500,660))
             #screen.blit(grafika_ryby, (x-szerokosc_ryby/2, y-wysokosc_ryby/2))
             draw_figure(event, screen, x, y)
             ostatnio_x, ostatnio_y = x, y
+            Mapa.draw_pietro(screen)
 
 
 
@@ -82,7 +90,7 @@ def input(events):
             if x < 500 :
                 sound.play()
             else:
-                screen.blit(grafika_ogien, (500,330))
+                # screen.blit(grafika_ogien, (500,330))
                 pygame.display.flip()
 
 
