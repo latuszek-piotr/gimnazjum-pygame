@@ -6,11 +6,11 @@ import pygame
 class Player(object):
 
     def __init__(self):
-        self.rect = pygame.Rect(32, 32, 16, 16)
+        self.rect = pygame.Rect(30, 30, 10, 10)
 
     def move(self, dx, dy):
 
-        # Move each axis separately. Note that this checks for collisions both times.
+        # Move each axis separately. Note that tddddddhis checks for collisions both times.
         if dx != 0:
             self.move_single_axis(dx, 0)
         if dy != 0:
@@ -47,29 +47,38 @@ pygame.init()
 
 # Set up the display
 pygame.display.set_caption("Get to the red square!")
-screen = pygame.display.set_mode((320, 240))
+screen = pygame.display.set_mode((600, 600))
 
 clock = pygame.time.Clock()
 walls = [] # List to hold the walls
 player = Player() # Create the player
-
+player1 = Player() # Create the player
+player2 = Player() # Create the player
+player3 = Player() # Create the player
 # Holds the level layout in a list of strings.
 level = [
-"WWWWWWWWWWWWWWWWWWWW",
-"W                  W",
-"W         WWWWWW   W",
-"W   WWWW       W   W",
-"W   W        WWWW  W",
-"W WWW  WWWW        W",
-"W   W     W W      W",
-"W   W     W   WWW WW",
-"W   WWW WWW   W W  W",
-"W     W   W   W W  W",
-"WWW   W   WWWWW W  W",
-"W W      WW        W",
-"W W   WWWW   WWW   W",
-"W     W    E   W   W",
-"WWWWWWWWWWWWWWWWWWWW",
+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+"W                  WWWWWWWWWWWWWW             WWWWWWWWWW",
+"WW     WWWWWW                                 WWWWWWWWWW"
+"W   WWWW       WWWWWWWWWWWWWWWWWWWWW WWWWWWWWWWWWWWWWWWW",
+"W   W        WWWW                             WWWWWWWWWW",
+"W WWW  WWWW                                   WWWWWWWWWW",
+"W   W     W W      WWWWWWWW                           W",
+"W   W     W   WWW                            WWWWWWW  W",
+"W   WWW WWW   W W WWWWWWWWWWWWWW  WWWWW  WWWWWWWWWWW  W",
+"W     W   W   W WWWWWWWWW                             W",
+"WWW   W   W WWW WWWWWWWWW WWWWWWWWWWWWWWWW WWWWWWWW   W",
+"W W      WW          WWWWWW                    WWWW   W",
+"W W   WWWW   WWWWWWW        WWWWWWWWWWWWWW WWWWWWWW   WW",
+"W     W              WWWW                       WWWW  WW",
+"W                           E                         W",
+"WWWWWWWWWWWWWW  WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+
+
+
+
+
+
 ]
 
 # Parse the level string above. W = wall, E = exit
@@ -106,14 +115,36 @@ while running:
     if key[pygame.K_DOWN]:
         player.move(0, 2)
 
+    if key[pygame.K_a]:
+        player1.move(-2, 0)
+    if key[pygame.K_d]:
+        player1.move(2, 0)
+    if key[pygame.K_w]:
+        player1.move(0, -2)
+    if key[pygame.K_s]:
+        player1.move(0, 2)
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    (player2_x, player2_y) = player2.rect.center
+    dx = mouse_x - player2_x
+    dy = mouse_y - player2_y
+    player2.move(dx, dy)
+
     # Just added this to make it slightly fun ;)
     if player.rect.colliderect(end_rect):
-        raise SystemExit, "You win!"
+        raise SystemExit, "You win wiktor!"
+    if player1.rect.colliderect(end_rect):
+        raise SystemExit, "You win piotrek!"
 
-    # Draw the scene
+    # Draw the scenea
     screen.fill((0, 0, 0))
     for wall in walls:
         pygame.draw.rect(screen, (255, 255, 255), wall.rect)
     pygame.draw.rect(screen, (255, 0, 0), end_rect)
     pygame.draw.rect(screen, (255, 200, 0), player.rect)
+    pygame.draw.rect(screen, (255, 0, 200), player1.rect)
+    pygame.draw.rect(screen, (100, 100,100 ), player2.rect)
+
+
+
+
     pygame.display.flip()
