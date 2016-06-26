@@ -47,7 +47,7 @@ pygame.init()
 
 # Set up the display
 pygame.display.set_caption("Get to the red square!")
-screen = pygame.display.set_mode((600, 600))
+screen = pygame.display.set_mode((800, 600))
 
 clock = pygame.time.Clock()
 walls = [] # List to hold the walls
@@ -71,9 +71,10 @@ level = [
 "W W      WW          WWWWWW                    WWWW   W",
 "W W   WWWW   WWWWWWW        WWWWWWWWWWWWWW WWWWWWWW   WW",
 "W     W              WWWW                       WWWW  WW",
-"W                           E                         W",
-"WWWWWWWWWWWWWW  WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-
+"W                                                     W",
+"WWWWWWWWWWWWWW  WWWWWWWWWWWWWWWWWWW WWWWWWWWWWWWWWWWWWWW",
+"W                                     EW",
+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
 
 
 
@@ -129,11 +130,16 @@ while running:
     dy = mouse_y - player2_y
     player2.move(dx, dy)
 
+
     # Just added this to make it slightly fun ;)
     if player.rect.colliderect(end_rect):
-        raise SystemExit, "You win wiktor!"
+        raise SystemExit,sound.play()
+        print "You win Wiktor!"
     if player1.rect.colliderect(end_rect):
         raise SystemExit, "You win piotrek!"
+    if player2.rect.colliderect(end_rect):
+        raise SystemExit, "You win! "
+
 
     # Draw the scenea
     screen.fill((0, 0, 0))
@@ -142,9 +148,11 @@ while running:
     pygame.draw.rect(screen, (255, 0, 0), end_rect)
     pygame.draw.rect(screen, (255, 200, 0), player.rect)
     pygame.draw.rect(screen, (255, 0, 200), player1.rect)
-    pygame.draw.rect(screen, (100, 100,100 ), player2.rect)
+    pygame.draw.rect(screen, (0, 255 ,0 ), player2.rect)
 
 
 
 
     pygame.display.flip()
+    pygame.mixer.init()
+    sound = pygame.mixer.Sound('dzwiek/fanfary.wav')

@@ -102,8 +102,7 @@ def input(events):
             screen.fill((blue))
             x, y = pobierz_wspolrzedne(event, ostatnio_x, ostatnio_y)
             screen.blit(grafika_wody, (0, 0))
-
-            sale.draw_sale(screen,x,y)
+            sale.draw_mapa(screen)
             # draw_figure(event, screen, x, y)
             draw_ludek(screen, x, y)
 
@@ -122,6 +121,7 @@ pygame.display.set_caption('animacja luku')
 # pobieramy informacje o ekranie - tle
 screen = pygame.display.get_surface()
 pygame.display.flip()
+
 
 while True:
     input(pygame.event.get())
