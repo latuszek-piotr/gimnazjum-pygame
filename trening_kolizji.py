@@ -47,7 +47,7 @@ pygame.init()
 
 # Set up the display
 pygame.display.set_caption("Get to the red square!")
-screen = pygame.display.set_mode((800, 600))
+screen = pygame.display.set_mode((890, 500))
 
 clock = pygame.time.Clock()
 walls = [] # List to hold the walls
@@ -59,7 +59,7 @@ player3 = Player() # Create the player
 level = [
 "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
 "W                  WWWWWWWWWWWWWW             WWWWWWWWWW",
-"WW     WWWWWW                                 WWWWWWWWWW"
+"WW     WWWWWW                                WWWWWWWWWW"
 "W   WWWW       WWWWWWWWWWWWWWWWWWWWW WWWWWWWWWWWWWWWWWWW",
 "W   W        WWWW                             WWWWWWWWWW",
 "W WWW  WWWW                                   WWWWWWWWWW",
@@ -72,8 +72,8 @@ level = [
 "W W   WWWW   WWWWWWW        WWWWWWWWWWWWWW WWWWWWWW   WW",
 "W     W              WWWW                       WWWW  WW",
 "W                                                     W",
-"WWWWWWWWWWWWWW  WWWWWWWWWWWWWWWWWWW WWWWWWWWWWWWWWWWWWWW",
-"W                                     EW",
+"WWWWWWWWWWWWWW  WWWWWWWWWWWWWWWWWWW WWWWWWWWWWWWWWWW WWW",
+"W                                                 E   W",
 "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
 
 
@@ -147,12 +147,14 @@ while running:
         pygame.draw.rect(screen, (255, 255, 255), wall.rect)
     pygame.draw.rect(screen, (255, 0, 0), end_rect)
     pygame.draw.rect(screen, (255, 200, 0), player.rect)
+    pygame.draw.rect(screen, (255, 0, 0), end_rect)
     pygame.draw.rect(screen, (255, 0, 200), player1.rect)
     pygame.draw.rect(screen, (0, 255 ,0 ), player2.rect)
 
-
+    pygame.mixer.init()
+    sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
 
 
     pygame.display.flip()
-    pygame.mixer.init()
-    sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
+    #pygame.mixer.init()
+    #sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
