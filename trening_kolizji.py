@@ -58,7 +58,7 @@ player3 = Player() # Create the player
 # Holds the level layout in a list of strings.
 level = [
 "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
-"W                  WWWWWWWWWWWWWW             WWWWWWWWWW",
+"W       E           WWWWWWWWWWWWWW             WWWWWWWWWW",
 "WW     WWWWWW                                WWWWWWWWWW"
 "W   WWWW       WWWWWWWWWWWWWWWWWWWWW WWWWWWWWWWWWWWWWWWW",
 "W   W        WWWW                             WWWWWWWWWW",
@@ -73,7 +73,7 @@ level = [
 "W     W              WWWW                       WWWW  WW",
 "W                                                     W",
 "WWWWWWWWWWWWWW  WWWWWWWWWWWWWWWWWWW WWWWWWWWWWWWWWWW WWW",
-"W                                                 E   W",
+"W                                                    W",
 "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
 
 
@@ -153,8 +153,7 @@ while running:
 
     pygame.mixer.init()
     sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
-
+    pygame.mixer.init()
+    sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
 
     pygame.display.flip()
-    #pygame.mixer.init()
-    #sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
