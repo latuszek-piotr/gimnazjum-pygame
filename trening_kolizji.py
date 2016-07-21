@@ -47,36 +47,36 @@ pygame.init()
 
 # Set up the display
 pygame.display.set_caption("Get to the red square!")
-screen = pygame.display.set_mode((320, 240))
+screen = pygame.display.set_mode((1500, 440))
 
 clock = pygame.time.Clock()
 walls = [] # List to hold the walls
 player = Player() # Create the player
-
+player2 = Player()
 # Holds the level layout in a list of strings.
 level = [
-"WWWWWWWWWWWWWWWWWWWW",
-"W                  W",
-"W         WWWWWW   W",
-"W   WWWW       W   W",
-"W   W        WWWW  W",
-"W WWW  WWWW        W",
-"W   W     W W      W",
-"W   W     W   WWW WW",
-"W   WWW WWW   W W  W",
-"W     W   W   W W  W",
-"WWW   W   WWWWW W  W",
-"W W      WW        W",
-"W W   WWWW   WWW   W",
-"W     W    E   W   W",
-"WWWWWWWWWWWWWWWWWWWW",
+"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
+"w                                             www",
+"w         wwwwww      w   wwww wwww wwwwwwwwww ww",
+"w   wwww       w      w                    www ww",
+"w   W        wwww  wwwwww               www    ww",
+"w www  ww w      w       wwwww          w   ww ww",
+"w     w   w w  w   wwwww wwwwwwwww      w wwE  ww",
+"wwww  w   w      ww      w   Ew     www w  www  w",
+"w    ww www   w w   wwwwww    w         ww    w w",
+"w wwwww       w w  www   w ww w         wwwww W w",
+"w w  ww   wwwww w      w w    w    wwww www     w",
+"w w       ww    wwwwwwww w          www www w w w",
+"w w w wwww   www  w   w  w            w       www",
+"w   w     E   w     w                www wwwwwwwww",
+"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
 ]
 
 # Parse the level string above. W = wall, E = exit
 x = y = 0
 for row in level:
     for col in row:
-        if col == "W":
+        if col == "w":
             Wall((x, y))
         if col == "E":
             end_rect = pygame.Rect(x, y, 16, 16)
@@ -97,6 +97,16 @@ while running:
 
     # Move the player if an arrow key is pressed
     key = pygame.key.get_pressed()
+    if key[pygame.K_a]:
+        player2.move(-2, 0)
+    if key[pygame.K_d]:
+        player2.move(2, 0)
+    if key[pygame.K_w]:
+        player2.move(0, -2)
+    if key[pygame.K_s]:
+        player2.move(0, 2)
+
+    key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
         player.move(-2, 0)
     if key[pygame.K_RIGHT]:
@@ -110,10 +120,14 @@ while running:
     if player.rect.colliderect(end_rect):
         raise SystemExit, "You win!"
 
+    if player2.rect.colliderect(end_rect):
+        raise SystemExit, "You win!"
+
     # Draw the scene
     screen.fill((0, 0, 0))
     for wall in walls:
         pygame.draw.rect(screen, (255, 255, 255), wall.rect)
     pygame.draw.rect(screen, (255, 0, 0), end_rect)
     pygame.draw.rect(screen, (255, 200, 0), player.rect)
+    pygame.draw.rect(screen, (0, 200, 0), player2.rect)
     pygame.display.flip()
