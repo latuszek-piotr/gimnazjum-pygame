@@ -153,7 +153,6 @@ while running:
 
     pygame.mixer.init()
     sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
-    pygame.mixer.init()
-    sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
+
 
     pygame.display.flip()
