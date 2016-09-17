@@ -19,6 +19,7 @@ player1 = Player(color=(255, 200, 0)) # Create the player
 player2 = Player(color=(255, 0, 200)) # Create the player
 player3 = Player(color=(0, 255 ,0 )) # Create the player
 
+
 flat1 = Flat(flat_1_data)
 
 running = True
@@ -52,11 +53,16 @@ while running:
     if key[pygame.K_s]:
         player2.move(0, 2, flat1.walls)
 
-    mouse_x, mouse_y = pygame.mouse.get_pos()
-    (player3_x, player3_y) = player3.rect.center
-    dx = mouse_x - player3_x
-    dy = mouse_y - player3_y
-    player3.move(dx, dy, flat1.walls)
+    if key[pygame.K_j]:
+        player3.move(-2, 0, flat1.walls)
+    if key[pygame.K_l]:
+        player3.move(2, 0, flat1.walls)
+    if key[pygame.K_i]:
+        player3.move(0, -2, flat1.walls)
+    if key[pygame.K_k]:
+        player3.move(0, 2, flat1.walls)
+
+
 
 
     # # Just added this to make it slightly fun ;)
