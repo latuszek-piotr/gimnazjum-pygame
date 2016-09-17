@@ -1,28 +1,39 @@
-import os
-import random
 import pygame
+from wall import Wall
 
-class Wall(object):
 
-    def __init__(self, pos):
-        walls.append(self)
-        self.rect = pygame.Rect(pos[0], pos[1], 16, 16)
+class Flat(object):
+    def __init__(self, flat_data, wall_thikness=16):
+        self.flat_data = flat_data
+        self.wall_thikness = wall_thikness
+        self.color = (255, 155, 105)
+        self.walls = self.create_walls()
 
-os.environ["SDL_VIDEO_CENTERED"] = "1"
-pygame.init()
+    def create_walls(self):
+        walls = []
+        x = y = 0
+        for row in self.flat_data:
+            for col in row:
+                if col == "w":
+                    single_wall = Wall((x, y))
+                    walls.append(single_wall)
+                x += self.wall_thikness
+            y += self.wall_thikness
+            x = 0
+        return walls
 
-pygame.display.set_caption("szkola_1_pietro")
-screen = pygame.display.set_mode((890, 500))
+    def draw(self, screen):
+        for wall in self.walls:
+            pygame.draw.rect(screen, self.color, wall.rect)
 
-walls = [] # List to hold the walls
 
-level = [
+flat_1_data = [
 "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
 "w                                    w                                                          w",
 "w                                    w                                                          w",
 "w                                    w                                                          w",
 "w                                    w                                                          w",
-"w             e                      w                                                          w",
+"w                                    w                                                          w",
 "w                                    w                                                          w",
 "w                                    w                                                          w",
 "w                                    p                                                          w",
@@ -35,25 +46,13 @@ level = [
 "w                                    w                                                          p",
 "w                                    w                                                          w",
 "w                                   wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww""pp""wwwww""pp""wwwwwwwwwwww",
-"w                                   w            w",
-"w                                   w            w",
-"w                                   p            w",
-"w                                   p            w",
-"w                                   w            w",
-"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww            w",
-                                     "w"         "w",
-                                     "w"         "w",
-                                     "wwwwwwwwwwwww""wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
+"w                                   w            w                                   w",
+"w                                   w            w                                   w",
+"w                                   p            w                                   w",
+"w                                   p            w                                   w",
+"w                                   w            w                                   w",
+"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww            w                                   w",
+                                     "w"         "w                                   w",
+                                     "w"         "w                                   w",
+                                     "wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
 ]
-
-
-x = y = 0
-for row in level:
-    for col in row:
-        if col == "W":
-            Wall((x, y))
-        if col == "E":
-            end_rect = pygame.Rect(x, y, 16, 16)
-        x += 16
-    y += 16
-    x = 0
