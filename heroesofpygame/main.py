@@ -5,6 +5,8 @@ import pygame
 from heroesofpygame.player import Player
 from heroesofpygame.wall import Wall
 from heroesofpygame.flat import Flat, flat_1_data
+from heroesofpygame.wiktor import Wiktor
+from heroesofpygame.dominik import Dominik
 
 clock = pygame.time.Clock()
 
@@ -18,6 +20,8 @@ screen = pygame.display.set_mode((1300, 650))
 player1 = Player(color=(255, 200, 0)) # Create the player
 player2 = Player(color=(255, 0, 200)) # Create the player
 player3 = Player(color=(0, 255 ,0 )) # Create the player
+player1 = Wiktor()
+player2 = Dominik()
 
 
 flat1 = Flat(flat_1_data)
