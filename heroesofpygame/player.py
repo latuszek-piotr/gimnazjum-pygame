@@ -3,7 +3,7 @@ from pixel import Pixel
 
 
 class Player(Pixel):
-    def __init__(self, pos=(30, 30), size=10, color=(255,255,255)):
+    def __init__(self, pos=(30, 30), size=4, color=(255,255,255)):
         super(Player, self).__init__(pos, size, color)
 
     def move_single_axis(self, dx, dy, walls):
