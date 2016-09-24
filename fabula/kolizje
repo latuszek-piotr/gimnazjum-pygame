@@ -1,1 +1,25 @@
 nastepne spotkanie kolizje i wejscia do komnat (zmiana calkowita mapki)
+
+
+
+
+zrobic sale Pan Grzegorz mapa szkoly wyslac
+
+My robimy sale
+
+Zrobic rysunki kwiatkow 50
+
+cztery ludziki z twarzami wysookosc 120 szerokosc 150
+
+szarancza w kwadracie 30 20
+
+szarancza idzie w kierunku kwiatka
+
+kolizja z kwiatkiem powoduje zmiane ludka mala doniczka w kieszeni i na dole w eq pojawia sie ikona kwiatka
+jak doniesiesz kwiatek do półki detekcja prze kolizje i wyjmujesz z eq i dajesz na półke
+
+
+logika walki z szarancza
+
+kwaitek sie niszczy jak kolizja z kwadratem szaranczy
+

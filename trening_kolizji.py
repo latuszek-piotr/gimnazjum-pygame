@@ -6,11 +6,11 @@ import pygame
 class Player(object):
 
     def __init__(self):
-        self.rect = pygame.Rect(32, 32, 16, 16)
+        self.rect = pygame.Rect(30, 30, 10, 10)
 
     def move(self, dx, dy):
 
-        # Move each axis separately. Note that this checks for collisions both times.
+        # Move each axis separately. Note that tddddddhis checks for collisions both times.
         if dx != 0:
             self.move_single_axis(dx, 0)
         if dy != 0:
@@ -47,29 +47,39 @@ pygame.init()
 
 # Set up the display
 pygame.display.set_caption("Get to the red square!")
-screen = pygame.display.set_mode((1500, 440))
+screen = pygame.display.set_mode((890, 500))
 
 clock = pygame.time.Clock()
 walls = [] # List to hold the walls
 player = Player() # Create the player
-player2 = Player()
+player1 = Player() # Create the player
+player2 = Player() # Create the player
+player3 = Player() # Create the player
 # Holds the level layout in a list of strings.
 level = [
-"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
-"w                                             www",
-"w         wwwwww      w   wwww wwww wwwwwwwwww ww",
-"w   wwww       w      w                    www ww",
-"w   W        wwww  wwwwww               www    ww",
-"w www  ww w      w       wwwww          w   ww ww",
-"w     w   w w  w   wwwww wwwwwwwww      w wwE  ww",
-"wwww  w   w      ww      w   Ew     www w  www  w",
-"w    ww www   w w   wwwwww    w         ww    w w",
-"w wwwww       w w  www   w ww w         wwwww W w",
-"w w  ww   wwwww w      w w    w    wwww www     w",
-"w w       ww    wwwwwwww w          www www w w w",
-"w w w wwww   www  w   w  w            w       www",
-"w   w     E   w     w                www wwwwwwwww",
-"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww",
+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+"W                   WWWWWWWWWWWWWW             WWWWWWWWWW",
+"WW     WWWWWW                                WWWWWWWWWW"
+"W   WWWW       WWWWWWWWWWWWWWWWWWWWW WWWWWWWWWWWWWWWWWWW",
+"W   W        WWWW                             WWWWWWWWWW",
+"W WWW  WWWW                                   WWWWWWWWWW",
+"W   W     W W      WWWWWWWWWWWWWWWWWWWWWWWW           W",
+"W   W     W   WWW                            WWWWWWW  W",
+"W   WWW WWW   W W WWWWWWWWWWWWWW  WWWWW  WWWWWWWWWWW  W",
+"W     W   W   W WWWWWWWWW                             W",
+"WWW   W   W WWW WWWWWWWWW WWWWWWWWWWWWWWWW WWWWWWWW   W",
+"W W      WW          WWWWWW                    WWWW   W",
+"W W   WWWW   WWWWWWW        WWWWWWWWWWWWWW WWWWWWWW   WW",
+"W     W             WWWWW WW          W         WWWW  WW",
+"W                                     W      WW       W",
+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW WWW",
+"W                                                   E W",
+"WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW",
+
+
+
+
+
 ]
 
 # Parse the level string above. W = wall, E = exit
@@ -116,18 +126,43 @@ while running:
     if key[pygame.K_DOWN]:
         player.move(0, 2)
 
+    if key[pygame.K_a]:
+        player1.move(-2, 0)
+    if key[pygame.K_d]:
+        player1.move(2, 0)
+    if key[pygame.K_w]:
+        player1.move(0, -2)
+    if key[pygame.K_s]:
+        player1.move(0, 2)
+    mouse_x, mouse_y = pygame.mouse.get_pos()
+    (player2_x, player2_y) = player2.rect.center
+    dx = mouse_x - player2_x
+    dy = mouse_y - player2_y
+    player2.move(dx, dy)
+
+
     # Just added this to make it slightly fun ;)
     if player.rect.colliderect(end_rect):
-        raise SystemExit, "You win!"
-
+        raise SystemExit,sound.play()
+        print "You win Wiktor!"
+    if player1.rect.colliderect(end_rect):
+        raise SystemExit, "You win piotrek!"
     if player2.rect.colliderect(end_rect):
-        raise SystemExit, "You win!"
+        raise SystemExit, "You win! "
 
-    # Draw the scene
+
+    # Draw the scenea
     screen.fill((0, 0, 0))
     for wall in walls:
         pygame.draw.rect(screen, (255, 255, 255), wall.rect)
     pygame.draw.rect(screen, (255, 0, 0), end_rect)
     pygame.draw.rect(screen, (255, 200, 0), player.rect)
-    pygame.draw.rect(screen, (0, 200, 0), player2.rect)
+    pygame.draw.rect(screen, (255, 0, 0), end_rect)
+    pygame.draw.rect(screen, (255, 0, 200), player1.rect)
+    pygame.draw.rect(screen, (0, 255 ,0 ), player2.rect)
+
+    pygame.mixer.init()
+    sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
+
+
     pygame.display.flip()
