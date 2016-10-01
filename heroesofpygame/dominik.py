@@ -4,7 +4,11 @@ from pixel import Pixel
 
 
 class Dominik(Pixel):
+    happy_img = os.path.join('grafika', 'dominik_wesoly.png')
     sad_img = os.path.join('grafika', 'dominik_smutny.png')
+    angry_img = os.path.join('grafika', 'dominik_zly.png')
+    surprised_img = os.path.join('grafika', 'dominik_zdziwiony.png')
+    scared_img = os.path.join('grafika', 'dominik_prestraszony.png')
 
     def __init__(self, pos=(80, 70), size=4):
         super(Dominik, self).__init__(pos, size)

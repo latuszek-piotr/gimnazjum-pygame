@@ -5,6 +5,10 @@ from pixel import Pixel
 
 class Wiktor(Pixel):
     happy_img = os.path.join('grafika', 'wiktor_wesoly.png')
+    sad_img = os.path.join('grafika', 'wiktor_smutny.png')
+    angry_img = os.path.join('grafika', 'wiktor_zly.png')
+    surprised_img = os.path.join('grafika', 'wiktor_zdziwiony.png')
+    scared_img = os.path.join('grafika', 'wiktor_prestraszony.png')
 
     def __init__(self, pos=(50, 50), size=4):
         super(Wiktor, self).__init__(pos, size)
