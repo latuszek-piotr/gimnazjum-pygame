@@ -10,7 +10,7 @@ class Dawid(Pixel):
     surprised_img = os.path.join('grafika', 'dawid_zdziwiony.png')
     scared_img = os.path.join('grafika', 'dawid_prestraszony.png')
 
-    def __init__(self, pos=(50, 50), size=4):
+    def __init__(self, pos=(440, 120), size=4):
         super(Dawid, self).__init__(pos, size)
         self.mood = 'happy'
         self.img = pygame.transform.scale(pygame.image.load(Dawid.happy_img).convert_alpha(), (50, 60))

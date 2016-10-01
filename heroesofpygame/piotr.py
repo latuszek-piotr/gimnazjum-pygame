@@ -10,7 +10,7 @@ class Piotr(Pixel):
     surprised_img = os.path.join('grafika', 'piotr_zdziwiony.png')
     scared_img = os.path.join('grafika', 'piotr_prestraszony.png')
 
-    def __init__(self, pos=(50, 50), size=4):
+    def __init__(self, pos=(350, 50), size=4):
         super(Piotr, self).__init__(pos, size)
         self.mood = 'happy'
         self.img = pygame.transform.scale(pygame.image.load(Piotr.happy_img).convert_alpha(), (50, 60))

@@ -5,8 +5,11 @@ import pygame
 from heroesofpygame.player import Player
 from heroesofpygame.wall import Wall
 from heroesofpygame.flat import Flat, flat_1_data
+
 from heroesofpygame.wiktor import Wiktor
 from heroesofpygame.dominik import Dominik
+from heroesofpygame.piotr import Piotr
+from heroesofpygame.dawid import Dawid
 
 clock = pygame.time.Clock()
 
@@ -17,11 +20,11 @@ pygame.init()
 pygame.display.set_caption("szkola_1_pietro")
 screen = pygame.display.set_mode((1300, 650))
 
-player1 = Player(color=(255, 200, 0)) # Create the player
-player2 = Player(color=(255, 0, 200)) # Create the player
-player3 = Player(color=(0, 255 ,0 )) # Create the player
 player1 = Wiktor()
 player2 = Dominik()
+player3 = Dawid()
+player4 = Piotr()
+
 
 
 flat1 = Flat(flat_1_data)
@@ -67,24 +70,23 @@ while running:
         player3.move(0, 2, flat1.walls)
 
 
+    if key[pygame.K_f]:
+        player4.move(-2, 0, flat1.walls)
+    if key[pygame.K_h]:
+        player4.move(2, 0, flat1.walls)
+    if key[pygame.K_t]:
+        player4.move(0, -2, flat1.walls)
+    if key[pygame.K_g]:
+        player4.move(0, 2, flat1.walls)
 
-
-    # # Just added this to make it slightly fun ;)
-    # if player.rect.colliderect(end_rect):
-    #     raise SystemExit,sound.play()
-    #     print "You win Wiktor!"
-    # if player1.rect.colliderect(end_rect):
-    #     raise SystemExit, "You win piotrek!"
-    # if player2.rect.colliderect(end_rect):
-    #     raise SystemExit, "You win! "
 
     # Draw the scenea
     screen.fill((0, 0, 0))
     flat1.draw(screen)
-    # pygame.draw.rect(screen, (255, 0, 0), end_rect)
+
     player1.draw(screen)
-    # pygame.draw.rect(screen, (255, 0, 0), end_rect)
     player2.draw(screen)
     player3.draw(screen)
+    player4.draw(screen)
 
     pygame.display.flip()
