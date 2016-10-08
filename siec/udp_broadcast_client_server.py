@@ -2,7 +2,9 @@ import socket
 import sys
 import time
 import subprocess
-import ipaddress
+#import ipaddress
+import platform
+import re
 
 MAX = 65535
 PORT = 50004
@@ -16,6 +18,28 @@ def get_host_ip():
     return ip_string
 
 def get_mask(ip_string):
+    if platform.system() == 'Windows':
+        return get_mask_from_ipconfig(ip_string)
+    if platform.system() == 'Linux':
+        return get_broadcast_ip_from_ip_addr(ip_string)
+    return "255.255.255.0"
+
+def get_broadcast_ip_from_ip_addr(ip_string):
+    proc = subprocess.Popen(['ip', 'addr'], stdout=subprocess.PIPE)
+    line = proc.stdout.readline()
+    while line:
+        line = proc.stdout.readline()
+        # print line
+        match = re.search(r"inet\s+(\S+)\s+brd\s+(\S+)", line)
+        if match:
+            ip_addr = match.group(1)
+            broadcast_addr = match.group(2)
+            # print ip_string, ip_addr, broadcast_addr
+            if ip_string in ip_addr:
+                return broadcast_addr
+    return "255.255.255.0"
+
+def get_mask_from_ipconfig(ip_string):
     proc = subprocess.Popen('ipconfig', stdout=subprocess.PIPE)
     while True:
         line = proc.stdout.readline()
@@ -30,9 +54,18 @@ def get_mask(ip_string):
     # print 'mask = %s' % mask
     return mask
 
+def get_broadcast_ip(ip_string):
+    if platform.system() == 'Windows':
+        return get_broadcast_ip_from_ifconfig(ip_string)
+    if platform.system() == 'Linux':
+        return get_broadcast_ip_from_ip_addr(ip_string)
+    parts = ip_string.split('.')
+    parts[-1]='255'
+    return ".".join(parts)
 
-def get_broadcast_ip(ip_string, mask_string):
+def get_broadcast_ip_from_ifconfig(ip_string):
     """Broadcast IP is IP bitwise ORed with Bit-negated mask"""
+    mask_string = get_mask_from_ipconfig(host_ip)
     mask_int_parts = [(~int(part) & 0xFF) for part in mask_string.split('.')]
     # print "inverted_mask %s" % mask_int_parts
     ip_int_parts = [(int(part) & 0xFF) for part in ip_string.split('.')]
@@ -46,14 +79,14 @@ def get_broadcast_ip(ip_string, mask_string):
 
 host_ip = get_host_ip()
 # ip_mask = get_mask(host_ip)
-h_ip = ipaddress.IPv4Interface(socket.inet_aton(host_ip))
-print h_ip
-ip_mask = h_ip.network.hostmask
-# broadcast_ip = get_broadcast_ip(host_ip, ip_mask)
-broadcast_ip = h_ip.network.broadcast_address
+# h_ip = ipaddress.IPv4Interface(socket.inet_aton(host_ip))
+# print h_ip
+# ip_mask = h_ip.network.netmask
+broadcast_ip = get_broadcast_ip(host_ip)
+# broadcast_ip = str(h_ip.network.broadcast_address)
 
 print "HOST IP      = %s" % host_ip
-print "IP MASK      = %s" % ip_mask
+# print "IP MASK      = %s" % ip_mask
 print "BROADCAST IP = %s" % broadcast_ip
 
 s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
