@@ -2,6 +2,7 @@ import socket
 import sys
 import time
 import subprocess
+import ipaddress
 
 MAX = 65535
 PORT = 50004
@@ -10,7 +11,7 @@ def get_host_ip():
     s1 = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s1.connect(('10.255.255.255', 0))
     ip_string = s1.getsockname()[0]
-    # print 's1 addr == ', ip_string
+    print 'HOST IP addr == ', ip_string
     s1.close()
     return ip_string
 
@@ -44,8 +45,12 @@ def get_broadcast_ip(ip_string, mask_string):
     return broadcast_ip
 
 host_ip = get_host_ip()
-ip_mask = get_mask(host_ip)
-broadcast_ip = get_broadcast_ip(host_ip, ip_mask)
+# ip_mask = get_mask(host_ip)
+h_ip = ipaddress.IPv4Interface(socket.inet_aton(host_ip))
+print h_ip
+ip_mask = h_ip.network.hostmask
+# broadcast_ip = get_broadcast_ip(host_ip, ip_mask)
+broadcast_ip = h_ip.network.broadcast_address
 
 print "HOST IP      = %s" % host_ip
 print "IP MASK      = %s" % ip_mask
