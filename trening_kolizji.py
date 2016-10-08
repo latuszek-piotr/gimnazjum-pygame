@@ -86,7 +86,7 @@ level = [
 x = y = 0
 for row in level:
     for col in row:
-        if col == "w":
+        if col == "W":
             Wall((x, y))
         if col == "E":
             end_rect = pygame.Rect(x, y, 16, 16)

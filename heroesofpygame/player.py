@@ -19,7 +19,7 @@ class Player(Pixel):
                 # I have collision with him
                 self.collision(dx, dy, scene_object)
                 # and he has collision with me
-                scene_object.collision(dx, dy, self)
+                #scene_object.collision(dx, dy, self)
 
     def collides(self, other_scene_object):
         return self.rect.colliderect(other_scene_object.rect)
