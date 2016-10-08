@@ -1,6 +1,7 @@
 import os
 import random
 import pygame
+import sys
 
 from heroesofpygame.player import Player
 from heroesofpygame.wall import Wall
@@ -29,7 +30,8 @@ players = {
     "Dawid":  Dawid(),
     "Piotr":  Piotr(),
     }
-active_player = players["Wiktor"]
+active_player_name = sys.argv[1]
+active_player = players[active_player_name]
 
 flat1 = Flat(flat_1_data)
 
