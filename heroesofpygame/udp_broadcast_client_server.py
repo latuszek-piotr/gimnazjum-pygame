@@ -103,7 +103,7 @@ class NetworkConnection(object):
             host_ip = get_host_ip()
             self.broadcast_ip = get_broadcast_ip(host_ip)
         self.broadcast_address = (self.broadcast_ip, self.port)
-        print 'Rozglaszam swoja pozycje gracza na adres: {}'.format(str(self.broadcast_address))
+        # print 'Rozglaszam swoja pozycje gracza na adres: {}'.format(str(self.broadcast_address))
 
     def shutdown(self):
         self.connection.close()
@@ -111,18 +111,18 @@ class NetworkConnection(object):
     def receive(self):
         try:
             self.last_data, self.last_sender_address = self.connection.recvfrom(self.max_buffsize)
-            print 'Dostalem "%s" od: %s' % (self.last_data, self.last_sender_address)
+            # print 'Dostalem "%s" od: %s' % (self.last_data, self.last_sender_address)
             return self.last_data
         except socket.timeout:
             return None
 
     def send_to_last_sender(self, data):
         if self.last_sender_address is not None:
-            print 'Sending "%s" to: %s' % (data, self.last_sender_address)
+            # print 'Sending "%s" to: %s' % (data, self.last_sender_address)
             self.connection.sendto(data, self.last_sender_address)
 
     def broadcast(self, data):
-        print 'Sending "%s" to: %s' % (data, self.broadcast_address)
+        # print 'Sending "%s" to: %s' % (data, self.broadcast_address)
         self.connection.sendto(data, self.broadcast_address)
 
 if __name__ == '__main__':
