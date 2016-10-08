@@ -11,6 +11,8 @@ from heroesofpygame.dominik import Dominik
 from heroesofpygame.piotr import Piotr
 from heroesofpygame.dawid import Dawid
 
+from heroesofpygame.udp_broadcast_client_server import NetworkConnection
+
 clock = pygame.time.Clock()
 
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -19,6 +21,8 @@ pygame.init()
 
 pygame.display.set_caption("szkola_1_pietro")
 screen = pygame.display.set_mode((1300, 650))
+
+net_connection = NetworkConnection()
 
 player1 = Wiktor()
 player2 = Dominik()
@@ -44,16 +48,22 @@ while running:
         if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
             running = False
 
+    network_data = net_connection.receive()
+
     # Move the player if an arrow key is pressed
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
-        player1.move(-1, 0, all_objects)
+        nowa_pozycja = player1.move(-1, 0, all_objects)
+        net_connection.broadcast(data=nowa_pozycja)
     if key[pygame.K_RIGHT]:
-        player1.move(1, 0, all_objects)
+        nowa_pozycja = player1.move(1, 0, all_objects)
+        net_connection.broadcast(data=nowa_pozycja)
     if key[pygame.K_UP]:
-        player1.move(0, -1, all_objects)
+        nowa_pozycja = player1.move(0, -1, all_objects)
+        net_connection.broadcast(data=nowa_pozycja)
     if key[pygame.K_DOWN]:
-        player1.move(0, 1, all_objects)
+        nowa_pozycja = player1.move(0, 1, all_objects)
+        net_connection.broadcast(data=nowa_pozycja)
 
     if key[pygame.K_a]:
         player2.move(-2, 0, all_objects)
