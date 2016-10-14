@@ -38,6 +38,7 @@ player3 = players["Dawid"]
 player4 = players["Piotr"]
 
 flower_1 = Flower()
+flower_2 = Flower(pos=(500, 300))
 
 flat1 = Flat(flat_1_data)
 
@@ -104,6 +105,7 @@ while running:
     screen.fill((0, 0, 0))
     flat1.draw(screen)
     flower_1.draw(screen)
+    flower_2.draw(screen)
     active_player.draw(screen)
     player2.draw(screen)
     player3.draw(screen)
