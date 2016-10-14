@@ -11,7 +11,7 @@ from heroesofpygame.wiktor import Wiktor
 from heroesofpygame.dominik import Dominik
 from heroesofpygame.piotr import Piotr
 from heroesofpygame.dawid import Dawid
-
+from heroesofpygame.flower import Flower
 from heroesofpygame.udp_broadcast_client_server import NetworkConnection
 
 clock = pygame.time.Clock()
@@ -36,6 +36,8 @@ player1 = players["Wiktor"]
 player2 = players["Dominik"]
 player3 = players["Dawid"]
 player4 = players["Piotr"]
+
+flower_1 = Flower()
 
 flat1 = Flat(flat_1_data)
 
@@ -101,7 +103,7 @@ while running:
     # Draw the scenea
     screen.fill((0, 0, 0))
     flat1.draw(screen)
-
+    flower_1.draw(screen)
     active_player.draw(screen)
     player2.draw(screen)
     player3.draw(screen)
