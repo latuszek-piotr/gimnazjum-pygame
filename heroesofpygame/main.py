@@ -39,17 +39,17 @@ all_objects = flat1.walls
 for player_name in players:
     all_objects.append(players[player_name])
 
-running = True
-while running:
 
-    clock.tick(60)
-
+def is_game_finished():
+    running = True
     for e in pygame.event.get():
         if e.type == pygame.QUIT:
             running = False
         if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
             running = False
+    return running
 
+def move_remote_player(net_connection, active_player, players):
     network_data = net_connection.receive()
     # x=363, y=231, name=Wiktor
 
@@ -64,7 +64,7 @@ while running:
             moved_player.rect.x = x
             moved_player.rect.y = y
 
-    # Move the player if an arrow key is pressed
+def move_player_using_keyboard(active_player, all_objects, net_connection):
     key = pygame.key.get_pressed()
     if key[pygame.K_LEFT]:
         nowa_pozycja = active_player.move(-1, 0, all_objects)
@@ -78,6 +78,21 @@ while running:
     if key[pygame.K_DOWN]:
         nowa_pozycja = active_player.move(0, 1, all_objects)
         net_connection.broadcast(data=nowa_pozycja)
+
+# ---------------------------- glowna petla zdarzen pygame
+
+running = True
+while running:
+
+
+    clock.tick(60)
+
+    running = is_game_finished()
+    move_remote_player(net_connection, active_player, players)
+
+    # Move the player if an arrow key is pressed
+    move_player_using_keyboard(active_player, all_objects, net_connection)
+
 
     # if key[pygame.K_a]:
     #     player2.move(-2, 0, all_objects)
