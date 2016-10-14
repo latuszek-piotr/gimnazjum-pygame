@@ -32,6 +32,10 @@ players = {
     }
 active_player_name = sys.argv[1]
 active_player = players[active_player_name]
+player1 = players["Wiktor"]
+player2 = players["Dominik"]
+player3 = players["Dawid"]
+player4 = players["Piotr"]
 
 flat1 = Flat(flat_1_data)
 
@@ -64,19 +68,18 @@ def move_remote_player(net_connection, active_player, players):
             moved_player.rect.x = x
             moved_player.rect.y = y
 
-def move_player_using_keyboard(active_player, all_objects, net_connection):
+def move_player_using_keyboard(key_left, key_right, key_up, key_down, active_player, all_objects, net_connection):
     key = pygame.key.get_pressed()
-    if key[pygame.K_LEFT]:
+    nowa_pozycja = None
+    if key[key_left]:
         nowa_pozycja = active_player.move(-1, 0, all_objects)
-        net_connection.broadcast(data=nowa_pozycja)
-    if key[pygame.K_RIGHT]:
+    if key[key_right]:
         nowa_pozycja = active_player.move(1, 0, all_objects)
-        net_connection.broadcast(data=nowa_pozycja)
-    if key[pygame.K_UP]:
+    if key[key_up]:
         nowa_pozycja = active_player.move(0, -1, all_objects)
-        net_connection.broadcast(data=nowa_pozycja)
-    if key[pygame.K_DOWN]:
+    if key[key_down]:
         nowa_pozycja = active_player.move(0, 1, all_objects)
+    if (net_connection != None) and (nowa_pozycja != None):
         net_connection.broadcast(data=nowa_pozycja)
 
 # ---------------------------- glowna petla zdarzen pygame
@@ -84,52 +87,24 @@ def move_player_using_keyboard(active_player, all_objects, net_connection):
 running = True
 while running:
 
-
     clock.tick(60)
 
     running = is_game_finished()
-    move_remote_player(net_connection, active_player, players)
+    # move_remote_player(net_connection, active_player, players)
 
     # Move the player if an arrow key is pressed
-    move_player_using_keyboard(active_player, all_objects, net_connection)
-
-
-    # if key[pygame.K_a]:
-    #     player2.move(-2, 0, all_objects)
-    # if key[pygame.K_d]:
-    #     player2.move(2, 0, all_objects)
-    # if key[pygame.K_w]:
-    #     player2.move(0, -2, all_objects)
-    # if key[pygame.K_s]:
-    #     player2.move(0, 2, all_objects)
-    # 
-    # if key[pygame.K_j]:
-    #     player3.move(-2, 0, all_objects)
-    # if key[pygame.K_l]:
-    #     player3.move(2, 0, all_objects)
-    # if key[pygame.K_i]:
-    #     player3.move(0, -2, all_objects)
-    # if key[pygame.K_k]:
-    #     player3.move(0, 2, all_objects)
-    # 
-    # 
-    # if key[pygame.K_f]:
-    #     player4.move(-2, 0, all_objects)
-    # if key[pygame.K_h]:
-    #     player4.move(2, 0, all_objects)
-    # if key[pygame.K_t]:
-    #     player4.move(0, -2, all_objects)
-    # if key[pygame.K_g]:
-    #     player4.move(0, 2, all_objects)
-
+    move_player_using_keyboard(pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN, active_player, all_objects, net_connection)
+    move_player_using_keyboard(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, player2, all_objects, None)
+    move_player_using_keyboard(pygame.K_j, pygame.K_l, pygame.K_i, pygame.K_k, player3, all_objects, None)
+    move_player_using_keyboard(pygame.K_f, pygame.K_h, pygame.K_t, pygame.K_g, player4, all_objects, None)
 
     # Draw the scenea
     screen.fill((0, 0, 0))
     flat1.draw(screen)
 
     active_player.draw(screen)
-    # player2.draw(screen)
-    # player3.draw(screen)
-    # player4.draw(screen)
+    player2.draw(screen)
+    player3.draw(screen)
+    player4.draw(screen)
 
     pygame.display.flip()
