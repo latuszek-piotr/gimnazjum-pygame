@@ -12,6 +12,7 @@ from heroesofpygame.dominik import Dominik
 from heroesofpygame.piotr import Piotr
 from heroesofpygame.dawid import Dawid
 from heroesofpygame.flower import Flower
+from heroesofpygame.parter import Parter
 from heroesofpygame.strzal import Strzal
 from heroesofpygame.udp_broadcast_client_server import NetworkConnection
 
@@ -40,6 +41,7 @@ player4 = players["Piotr"]
 
 flower_1 = Flower()
 flower_2 = Flower(pos=(500, 300))
+parter = Parter()
 
 strzal = Strzal()
 
@@ -115,6 +117,7 @@ while running:
     # Draw the scenea
     screen.fill((0, 0, 0))
     flat1.draw(screen)
+    parter.draw(screen)
     flower_1.draw(screen)
     flower_2.draw(screen)
     active_player.draw(screen)
