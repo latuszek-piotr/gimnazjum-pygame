@@ -12,6 +12,7 @@ from heroesofpygame.dominik import Dominik
 from heroesofpygame.piotr import Piotr
 from heroesofpygame.dawid import Dawid
 from heroesofpygame.flower import Flower
+from heroesofpygame.strzal import Strzal
 from heroesofpygame.udp_broadcast_client_server import NetworkConnection
 
 clock = pygame.time.Clock()
@@ -39,6 +40,8 @@ player4 = players["Piotr"]
 
 flower_1 = Flower()
 flower_2 = Flower(pos=(500, 300))
+
+strzal = Strzal()
 
 flat1 = Flat(flat_1_data)
 
@@ -85,6 +88,12 @@ def move_player_using_keyboard(key_left, key_right, key_up, key_down, active_pla
     if (net_connection != None) and (nowa_pozycja != None):
         net_connection.broadcast(data=nowa_pozycja)
 
+
+def sprawdz_strzal(strzal):
+    key = pygame.key.get_pressed()
+    if key[pygame.K_SPACE]:
+        strzal.start()
+
 # ---------------------------- glowna petla zdarzen pygame
 
 running = True
@@ -101,6 +110,8 @@ while running:
     move_player_using_keyboard(pygame.K_j, pygame.K_l, pygame.K_i, pygame.K_k, player3, all_objects, None)
     move_player_using_keyboard(pygame.K_f, pygame.K_h, pygame.K_t, pygame.K_g, player4, all_objects, None)
 
+    sprawdz_strzal(strzal)
+
     # Draw the scenea
     screen.fill((0, 0, 0))
     flat1.draw(screen)
@@ -110,5 +121,6 @@ while running:
     player2.draw(screen)
     player3.draw(screen)
     player4.draw(screen)
+    strzal.draw(screen)
 
     pygame.display.flip()
