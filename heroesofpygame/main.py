@@ -115,6 +115,7 @@ while running:
     sprawdz_strzal(strzal)
 
     # Draw the scenea
+
     screen.fill((0, 0, 0))
     flat1.draw(screen)
     parter.draw(screen)
