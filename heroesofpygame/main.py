@@ -8,7 +8,7 @@ from heroesofpygame.wiktor import Wiktor
 from heroesofpygame.dominik import Dominik
 from heroesofpygame.piotr import Piotr
 from heroesofpygame.dawid import Dawid
-from heroesofpygame.flower import Flower
+# from heroesofpygame.flower import Flower      # to ma sie narysowac w sali
 from heroesofpygame.parter import Parter
 from heroesofpygame.strzal import Strzal
 from heroesofpygame.udp_broadcast_client_server import NetworkConnection
@@ -36,16 +36,17 @@ player2 = players["Dominik"]
 player3 = players["Dawid"]
 player4 = players["Piotr"]
 
-flower_1 = Flower()
-flower_2 = Flower(pos=(500, 300))
+# flower_1 = Flower()
+# flower_2 = Flower(pos=(500, 300))    # to ma sie narysowac w sali
 parter = Parter()
-# parter.stolowka.przeskaluj(1300, 650)
-parter.osiem_a.przeskaluj(1300, 650)
-# parter.korytarz_szatni.przeskaluj(1300, 650)
+
+aktywna_sala = parter.osiem_a
+aktywna_sala.przeskaluj(1300, 650)
 
 strzal = Strzal()
 
-all_objects =parter.walls()
+# all_objects = parter.walls()
+all_objects = aktywna_sala.walls()
 for player_name in players:
     all_objects.append(players[player_name])
 
@@ -115,10 +116,12 @@ while running:
     # Draw the scenea
 
     screen.fill((0, 0, 0))
-    parter.draw(screen)
-    flower_1.draw(screen)
-    flower_2.draw(screen)
+    # parter.draw(screen)     # rysujemy go tylko w trybie "podglad mapy"
+    aktywna_sala.draw(screen)
+    # flower_1.draw(screen)   # to ma sie narysowac w sali
+    # flower_2.draw(screen)
     active_player.draw(screen)
+    player1.draw(screen)
     player2.draw(screen)
     player3.draw(screen)
     player4.draw(screen)
