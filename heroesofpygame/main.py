@@ -40,6 +40,9 @@ player4 = players["Piotr"]
 flower_1 = Flower()
 flower_2 = Flower(pos=(500, 300))
 parter = Parter()
+# parter.stolowka.przeskaluj(1300, 650)
+parter.osiem_a.przeskaluj(1300, 650)
+# parter.korytarz_szatni.przeskaluj(1300, 650)
 
 strzal = Strzal()
 

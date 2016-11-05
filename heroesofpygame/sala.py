@@ -8,11 +8,37 @@ class ClassRoom(object):
         self.pos = pos
         self.wall_width = wall_width
         self.color = color
-        self.left_wall = pygame.Rect(pos[0], pos[1], self.wall_width, self.room_length)
-        self.right_wall = pygame.Rect(pos[0]+room_width-wall_width, pos[1], self.wall_width, self.room_length)
-        self.top_wall = pygame.Rect(pos[0]+wall_width, pos[1], room_width-2*wall_width, wall_width)
-        self.bottom_wall = pygame.Rect(pos[0]+wall_width, pos[1]+room_length-wall_width, room_width-2*wall_width, wall_width)
-        
+        self.przelicz_sciany(self.pos, self.room_width, self.room_length)
+
+    def przelicz_sciany(self, pos, room_width, room_length):
+        self.left_wall = pygame.Rect(pos[0], pos[1], self.wall_width, room_length)
+        self.right_wall = pygame.Rect(pos[0]+room_width-self.wall_width, pos[1], self.wall_width, room_length)
+        self.top_wall = pygame.Rect(pos[0]+self.wall_width, pos[1], room_width-2*self.wall_width, self.wall_width)
+        self.bottom_wall = pygame.Rect(pos[0]+self.wall_width, pos[1]+room_length-self.wall_width, room_width-2*self.wall_width, self.wall_width)
+
+    def skala_pozioma(self, docelowa_szerokosc):
+        return docelowa_szerokosc / float(self.room_width)
+
+    def skala_pionowa(self, docelowa_dlugosc):
+        return docelowa_dlugosc / float(self.room_length)
+
+    def przeskaluj(self, docelowa_szerokosc, docelowa_dlugosc):
+        skala_pion = self.skala_pionowa(docelowa_dlugosc)
+        skala_poziom = self.skala_pozioma(docelowa_szerokosc)
+
+        room_width_pion = self.room_width * skala_pion
+        room_length_pion = self.room_length * skala_pion
+        room_width_poziom = self.room_width * skala_poziom
+        room_length_poziom = self.room_length * skala_poziom
+
+        if (room_width_pion <= docelowa_szerokosc) and (room_length_pion <= docelowa_dlugosc):
+            roznica_szerokosci = docelowa_szerokosc - room_width_pion
+            poz_x = roznica_szerokosci / 2
+            self.przelicz_sciany((poz_x,0), room_width_pion, room_length_pion)
+        else:
+            roznica_dlugosci = docelowa_dlugosc - room_length_poziom
+            poz_y = roznica_dlugosci / 2
+            self.przelicz_sciany((0,poz_y), room_width_poziom, room_length_poziom)
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.color, self.left_wall)
