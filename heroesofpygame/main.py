@@ -1,12 +1,10 @@
 import os
-import random
-import pygame
 import sys
 
-from heroesofpygame.player import Player
-from heroesofpygame.wall import Wall
-from heroesofpygame.flat import Flat, flat_1_data
+import pygame
 
+from heroesofpygame.flat import Flat, flat_1_data
+from heroesofpygame import pietro
 from heroesofpygame.wiktor import Wiktor
 from heroesofpygame.dominik import Dominik
 from heroesofpygame.piotr import Piotr

@@ -16,6 +16,15 @@ class Parter(object):
         self.kantorek_wf = ClassRoom(pos=(149,163), room_width=19, room_length=18)
         self.korytarz_do_szatni = ClassRoom(pos=(168,134), room_width=73, room_length=47)
         self.stolowka = ClassRoom(pos=(241,179), room_width=60, room_length=40)
+        self.lazienka_dziewczyn = ClassRoom(pos=(85,180), room_width=36, room_length=20)
+        self.klasa_bio = ClassRoom(pos=(600,300), room_width=59, room_length=87)
+        self.kantorek_chem = ClassRoom(pos=(600,387), room_width=30, room_length=38)
+        self.kantorek_fiz = ClassRoom(pos=(629,387), room_width=30, room_length=38)
+        self.swietlica_gorna = ClassRoom(pos=(659,365), room_width=40, room_length=60)
+        self.pedagog = ClassRoom(pos=(659,300), room_width=25, room_length=28)
+        self.pokoj_nauczycieli = ClassRoom(pos=(684,300), room_width=55, room_length=28)
+        self.klasa_info = ClassRoom(pos=(699,365), room_width=72, room_length=60)
+        self.klasa_hist = ClassRoom(pos=(770,365), room_width=72, room_length=60)
 
 
     def draw(self, screen):
@@ -32,4 +41,12 @@ class Parter(object):
         self.kantorek_wf.draw(screen)
         self.korytarz_do_szatni.draw(screen)
         self.stolowka.draw(screen)
-
+        self.lazienka_dziewczyn.draw(screen)
+        self.klasa_bio.draw(screen)
+        self.kantorek_chem.draw(screen)
+        self.kantorek_fiz.draw(screen)
+        self.swietlica_gorna.draw(screen)
+        self.pedagog.draw(screen)
+        self.pokoj_nauczycieli.draw(screen)
+        self.klasa_info.draw(screen)
+        self.klasa_hist.draw(screen)
