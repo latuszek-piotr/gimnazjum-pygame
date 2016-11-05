@@ -3,8 +3,7 @@ import sys
 
 import pygame
 
-from heroesofpygame.flat import Flat, flat_1_data
-from heroesofpygame import pietro
+from heroesofpygame import Pietro
 from heroesofpygame.wiktor import Wiktor
 from heroesofpygame.dominik import Dominik
 from heroesofpygame.piotr import Piotr
@@ -46,9 +45,7 @@ parter.osiem_a.przeskaluj(1300, 650)
 
 strzal = Strzal()
 
-flat1 = Flat(flat_1_data)
-
-all_objects = flat1.walls
+all_objects =parter.walls()
 for player_name in players:
     all_objects.append(players[player_name])
 
@@ -118,7 +115,6 @@ while running:
     # Draw the scenea
 
     screen.fill((0, 0, 0))
-    flat1.draw(screen)
     parter.draw(screen)
     flower_1.draw(screen)
     flower_2.draw(screen)

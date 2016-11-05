@@ -1,5 +1,5 @@
 import pygame
-
+from heroesofpygame.wall import NewWall
 
 class ClassRoom(object):
     def __init__(self, pos, room_width, room_length, wall_width=3, color=(75, 5, 205)):
@@ -11,10 +11,13 @@ class ClassRoom(object):
         self.przelicz_sciany(self.pos, self.room_width, self.room_length)
 
     def przelicz_sciany(self, pos, room_width, room_length):
-        self.left_wall = pygame.Rect(pos[0], pos[1], self.wall_width, room_length)
-        self.right_wall = pygame.Rect(pos[0]+room_width-self.wall_width, pos[1], self.wall_width, room_length)
-        self.top_wall = pygame.Rect(pos[0]+self.wall_width, pos[1], room_width-2*self.wall_width, self.wall_width)
-        self.bottom_wall = pygame.Rect(pos[0]+self.wall_width, pos[1]+room_length-self.wall_width, room_width-2*self.wall_width, self.wall_width)
+        self.left_wall = NewWall((pos[0], pos[1]), self.wall_width, room_length)
+        self.right_wall = NewWall((pos[0]+room_width-self.wall_width, pos[1]), self.wall_width, room_length)
+        self.top_wall = NewWall((pos[0]+self.wall_width, pos[1]), room_width-2*self.wall_width, self.wall_width)
+        self.bottom_wall = NewWall((pos[0]+self.wall_width, pos[1]+room_length-self.wall_width), room_width-2*self.wall_width, self.wall_width)
+
+    def walls(self):
+        return [self.left_wall, self.right_wall, self.top_wall, self.bottom_wall]
 
     def skala_pozioma(self, docelowa_szerokosc):
         return docelowa_szerokosc / float(self.room_width)
@@ -41,8 +44,5 @@ class ClassRoom(object):
             self.przelicz_sciany((0,poz_y), room_width_poziom, room_length_poziom)
 
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.left_wall)
-        pygame.draw.rect(screen, self.color, self.right_wall)
-        pygame.draw.rect(screen, self.color, self.top_wall)
-        pygame.draw.rect(screen, self.color, self.bottom_wall)
-
+        for wall in self.walls():
+            wall.draw(screen)

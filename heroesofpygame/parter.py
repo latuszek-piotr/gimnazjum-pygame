@@ -26,27 +26,36 @@ class Parter(object):
         self.klasa_info = ClassRoom(pos=(699,365), room_width=72, room_length=60)
         self.klasa_hist = ClassRoom(pos=(770,365), room_width=72, room_length=60)
 
+    def sale(self):
+        return [self.sala_gimn,
+                self.szatnia_duza,
+                self.korytarz_szatni,
+                self.szatnia_mala,
+                self.osiem_a,
+                self.osiem,
+                self.archiwum,
+                self.siudemka,
+                self.szostka,
+                self.korytarz_do_salisiedem,
+                self.kantorek_wf,
+                self.korytarz_do_szatni,
+                self.stolowka,
+                self.lazienka_dziewczyn,
+                self.klasa_bio,
+                self.kantorek_chem,
+                self.kantorek_fiz,
+                self.swietlica_gorna,
+                self.pedagog,
+                self.pokoj_nauczycieli,
+                self.klasa_info,
+                self.klasa_hist]
+
+    def walls(self):
+        sciany = []
+        for sala in self.sale():
+            sciany.extend(sala.walls())
+        return sciany
 
     def draw(self, screen):
-        self.sala_gimn.draw(screen)
-        self.szatnia_duza.draw(screen)
-        self.korytarz_szatni.draw(screen)
-        self.szatnia_mala.draw(screen)
-        self.osiem_a.draw(screen)
-        self.osiem.draw(screen)
-        self.archiwum.draw(screen)
-        self.siudemka.draw(screen)
-        self.szostka.draw(screen)
-        self.korytarz_do_salisiedem.draw(screen)
-        self.kantorek_wf.draw(screen)
-        self.korytarz_do_szatni.draw(screen)
-        self.stolowka.draw(screen)
-        self.lazienka_dziewczyn.draw(screen)
-        self.klasa_bio.draw(screen)
-        self.kantorek_chem.draw(screen)
-        self.kantorek_fiz.draw(screen)
-        self.swietlica_gorna.draw(screen)
-        self.pedagog.draw(screen)
-        self.pokoj_nauczycieli.draw(screen)
-        self.klasa_info.draw(screen)
-        self.klasa_hist.draw(screen)
+        for sala in self.sale():
+            sala.draw(screen)
