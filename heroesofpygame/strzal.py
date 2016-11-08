@@ -4,7 +4,7 @@ import time
 
 class Strzal(object):
     strzal_img = []
-    for nr in range(1,6):
+    for nr in range(1,10):
         strzal_img.append(os.path.join('grafika', 'strzal', 'strzal_%s.png' % nr))
 
     def __init__(self, pos=(910, 150), size=50):
@@ -14,7 +14,11 @@ class Strzal(object):
                        (pygame.transform.scale(pygame.image.load(Strzal.strzal_img[1]).convert_alpha(), (100, 100)),(0, 20)),
                        (pygame.transform.scale(pygame.image.load(Strzal.strzal_img[2]).convert_alpha(), (100, 120)),(20, 0)),
                        (pygame.transform.scale(pygame.image.load(Strzal.strzal_img[3]).convert_alpha(), (200, 120)),(40, 0)),
-                       (pygame.transform.scale(pygame.image.load(Strzal.strzal_img[4]).convert_alpha(), (180, 120)),(70, 0)),
+                       (pygame.transform.scale(pygame.image.load(Strzal.strzal_img[4]).convert_alpha(), (180, 120)),(80, 0)),
+                       (pygame.transform.scale(pygame.image.load(Strzal.strzal_img[5]).convert_alpha(), (90, 120)),(110, 0)),
+                       (pygame.transform.scale(pygame.image.load(Strzal.strzal_img[6]).convert_alpha(), (80, 120)),(110, 0)),
+                       (pygame.transform.scale(pygame.image.load(Strzal.strzal_img[7]).convert_alpha(), (70, 120)),(110, 0)),
+                       (pygame.transform.scale(pygame.image.load(Strzal.strzal_img[8]).convert_alpha(), (60, 120)),(110, 0)),
                        ]
         self.pos = pos
         self.start_time = None
@@ -27,7 +31,7 @@ class Strzal(object):
     def draw(self, screen):
         if self.start_time:
             image_index = self.ktory_obraz()
-            if image_index > 4:
+            if image_index >= len(self.images):
                 self.start_time = None  # koniec strzalu
             else:
                 # Copy image to screen:
