@@ -90,14 +90,17 @@ def get_broadcast_ip_from_ifconfig(ip_string):
 
 
 class NetworkConnection(object):
-    def __init__(self, port=50004, broadcast_ip=None, use_server=True):
+    def __init__(self, nazwa, port=50004, broadcast_ip=None, use_server=True):
+        self.nazwa = nazwa
         self.port = port
         self.max_buffsize = 65535
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.connection.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
         self.connection.settimeout(0.001)
         self.last_data = ''
+        self.last_msg_type = ''
         self.last_sender_address = None
+        self.last_sender_name = ''
         self.broadcast_ip = broadcast_ip
         self.broadcast_delay = 0.1
         self._last_broadcast_time = time.time()
@@ -124,28 +127,72 @@ class NetworkConnection(object):
         self.connection.close()
 
     def receive(self):
+        data = self._receive()
+        if data and (self.last_msg_typ == 'REQ'):
+            self.acknowledge_receival()
+        return data
+
+    def _receive(self):
         try:
-            self.last_data, self.last_sender_address = self.connection.recvfrom(self.max_buffsize)
-            # print 'Dostalem "%s" od: %s' % (self.last_data, self.last_sender_address)
+            network_packet, sender_address = self.connection.recvfrom(self.max_buffsize)
+            print 'Dostalem "%s" od: %s' % (network_packet, sender_address)
+            (msg_type, sender_name, last_data) = self._unpack_network_packet(network_packet)
+            # drop broadcasted messages from self
+            if sender_name == self.nazwa:
+                return None
+            self.last_sender_address = sender_address
+
+            (self.last_msg_type, self.last_sender_name, self.last_data) = (msg_type, sender_name, last_data)
             return self.last_data
         except socket.timeout:
             return None
+
+    def acknowledge_receival(self):
+        network_packet = self._build_network_packet("ACK", self.last_data)
+        self.send_to_last_sender(network_packet)
 
     def send_to_last_sender(self, data):
         if self.last_sender_address is not None:
             # print 'Sending "%s" to: %s' % (data, self.last_sender_address)
             self.connection.sendto(data, self.last_sender_address)
 
-    def broadcast(self, data):
+    def broadcast(self, data, await_confirmation=False):
         if self.broadcast_address is None:
             return
         now = time.time()
         delay_from_last_broadcast = now - self._last_broadcast_time
         if delay_from_last_broadcast > self.broadcast_delay:
-            # print 'Sending "%s" to: %s' % (data, self.broadcast_address)
-            self.connection.sendto(data, self.broadcast_address)
-            self._last_broadcast_time = now
+            self._broadcast(data, await_confirmation)
+            self._last_broadcast_time = time.time()
 
+    def _broadcast(self, data, await_confirmation=False, await_timeout=1):
+        if not await_confirmation:
+            network_packet = self._build_network_packet("IND", data)
+            self.connection.sendto(network_packet, self.broadcast_address)
+        else:
+            network_packet = self._build_network_packet("REQ", data)
+            self._await_other_players(network_packet)
+
+    def _await_other_players(self, network_packet, await_timeout=50):
+        self.connection.sendto(network_packet, self.broadcast_address)
+        now = start = time.time()
+        acknowledged_by = {}
+        while (now - start < await_timeout):
+            recv_data = self._receive()
+            if recv_data and (self.last_msg_typ == 'ACK'):
+                acknowledged_by[self.last_sender_address] = 1
+            now = time.time()
+        print acknowledged_by
+
+    def _build_network_packet(self, type, data):
+        network_packet = '{:<3.3}:{:<10.10}:{}'.format(type, self.nazwa, data)
+        return network_packet
+
+    def _unpack_network_packet(self, network_packet):
+        msg_type = network_packet[0:3]
+        sender_name = network_packet[4:14].strip()
+        data = network_packet[15:]
+        return (msg_type, sender_name, data)
 
 if __name__ == '__main__':
     broadcast_ip = None

@@ -69,6 +69,7 @@ def handle_remote_player(net_connection, active_player, players, remote_players)
     if network_data is not None:
         (pos, name, action) = Player.unpack_network_record(network_data)
         if name != active_player.__class__.__name__:
+            print "network: %s, %s, %s" % (pos, name, action)
             if action == 'move':
                 if name in remote_players:
                     moved_player = remote_players[name]
@@ -81,10 +82,10 @@ def handle_remote_player(net_connection, active_player, players, remote_players)
                 del remote_players[leaving_player_name]
 
 
-def broadcast_active_player(active_player, net_connection, action='move'):
+def broadcast_active_player(active_player, net_connection, action='move', await_confirmation=True):
     if net_connection != None:
         network_record = active_player.serialize_for_network(action=action)
-        net_connection.broadcast(data=network_record)
+        net_connection.broadcast(data=network_record, await_confirmation=await_confirmation)
 
 
 def move_player_using_keyboard(key_left, key_right, key_up, key_down, active_player, all_objects, net_connection):
@@ -102,6 +103,11 @@ def move_player_using_keyboard(key_left, key_right, key_up, key_down, active_pla
     broadcast_active_player(active_player, net_connection)
 
 
+def draw_remote(screen, remote_players):
+    for player in remote_players.values():
+        player.draw(screen)
+
+
 def sprawdz_strzal(strzal):
     key = pygame.key.get_pressed()
     if key[pygame.K_SPACE]:
@@ -109,11 +115,11 @@ def sprawdz_strzal(strzal):
 
 # ---------------------------- glowna petla zdarzen pygame
 
-net_connection = NetworkConnection()
+net_connection = NetworkConnection(active_player.nazwa)
+active_player.move_to(srodek_ekranu)
+broadcast_active_player(active_player, net_connection, action='join', await_confirmation=True)
 
 running = True
-active_player.move_to(srodek_ekranu)
-broadcast_active_player(active_player, net_connection, action='join')
 
 while running:
 
@@ -138,10 +144,11 @@ while running:
     # flower_1.draw(screen)   # to ma sie narysowac w sali
     # flower_2.draw(screen)
     active_player.draw(screen)
-    player1.draw(screen)
-    player2.draw(screen)
-    player3.draw(screen)
-    player4.draw(screen)
+    draw_remote(screen, remote_players)
+    # player1.draw(screen)
+    # player2.draw(screen)
+    # player3.draw(screen)
+    # player4.draw(screen)
     strzal.draw(screen)
 
     pygame.display.flip()

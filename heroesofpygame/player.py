@@ -5,11 +5,11 @@ from pixel import Pixel
 class Player(Pixel):
     def __init__(self, pos=(30, 30), size=4, color=(255,255,255)):
         super(Player, self).__init__(pos, size, color)
+        self.nazwa = self.__class__.__name__
 
     def serialize_for_network(self, action='move'):
         # Serialize only what is important to send over network.
-        nazwa = self.__class__.__name__
-        network_record = "x=%s, y=%s, name=%s, action=%s" % (self.rect.x, self.rect.y, nazwa, action)
+        network_record = "x=%s, y=%s, name=%s, action=%s" % (self.rect.x, self.rect.y, self.nazwa, action)
         return network_record
 
     @staticmethod
