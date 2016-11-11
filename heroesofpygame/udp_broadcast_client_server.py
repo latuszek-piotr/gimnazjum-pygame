@@ -96,11 +96,13 @@ class NetworkConnection(object):
         self.max_buffsize = 65535
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.connection.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        self.connection.settimeout(0.001)
+        self.connection.settimeout(0.01)
         self.last_data = ''
         self.last_msg_type = ''
         self.last_sender_address = None
         self.last_sender_name = ''
+
+        self.other_players = {}
         self.broadcast_ip = broadcast_ip
         self.broadcast_delay = 0.1
         self._last_broadcast_time = time.time()
@@ -141,11 +143,17 @@ class NetworkConnection(object):
             if sender_name == self.nazwa:
                 return None
             self.last_sender_address = sender_address
-
             (self.last_msg_type, self.last_sender_name, self.last_data) = (msg_type, sender_name, last_data)
+            self._update_other_players()
             return self.last_data
         except socket.timeout:
             return None
+
+
+    def _update_other_players(self):
+        if self.last_sender_name not in self.other_players:
+            self.other_players[self.last_sender_name] = {'address': self.last_sender_address,
+                                                         'last_data': self.last_data}
 
     def acknowledge_receival(self):
         network_packet = self._build_network_packet("ACK", self.last_data)
@@ -181,6 +189,7 @@ class NetworkConnection(object):
             recv_data = self._receive()
             if recv_data and (self.last_msg_typ == 'ACK'):
                 acknowledged_by[self.last_sender_address] = 1
+            self.connection.sendto(network_packet, self.broadcast_address)   # multiple tries "I'm new in play"
             now = time.time()
         print acknowledged_by
 
