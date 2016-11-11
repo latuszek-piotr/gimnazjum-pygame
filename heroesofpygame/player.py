@@ -6,6 +6,27 @@ class Player(Pixel):
     def __init__(self, pos=(30, 30), size=4, color=(255,255,255)):
         super(Player, self).__init__(pos, size, color)
 
+    def serialize_for_network(self, action='move'):
+        # Serialize only what is important to send over network.
+        nazwa = self.__class__.__name__
+        network_record = "x=%s, y=%s, name=%s, action=%s" % (self.rect.x, self.rect.y, nazwa, action)
+        return network_record
+
+    @staticmethod
+    def unpack_network_record(network_record):
+        parts = network_record.split(',')
+        #print parts
+        x = int(parts[0].split('=')[1])
+        y = int(parts[1].split('=')[1])
+        name = parts[2].split('=')[1]
+        action = parts[3].split('=')[1]
+        return ((x, y), name, action)
+
+    def move_to(self, pos):
+        # Move the rect
+        self.rect.x = pos[0]
+        self.rect.y = pos[1]
+
     def move_single_axis(self, dx, dy, all_objects_thay_may_colide):
         # Move the rect
         self.rect.x += dx
