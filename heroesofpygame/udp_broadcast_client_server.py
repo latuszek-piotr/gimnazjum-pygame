@@ -137,11 +137,12 @@ class NetworkConnection(object):
     def _receive(self):
         try:
             network_packet, sender_address = self.connection.recvfrom(self.max_buffsize)
-            print 'Dostalem "%s" od: %s' % (network_packet, sender_address)
+            # print 'Dostalem "%s" od: %s' % (network_packet, sender_address)
             (msg_type, sender_name, last_data) = self._unpack_network_packet(network_packet)
             # drop broadcasted messages from self
             if sender_name == self.nazwa:
                 return None
+            print 'Dostalem "%s" od: %s' % (network_packet, sender_address)
             self.last_sender_address = sender_address
             (self.last_msg_type, self.last_sender_name, self.last_data) = (msg_type, sender_name, last_data)
             self._update_other_players()
@@ -181,7 +182,7 @@ class NetworkConnection(object):
             network_packet = self._build_network_packet("REQ", data)
             self._await_other_players(network_packet)
 
-    def _await_other_players(self, network_packet, await_timeout=50):
+    def _await_other_players(self, network_packet, await_timeout=5):
         self.connection.sendto(network_packet, self.broadcast_address)
         now = start = time.time()
         acknowledged_by = {}

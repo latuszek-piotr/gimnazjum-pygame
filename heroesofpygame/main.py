@@ -82,7 +82,7 @@ def handle_remote_player(net_connection, active_player, players, remote_players)
                 del remote_players[leaving_player_name]
 
 
-def broadcast_active_player(active_player, net_connection, action='move', await_confirmation=True):
+def broadcast_active_player(active_player, net_connection, action='move', await_confirmation=False):
     if net_connection != None:
         network_record = active_player.serialize_for_network(action=action)
         net_connection.broadcast(data=network_record, await_confirmation=await_confirmation)
