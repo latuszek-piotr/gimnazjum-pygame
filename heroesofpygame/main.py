@@ -120,7 +120,7 @@ def sprawdz_strzal(strzal):
 
 net_connection = NetworkConnection(active_player.nazwa)
 active_player.move_to(srodek_ekranu)
-broadcast_active_player(active_player, net_connection, action='join', await_confirmation=True)
+# broadcast_active_player(active_player, net_connection, action='join', await_confirmation=True)
 
 running = True
 

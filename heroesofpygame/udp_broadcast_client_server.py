@@ -96,7 +96,7 @@ class NetworkConnection(object):
         self.max_buffsize = 65535
         self.connection = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.connection.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
-        self.connection.settimeout(0.01)
+        self.connection.settimeout(0.001)
         self.last_data = ''
         self.last_msg_type = ''
         self.last_sender_address = None
@@ -104,7 +104,7 @@ class NetworkConnection(object):
 
         self.other_players = {}
         self.broadcast_ip = broadcast_ip
-        self.broadcast_delay = 0.1
+        self.broadcast_delay = 0.01
         self._last_broadcast_time = time.time()
         if use_server:
             self.start_server()
