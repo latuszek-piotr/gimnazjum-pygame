@@ -70,7 +70,7 @@ def handle_remote_player(net_connection, active_player, players, remote_players)
     if network_data is not None:
         (pos, name, action) = Player.unpack_network_record(network_data)
         if name != active_player.__class__.__name__:
-            print "network: %s, %s, %s" % (pos, name, action)
+            # print "network: %s, %s, %s" % (pos, name, action)
             if action == 'move':
                 if name not in remote_players:
                     joining_player = players[name]
