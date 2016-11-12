@@ -62,6 +62,7 @@ def is_game_finished():
             running = False
     return running
 
+
 def handle_remote_player(net_connection, active_player, players, remote_players):
     network_data = net_connection.receive()
     # x=363, y=231, name=Wiktor
@@ -71,9 +72,11 @@ def handle_remote_player(net_connection, active_player, players, remote_players)
         if name != active_player.__class__.__name__:
             print "network: %s, %s, %s" % (pos, name, action)
             if action == 'move':
-                if name in remote_players:
-                    moved_player = remote_players[name]
-                    moved_player.move_to(pos)
+                if name not in remote_players:
+                    joining_player = players[name]
+                    remote_players[name] = joining_player
+                moved_player = remote_players[name]
+                moved_player.move_to(pos)
             elif action == 'join':
                 joining_player = players[name]
                 remote_players[name] = joining_player
