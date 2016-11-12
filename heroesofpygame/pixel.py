@@ -13,6 +13,9 @@ class Pixel(object):
             self.move_single_axis(dx, 0, other_scene_object)
         if dy != 0:
             self.move_single_axis(0, dy, other_scene_object)
+        nazwa = self.__class__.__name__
+        pozycja = "x=%s, y=%s, name=%s" % (self.rect.x, self.rect.y, nazwa)
+        return pozycja
 
     def move_single_axis(self, dx, dy, other_scene_object):
         # Move the rect
