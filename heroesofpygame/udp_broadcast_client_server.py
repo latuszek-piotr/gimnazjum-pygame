@@ -130,7 +130,7 @@ class NetworkConnection(object):
 
     def receive(self):
         data = self._receive()
-        if data and (self.last_msg_typ == 'REQ'):
+        if data and (self.last_msg_type == 'REQ'):
             self.acknowledge_receival()
         return data
 
@@ -188,7 +188,7 @@ class NetworkConnection(object):
         acknowledged_by = {}
         while (now - start < await_timeout):
             recv_data = self._receive()
-            if recv_data and (self.last_msg_typ == 'ACK'):
+            if recv_data and (self.last_msg_type == 'ACK'):
                 acknowledged_by[self.last_sender_address] = 1
             self.connection.sendto(network_packet, self.broadcast_address)   # multiple tries "I'm new in play"
             now = time.time()
