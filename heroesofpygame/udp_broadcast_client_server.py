@@ -129,13 +129,27 @@ class NetworkConnection(object):
         self.connection.close()
 
     def receive(self):
-        data = self._receive()
+        data = self._receive_all_pending()
         if data and (self.last_msg_type == 'REQ'):
             self.acknowledge_receival()
         return data
 
+    def _receive_all_pending(self, await_timeout=0.01):
+        now = start = time.time()
+        last_received_packet = None
+        while (now - start < await_timeout):
+            recv_data = self._receive()
+            if recv_data:
+                #TODO break pulling pending if another type comes
+                last_received_packet = recv_data
+                pass  # do nothing with this packet, we still have time for consuming incoming packets
+            else:
+                break  # socket.timeout means "no more packets on reading socket"
+            now = time.time()
+        return last_received_packet
+
     def _receive(self):
-        try:
+        try:           # TODO: wyjac zalegle pakiety
             network_packet, sender_address = self.connection.recvfrom(self.max_buffsize)
             (msg_type, sender_name, last_data) = self._unpack_network_packet(network_packet)
             # drop broadcasted messages from self
