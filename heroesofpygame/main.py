@@ -44,7 +44,6 @@ parter = Parter()
 
 aktywna_sala = parter.osiem_a
 aktywna_sala.przeskaluj(1300, 650)
-
 strzal = Strzal()
 
 # all_objects = parter.walls()
