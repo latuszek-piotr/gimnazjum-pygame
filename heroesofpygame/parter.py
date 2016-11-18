@@ -7,7 +7,7 @@ class Parter(object):
         self.szatnia_duza = ClassRoom(pos=(73,135), room_width=95, room_length=18)
         self.korytarz_szatni = ClassRoom(pos=(73,153), room_width=95, room_length=10)
         self.szatnia_mala = ClassRoom(pos=(73,163), room_width=76, room_length=18)
-        self.osiem_a = ClassRoom(pos=(10,181), room_width=30, room_length=69)
+        self.osiem_a = ClassRoom(pos=(10,181), room_width=30, room_length=69, drzwi={'location':'right', 'door_delta': 20})
         self.osiem = ClassRoom(pos=(40,181), room_width=46, room_length=36)
         self.archiwum = ClassRoom(pos=(40,214), room_width=20, room_length=36)
         self.siudemka = ClassRoom(pos=(60,214), room_width=50, room_length=36)

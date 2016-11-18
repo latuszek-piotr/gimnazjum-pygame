@@ -10,3 +10,4 @@ class Door(Pixel):
         self.color = color
         self.rect = pygame.Rect(pos[0], pos[1], width, length)
 
+
