@@ -4,6 +4,7 @@ import sys
 import pygame
 
 from heroesofpygame import Pietro
+from heroesofpygame.player import Player
 from heroesofpygame.wiktor import Wiktor
 from heroesofpygame.dominik import Dominik
 from heroesofpygame.piotr import Piotr
@@ -21,14 +22,15 @@ pygame.init()
 
 pygame.display.set_caption("szkola_1_pietro")
 screen = pygame.display.set_mode((1300, 650))
+srodek_ekranu = (650, 325)
 
-net_connection = NetworkConnection()
 players = {
     "Wiktor":  Wiktor(),
     "Dominik":  Dominik(),
     "Dawid":  Dawid(),
     "Piotr":  Piotr(),
     }
+remote_players = {}
 active_player_name = sys.argv[1]
 active_player = players[active_player_name]
 player1 = players["Wiktor"]
@@ -60,34 +62,53 @@ def is_game_finished():
             running = False
     return running
 
-def move_remote_player(net_connection, active_player, players):
+
+def handle_remote_player(net_connection, active_player, players, remote_players):
     network_data = net_connection.receive()
     # x=363, y=231, name=Wiktor
 
     if network_data is not None:
-        parts = network_data.split(',')
-        #print parts
-        x = int(parts[0].split('=')[1])
-        y = int(parts[1].split('=')[1])
-        name = parts[2].split('=')[1]
+        (pos, name, action) = Player.unpack_network_record(network_data)
         if name != active_player.__class__.__name__:
-            moved_player = players[name]
-            moved_player.rect.x = x
-            moved_player.rect.y = y
+            # print "network: %s, %s, %s" % (pos, name, action)
+            if action == 'move':
+                if name not in remote_players:
+                    joining_player = players[name]
+                    remote_players[name] = joining_player
+                moved_player = remote_players[name]
+                moved_player.move_to(pos)
+            elif action == 'join':
+                joining_player = players[name]
+                remote_players[name] = joining_player
+            elif action == 'leave':
+                leaving_player_name = name
+                del remote_players[leaving_player_name]
+
+
+def broadcast_active_player(active_player, net_connection, action='move', await_confirmation=False):
+    if net_connection != None:
+        network_record = active_player.serialize_for_network(action=action)
+        net_connection.broadcast(data=network_record, await_confirmation=await_confirmation)
+
 
 def move_player_using_keyboard(key_left, key_right, key_up, key_down, active_player, all_objects, net_connection):
     key = pygame.key.get_pressed()
-    nowa_pozycja = None
     if key[key_left]:
-        nowa_pozycja = active_player.move(-1, 0, all_objects)
-    if key[key_right]:
-        nowa_pozycja = active_player.move(1, 0, all_objects)
-    if key[key_up]:
-        nowa_pozycja = active_player.move(0, -1, all_objects)
-    if key[key_down]:
-        nowa_pozycja = active_player.move(0, 1, all_objects)
-    if (net_connection != None) and (nowa_pozycja != None):
-        net_connection.broadcast(data=nowa_pozycja)
+        active_player.move(-1, 0, all_objects)
+    elif key[key_right]:
+        active_player.move(1, 0, all_objects)
+    elif key[key_up]:
+        active_player.move(0, -1, all_objects)
+    elif key[key_down]:
+        active_player.move(0, 1, all_objects)
+    else:
+        return  # no move
+    broadcast_active_player(active_player, net_connection)
+
+
+def draw_remote(screen, remote_players):
+    for player in remote_players.values():
+        player.draw(screen)
 
 
 def sprawdz_strzal(strzal):
@@ -97,13 +118,18 @@ def sprawdz_strzal(strzal):
 
 # ---------------------------- glowna petla zdarzen pygame
 
+net_connection = NetworkConnection(active_player.nazwa)
+active_player.move_to(srodek_ekranu)
+# broadcast_active_player(active_player, net_connection, action='join', await_confirmation=True)
+
 running = True
+
 while running:
 
     clock.tick(60)
 
     running = is_game_finished()
-    # move_remote_player(net_connection, active_player, players)
+    handle_remote_player(net_connection, active_player, players, remote_players)
 
     # Move the player if an arrow key is pressed
     move_player_using_keyboard(pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN, active_player, all_objects, net_connection)
@@ -121,10 +147,13 @@ while running:
     # flower_1.draw(screen)   # to ma sie narysowac w sali
     # flower_2.draw(screen)
     active_player.draw(screen)
-    player1.draw(screen)
-    player2.draw(screen)
-    player3.draw(screen)
-    player4.draw(screen)
+    draw_remote(screen, remote_players)
+    # player1.draw(screen)
+    # player2.draw(screen)
+    # player3.draw(screen)
+    # player4.draw(screen)
     strzal.draw(screen)
 
     pygame.display.flip()
+
+broadcast_active_player(active_player, net_connection, action='leave')
