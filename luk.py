@@ -104,7 +104,6 @@ green = (0,255,0)
 jakis = (69,69,69)
 grafika_wody = pygame.image.load('grafika/woda.jpg')
 grafika_ogien = pygame.image.load('grafika/ogien.jpg')
-dz = open('dzwiek/jesterdie_03.wav')
 
 pygame.mixer.init()
 sound = pygame.mixer.Sound('dzwiek/jesterdie_03.wav')

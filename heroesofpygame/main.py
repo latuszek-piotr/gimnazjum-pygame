@@ -1,6 +1,6 @@
 import os
 import sys
-
+from pygame.locals import *
 import pygame
 
 from heroesofpygame import Pietro
@@ -45,7 +45,7 @@ parter = Parter()
 aktywna_sala = parter.osiem_a
 aktywna_sala.przeskaluj(1300, 650)
 strzal = Strzal()
-
+sound = pygame.mixer.Sound('dzwiek/ca_fire1.wav')
 # all_objects = parter.walls()
 all_objects = aktywna_sala.walls()
 for player_name in players:
@@ -114,9 +114,15 @@ def sprawdz_strzal(strzal):
     key = pygame.key.get_pressed()
     if key[pygame.K_SPACE]:
         strzal.start()
+def muzyka_pod_przyciskiem():
+        key = pygame.key.get_pressed()
+        pygame.mixer.init()
+        muza = pygame.mixer.Sound('dzwiek/burn1.wav')
+        if key[pygame.K_UP]:
+            muza.play()
+
 
 # ---------------------------- glowna petla zdarzen pygame
-
 net_connection = NetworkConnection(active_player.nazwa)
 active_player.move_to(srodek_ekranu)
 # broadcast_active_player(active_player, net_connection, action='join', await_confirmation=True)
@@ -137,7 +143,7 @@ while running:
     move_player_using_keyboard(pygame.K_f, pygame.K_h, pygame.K_t, pygame.K_g, player4, all_objects, None)
 
     sprawdz_strzal(strzal)
-
+    muzyka_pod_przyciskiem()
     # Draw the scenea
 
     screen.fill((0, 0, 0))
