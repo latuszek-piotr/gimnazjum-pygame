@@ -17,6 +17,7 @@ class Flower(object):
         selected_img =random.choice(Flower.flowers_img)
         self.img = pygame.transform.scale(pygame.image.load(selected_img).convert_alpha(), (size, size+10))
         self.pos = pos
+        self.rect = pygame.Rect(pos[0], pos[1], size, size+10)
 
     def draw(self, screen):
         # Copy image to screen:

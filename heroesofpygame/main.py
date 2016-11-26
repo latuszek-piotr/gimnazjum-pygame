@@ -19,6 +19,7 @@ clock = pygame.time.Clock()
 os.environ["SDL_VIDEO_CENTERED"] = "1"
 
 pygame.init()
+pygame.mixer.init()
 
 pygame.display.set_caption("szkola_1_pietro")
 screen = pygame.display.set_mode((1300, 650))
@@ -122,7 +123,6 @@ def sprawdz_strzal(strzal):
 
 def muzyka_pod_przyciskiem():
     key = pygame.key.get_pressed()
-    pygame.mixer.init()
     muza = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_sukcesu.wav')
     if key[pygame.K_b]:
         muza.play()

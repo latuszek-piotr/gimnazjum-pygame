@@ -15,13 +15,16 @@ class Szarancza(Player):
         super(Szarancza, self).__init__(pos, size)
         self.mood = 'happy'
         self.img = pygame.transform.scale(pygame.image.load(Szarancza.lot1).convert_alpha(), (size, size+10))
+        self.dzwiek_zjadania = pygame.mixer.Sound('dzwiek/dzwiek_walki/szarancza_zjada_kwiat.wav')
         self.start_time = None
         self.czas_dojscia = 10
         self.odleglosc_do_kwiatu = {'deltaX':0, 'deltaY':0}
+        self.kwiat_docelowy = None
 
     def start(self, kwiat):
         if kwiat is None:
             return
+        self.kwiat_docelowy = kwiat
         self.start_time = time.time()
         self.start_pos = self.pos
         self.odleglosc_do_kwiatu = self.wylicz_odleglosc(self.pos, kwiat.pos)
@@ -39,6 +42,10 @@ class Szarancza(Player):
             pos_x = (self.odleglosc_do_kwiatu['deltaX'] * time_delta / self.czas_dojscia) + self.start_pos[0]
             pos_y = (self.odleglosc_do_kwiatu['deltaY'] * time_delta / self.czas_dojscia) + self.start_pos[1]
             self.pos = (pos_x, pos_y)
+            self.rect.x = pos_x
+            self.rect.y = pos_y
+            if self.collides(self.kwiat_docelowy):
+                self.dzwiek_zjadania.play()
         return self.pos
 
     def draw(self, screen):
