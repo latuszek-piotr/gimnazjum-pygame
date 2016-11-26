@@ -12,6 +12,7 @@ from heroesofpygame.dawid import Dawid
 from heroesofpygame.parter import Parter
 from heroesofpygame.strzal import Strzal
 from heroesofpygame.udp_broadcast_client_server import NetworkConnection
+from heroesofpygame.szarancza import Szarancza
 
 clock = pygame.time.Clock()
 
@@ -41,6 +42,10 @@ parter = Parter()
 aktywna_sala = parter.osiem_a
 aktywna_sala.przeskaluj(1300, 650)
 aktywna_sala.dodaj_kwiat()
+
+lewy_dol = aktywna_sala.daj_naroznik(ktory='lewy-dolny')
+pozycja_startowa = (lewy_dol[0]+10, lewy_dol[1] - 60)
+aktywna_szarancza = Szarancza(pozycja_startowa)
 
 strzal = Strzal()
 sound = pygame.mixer.Sound('dzwiek/ca_fire1.wav')
@@ -157,6 +162,7 @@ while running:
     # player2.draw(screen)
     # player3.draw(screen)
     # player4.draw(screen)
+    aktywna_szarancza.draw(screen)
     strzal.draw(screen)
 
     pygame.display.flip()
