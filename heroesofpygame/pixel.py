@@ -3,6 +3,7 @@ import pygame
 
 class Pixel(object):
     def __init__(self, pos, size, color=(255, 255, 255)):
+        self.pos = pos
         self.size = size
         self.color = color
         self.rect = pygame.Rect(pos[0], pos[1], self.size, self.size)

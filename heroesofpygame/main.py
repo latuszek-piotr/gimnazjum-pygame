@@ -46,6 +46,7 @@ aktywna_sala.dodaj_kwiat()
 lewy_dol = aktywna_sala.daj_naroznik(ktory='lewy-dolny')
 pozycja_startowa = (lewy_dol[0]+10, lewy_dol[1] - 60)
 aktywna_szarancza = Szarancza(pozycja_startowa)
+aktywna_szarancza.start(aktywna_sala.daj_kwiat())
 
 strzal = Strzal()
 sound = pygame.mixer.Sound('dzwiek/ca_fire1.wav')

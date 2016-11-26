@@ -14,6 +14,11 @@ class ClassRoom(object):
         self.przelicz_sciany(self.pos, self.room_width, self.room_length)
         self.kwiaty = []
 
+    def daj_kwiat(self):
+        if self.kwiaty:
+            return self.kwiaty[0]
+        return None
+
     def daj_naroznik(self, ktory):
         if ktory == 'lewy-gorny':
             return self.left_wall.pos
@@ -26,7 +31,7 @@ class ClassRoom(object):
 
     def dodaj_kwiat(self):
         pos = self.daj_naroznik(ktory='lewy-gorny')
-        kwiat = Flower(pos=(pos[0]+10, pos[1]+10))
+        kwiat = Flower(pos=(pos[0]+100, pos[1]+10))
         self.kwiaty.append(kwiat)
 
     def przelicz_sciany(self, pos, room_width, room_length, skala=1):
