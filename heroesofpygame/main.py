@@ -9,7 +9,6 @@ from heroesofpygame.wiktor import Wiktor
 from heroesofpygame.dominik import Dominik
 from heroesofpygame.piotr import Piotr
 from heroesofpygame.dawid import Dawid
-# from heroesofpygame.flower import Flower      # to ma sie narysowac w sali
 from heroesofpygame.parter import Parter
 from heroesofpygame.strzal import Strzal
 from heroesofpygame.udp_broadcast_client_server import NetworkConnection
@@ -37,9 +36,6 @@ player1 = players["Wiktor"]
 player2 = players["Dominik"]
 player3 = players["Dawid"]
 player4 = players["Piotr"]
-
-# flower_1 = Flower()
-# flower_2 = Flower(pos=(500, 300))    # to ma sie narysowac w sali
 parter = Parter()
 
 aktywna_sala = parter.osiem_a
@@ -119,7 +115,7 @@ def sprawdz_strzal(strzal):
 def muzyka_pod_przyciskiem():
     key = pygame.key.get_pressed()
     pygame.mixer.init()
-    muza = pygame.mixer.Sound('dzwiek/burn1.wav')
+    muza = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_sukcesu.wav')
     if key[pygame.K_b]:
         muza.play()
 
