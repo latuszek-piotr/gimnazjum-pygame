@@ -40,6 +40,8 @@ parter = Parter()
 
 aktywna_sala = parter.osiem_a
 aktywna_sala.przeskaluj(1300, 650)
+aktywna_sala.dodaj_kwiat()
+
 strzal = Strzal()
 sound = pygame.mixer.Sound('dzwiek/ca_fire1.wav')
 # all_objects = parter.walls()
