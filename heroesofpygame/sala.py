@@ -12,8 +12,6 @@ class ClassRoom(object):
         self.door_definition = drzwi
         self.przelicz_sciany(self.pos, self.room_width, self.room_length)
 
-
-
     def przelicz_sciany(self, pos, room_width, room_length, skala=1):
         door_delta = None
         if self.door_definition and self.door_definition['location'] == 'left':
@@ -43,13 +41,12 @@ class ClassRoom(object):
                                    room_width-2*self.wall_width, self.wall_width, door_delta=door_delta)
         self.bottom_wall.przelicz_drzwi(skala=skala)
 
-
-
     def walls(self):
         return [self.left_wall, self.right_wall, self.top_wall, self.bottom_wall]
 
     def skala_pozioma(self, docelowa_szerokosc):
         return docelowa_szerokosc / float(self.room_width)
+
     def skala_pionowa(self, docelowa_dlugosc):
         return docelowa_dlugosc / float(self.room_length)
 
@@ -67,7 +64,6 @@ class ClassRoom(object):
             poz_x = roznica_szerokosci / 2
             self.przelicz_sciany((poz_x,0), room_width_pion, room_length_pion, skala_pion)
            # self.przelicz_drzwi((poz_x,0))
-
         else:
             roznica_dlugosci = docelowa_dlugosc - room_length_poziom
             poz_y = roznica_dlugosci / 2

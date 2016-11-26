@@ -114,12 +114,14 @@ def sprawdz_strzal(strzal):
     key = pygame.key.get_pressed()
     if key[pygame.K_SPACE]:
         strzal.start()
+
+
 def muzyka_pod_przyciskiem():
-        key = pygame.key.get_pressed()
-        pygame.mixer.init()
-        muza = pygame.mixer.Sound('dzwiek/burn1.wav')
-        if key[pygame.K_UP]:
-            muza.play()
+    key = pygame.key.get_pressed()
+    pygame.mixer.init()
+    muza = pygame.mixer.Sound('dzwiek/burn1.wav')
+    if key[pygame.K_b]:
+        muza.play()
 
 
 # ---------------------------- glowna petla zdarzen pygame
