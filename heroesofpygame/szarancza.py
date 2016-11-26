@@ -11,13 +11,20 @@ class Szarancza(Player):
     stoi = os.path.join('grafika', 'szarancza', 'szarancza_stoi.png')
 
 
-    def __init__(self, pos=(440, 120), size=50):
-        super(Szarancza, self).__init__(pos, size)
+    def __init__(self, pos=(440, 120), size=70):
+        size_do_kolizji = size - 30  # rect kolizji jest mniejszy od rect obrazka
+        super(Szarancza, self).__init__(pos, size_do_kolizji)
         self.mood = 'happy'
-        self.img = pygame.transform.scale(pygame.image.load(Szarancza.lot1).convert_alpha(), (size, size+10))
+        self.images = [
+                       (pygame.transform.scale(pygame.image.load(Szarancza.lot1).convert_alpha(), (int(size*2.0), int(size*1.8))), (size*0.1, -size*0.6)),
+                       (pygame.transform.scale(pygame.image.load(Szarancza.lot2).convert_alpha(), (int(size*2.0), size)), (0, 0)),
+                       (pygame.transform.scale(pygame.image.load(Szarancza.lot3).convert_alpha(), (int(size*1.9), int(size*1.3))), (0, 0)),
+                       (pygame.transform.scale(pygame.image.load(Szarancza.stoi).convert_alpha(), (int(size*1.9), size)), (0, 0)),
+                      ]
         self.dzwiek_zjadania = pygame.mixer.Sound('dzwiek/dzwiek_walki/szarancza_zjada_kwiat.wav')
         self.start_time = None
         self.czas_dojscia = 10
+        self.czas_machniecia_skrzydel = 0.1
         self.odleglosc_do_kwiatu = {'deltaX':0, 'deltaY':0}
         self.kwiat_docelowy = None
 
@@ -27,7 +34,7 @@ class Szarancza(Player):
         self.kwiat_docelowy = kwiat
         self.start_time = time.time()
         self.start_pos = self.pos
-        self.odleglosc_do_kwiatu = self.wylicz_odleglosc(self.pos, kwiat.pos)
+        self.odleglosc_do_kwiatu = self.wylicz_odleglosc(self.rect.center, kwiat.rect.midright)
 
     def wylicz_odleglosc(self, pos_start, pos_koncowa):
         odleglosc = {'deltaX': pos_koncowa[0] - pos_start[0], 'deltaY': pos_koncowa[1] - pos_start[1]}
@@ -46,9 +53,22 @@ class Szarancza(Player):
             self.rect.y = pos_y
             if self.collides(self.kwiat_docelowy):
                 self.dzwiek_zjadania.play()
+                self.start_time = None
         return self.pos
+
+    def ktory_obraz(self):
+        if self.start_time is None:
+            return 3  # Szarancza.stoi
+        now = time.time()
+        time_delta = now - self.start_time
+        ile_machniec = int(time_delta / self.czas_machniecia_skrzydel)
+        ktora_pozycja_lotu = ile_machniec % 3
+        return ktora_pozycja_lotu
 
     def draw(self, screen):
         # Copy image to screen:
-        pos = self.biezaca_pozycja()
-        screen.blit(self.img, [pos[0], pos[1]])
+        self.biezaca_pozycja()
+        image_index = self.ktory_obraz()
+        (image, (delta_x, delta_y)) = self.images[image_index]
+        pos = (self.pos[0] - delta_x, self.pos[1] + delta_y)
+        screen.blit(image, [pos[0], pos[1]])

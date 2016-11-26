@@ -15,9 +15,9 @@ class Flower(object):
 
     def __init__(self, pos=(410, 300), size=50):
         selected_img =random.choice(Flower.flowers_img)
-        self.img = pygame.transform.scale(pygame.image.load(selected_img).convert_alpha(), (size, size+10))
         self.pos = pos
-        self.rect = pygame.Rect(pos[0], pos[1], size, size+10)
+        self.img = pygame.transform.scale(pygame.image.load(selected_img).convert_alpha(), (size, size+10))
+        self.rect = pygame.Rect(pos[0]+20, pos[1]+10, 10, 10)  # rect kolizji jest mniejszy od rect obrazka
 
     def draw(self, screen):
         # Copy image to screen:
