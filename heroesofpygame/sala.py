@@ -1,5 +1,7 @@
 import pygame
 from heroesofpygame.wall import NewWall
+from heroesofpygame.flower import Flower
+
 
 
 class ClassRoom(object):
@@ -12,7 +14,12 @@ class ClassRoom(object):
         self.door_definition = drzwi
         self.przelicz_sciany(self.pos, self.room_width, self.room_length)
 
+
+    def przelicz_kwiaty(self, pos, skala=1):
+        self.kwiat = Flower(pos=(pos[0]+10, pos[1]+10))
+
     def przelicz_sciany(self, pos, room_width, room_length, skala=1):
+
         door_delta = None
         if self.door_definition and self.door_definition['location'] == 'left':
             door_delta = self.door_definition['door_delta'] * skala
@@ -63,13 +70,14 @@ class ClassRoom(object):
             roznica_szerokosci = docelowa_szerokosc - room_width_pion
             poz_x = roznica_szerokosci / 2
             self.przelicz_sciany((poz_x,0), room_width_pion, room_length_pion, skala_pion)
-           # self.przelicz_drzwi((poz_x,0))
+            self.przelicz_kwiaty((poz_x,0))
         else:
             roznica_dlugosci = docelowa_dlugosc - room_length_poziom
             poz_y = roznica_dlugosci / 2
             self.przelicz_sciany((0,poz_y), room_width_poziom, room_length_poziom, skala_poziom)
-            # self.przelicz_drzwi((0,poz_y))
+            self.przelicz_kwiaty((0,poz_y))
 
     def draw(self, screen):
         for wall in self.walls():
             wall.draw(screen)
+        self.kwiat.draw(screen)
