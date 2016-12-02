@@ -50,7 +50,7 @@ aktywna_szarancza = Szarancza(pozycja_startowa)
 aktywna_szarancza.start(aktywna_sala.daj_kwiat())
 
 strzal = Strzal()
-sound = pygame.mixer.Sound('dzwiek/ca_fire1.wav')
+sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
 # all_objects = parter.walls()
 all_objects = aktywna_sala.walls()
 for player_name in players:
@@ -123,7 +123,7 @@ def sprawdz_strzal(strzal):
 
 def muzyka_pod_przyciskiem():
     key = pygame.key.get_pressed()
-    muza = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_sukcesu.wav')
+    muza = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_porazki.wav')
     if key[pygame.K_b]:
         muza.play()
 
