@@ -18,3 +18,6 @@ class Wiktor(Player):
     def draw(self, screen):
         # Copy image to screen:
         screen.blit(self.img, [self.rect.x, self.rect.y])
+
+    def zmien_humor(self, mood):
+        self.mood = mood

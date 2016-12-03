@@ -40,7 +40,7 @@ player3 = players["Dawid"]
 player4 = players["Piotr"]
 parter = Parter()
 
-aktywna_sala = parter.osiem_a
+aktywna_sala = parter.klasa_info
 aktywna_sala.przeskaluj(1300, 650)
 aktywna_sala.dodaj_kwiat()
 
