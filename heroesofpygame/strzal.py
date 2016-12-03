@@ -20,10 +20,14 @@ class Strzal(object):
                        (pygame.transform.scale(pygame.image.load(Strzal.strzal_img[7]).convert_alpha(), (70, 120)),(110, 0)),
                        (pygame.transform.scale(pygame.image.load(Strzal.strzal_img[8]).convert_alpha(), (60, 120)),(110, 0)),
                        ]
-        self.pos = pos
+        self.pos = list(pos)
         self.start_time = None
         self.skok_czasu = 0.07
         self.skok_pozycji = 0
+
+    def ustaw_pozycje(self, x, y):
+        self.pos[0] = x
+        self.pos[1] = y
 
     def start(self):
         self.start_time = time.time()

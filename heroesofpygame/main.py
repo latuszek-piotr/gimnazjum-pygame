@@ -115,9 +115,10 @@ def draw_remote(screen, remote_players):
         player.draw(screen)
 
 
-def sprawdz_strzal(strzal):
+def sprawdz_strzal(strzal, x, y):
     key = pygame.key.get_pressed()
     if key[pygame.K_SPACE]:
+        strzal.ustaw_pozycje(x, y)
         strzal.start()
 
 
@@ -148,7 +149,7 @@ while running:
     move_player_using_keyboard(pygame.K_j, pygame.K_l, pygame.K_i, pygame.K_k, player3, all_objects, None)
     move_player_using_keyboard(pygame.K_f, pygame.K_h, pygame.K_t, pygame.K_g, player4, all_objects, None)
 
-    sprawdz_strzal(strzal)
+    sprawdz_strzal(strzal, x=active_player.rect.x, y=active_player.rect.y)
     muzyka_pod_przyciskiem()
     # Draw the scenea
 
