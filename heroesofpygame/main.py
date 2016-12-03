@@ -55,7 +55,7 @@ sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
 all_objects = aktywna_sala.walls()
 for player_name in players:
     all_objects.append(players[player_name])
-
+all_objects.append(strzal)
 
 def is_game_finished():
     running = True
@@ -150,6 +150,7 @@ while running:
     move_player_using_keyboard(pygame.K_f, pygame.K_h, pygame.K_t, pygame.K_g, player4, all_objects, None)
 
     sprawdz_strzal(strzal, x=active_player.rect.x, y=active_player.rect.y)
+    aktywna_szarancza.update_pozycji_i_kolizji(all_objects)
     muzyka_pod_przyciskiem()
     # Draw the scenea
 

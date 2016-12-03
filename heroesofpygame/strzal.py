@@ -21,6 +21,8 @@ class Strzal(object):
                        (pygame.transform.scale(pygame.image.load(Strzal.strzal_img[8]).convert_alpha(), (60, 120)),(110, 0)),
                        ]
         self.pos = list(pos)
+        self.size = size
+        self.ustaw_pozycje(pos[0], pos[1])
         self.start_time = None
         self.skok_czasu = 0.07
         self.skok_pozycji = 0
@@ -28,6 +30,10 @@ class Strzal(object):
     def ustaw_pozycje(self, x, y):
         self.pos[0] = x
         self.pos[1] = y
+        self.ustaw_rect_do_kolizji(x, y)
+
+    def ustaw_rect_do_kolizji(self, x, y):
+        self.rect = pygame.Rect(x, y, self.size, self.size)
 
     def start(self):
         self.start_time = time.time()
@@ -41,6 +47,7 @@ class Strzal(object):
                 # Copy image to screen:
                 (image, (delta_x, delta_y)) = self.images[image_index]
                 pos = (self.pos[0] - delta_x, self.pos[1] + delta_y)
+                self.ustaw_rect_do_kolizji(pos[0], pos[1])
                 screen.blit(image, pos)
 
     def ktory_obraz(self):

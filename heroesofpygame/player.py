@@ -1,5 +1,6 @@
 import pygame
 from pixel import Pixel
+from strzal import Strzal
 
 
 class Player(Pixel):
@@ -36,6 +37,8 @@ class Player(Pixel):
             if scene_object is self:
                 continue
             if self.collides(scene_object):
+                if isinstance(scene_object, Strzal):
+                    continue
                 ### print "kolizja: ja:{} on:{}".format(self.rect, scene_object.rect)
                 # I have collision with him
                 self.collision(dx, dy, scene_object)

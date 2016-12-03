@@ -2,6 +2,7 @@ import pygame
 import os
 import time
 from player import Player
+from strzal import Strzal
 
 
 class Szarancza(Player):
@@ -31,6 +32,7 @@ class Szarancza(Player):
         self.odleglosc_do_kwiatu = {'deltaX':0, 'deltaY':0}
         self.kwiat_docelowy = None
         self.stan = "lecaca"  # mozliwe wartosci: "lecaca", "stojaca", "martwa", "anihilowana"
+        self.czas_trafienia = None
 
     def start(self, kwiat):
         if kwiat is None:
@@ -39,6 +41,26 @@ class Szarancza(Player):
         self.start_time = time.time()
         self.start_pos = self.pos
         self.odleglosc_do_kwiatu = self.wylicz_odleglosc(self.rect.center, kwiat.rect.midright)
+
+    def update_pozycji_i_kolizji(self, all_objects_thay_may_colide):
+        if self.stan == "anihilowana":
+            return
+        self.biezaca_pozycja()
+        if self.stan == "martwa":
+            now = time.time()
+            czas_od_trafienia = now - self.czas_trafienia
+            if czas_od_trafienia > 2:
+                self.stan = "anihilowana"
+            return
+
+        for scene_object in all_objects_thay_may_colide:
+            if scene_object is self:
+                continue
+            if self.collides(scene_object):
+                if isinstance(scene_object, Strzal):
+                    self.stan = "martwa"
+                    self.czas_trafienia = time.time()
+
 
     def wylicz_odleglosc(self, pos_start, pos_koncowa):
         odleglosc = {'deltaX': pos_koncowa[0] - pos_start[0], 'deltaY': pos_koncowa[1] - pos_start[1]}
@@ -49,7 +71,7 @@ class Szarancza(Player):
             return self.pos
         now = time.time()
         time_delta = now - self.start_time
-        if time_delta < self.czas_dojscia:
+        if time_delta < self.czas_dojscia / 2:
             pos_x = (self.odleglosc_do_kwiatu['deltaX'] * time_delta / self.czas_dojscia) + self.start_pos[0]
             pos_y = (self.odleglosc_do_kwiatu['deltaY'] * time_delta / self.czas_dojscia) + self.start_pos[1]
             self.pos = (pos_x, pos_y)
@@ -59,11 +81,9 @@ class Szarancza(Player):
                 self.dzwiek_zjadania.play()
                 self.stan = "stojaca"
 
-        if time_delta > self.czas_dojscia + 2:
-            self.stan = "martwa"
-
-        if time_delta > self.czas_dojscia + 5:
-            self.stan = "anihilowana"
+        #
+        # if time_delta > self.czas_dojscia + 5:
+        #     self.stan = "anihilowana"
         return self.pos
 
     def ktory_obraz(self):
@@ -83,7 +103,7 @@ class Szarancza(Player):
         if self.stan == "anihilowana":
             return
         # Copy image to screen:
-        self.biezaca_pozycja()
+        # self.biezaca_pozycja()
         image_index = self.ktory_obraz()
         (image, (delta_x, delta_y)) = self.images[image_index]
         pos = (self.pos[0] - delta_x, self.pos[1] + delta_y)
