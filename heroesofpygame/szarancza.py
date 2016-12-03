@@ -15,18 +15,22 @@ class Szarancza(Player):
         size_do_kolizji = size - 30  # rect kolizji jest mniejszy od rect obrazka
         super(Szarancza, self).__init__(pos, size_do_kolizji)
         self.mood = 'happy'
+        szarancza_stojaca = pygame.transform.scale(pygame.image.load(Szarancza.stoi).convert_alpha(), (int(size*1.9), size))
         self.images = [
                        (pygame.transform.scale(pygame.image.load(Szarancza.lot1).convert_alpha(), (int(size*2.0), int(size*1.8))), (size*0.1, -size*0.6)),
                        (pygame.transform.scale(pygame.image.load(Szarancza.lot2).convert_alpha(), (int(size*2.0), size)), (0, 0)),
                        (pygame.transform.scale(pygame.image.load(Szarancza.lot3).convert_alpha(), (int(size*1.9), int(size*1.3))), (0, 0)),
-                       (pygame.transform.scale(pygame.image.load(Szarancza.stoi).convert_alpha(), (int(size*1.9), size)), (0, 0)),
+                       (szarancza_stojaca, (0, 0)),
+                       (pygame.transform.flip(szarancza_stojaca, False, True), (0, 0)),
                       ]
+        # self.images[3][0] = pygame.transform.flip(self.images[3][0], False, True)
         self.dzwiek_zjadania = pygame.mixer.Sound('dzwiek/dzwiek_walki/szarancza_zjada_kwiat.wav')
         self.start_time = None
         self.czas_dojscia = 10
         self.czas_machniecia_skrzydel = 0.1
         self.odleglosc_do_kwiatu = {'deltaX':0, 'deltaY':0}
         self.kwiat_docelowy = None
+        self.stan = "lecaca"  # mozliwe wartosci: "lecaca", "stojaca", "martwa", "anihilowana"
 
     def start(self, kwiat):
         if kwiat is None:
@@ -53,12 +57,22 @@ class Szarancza(Player):
             self.rect.y = pos_y
             if self.collides(self.kwiat_docelowy):
                 self.dzwiek_zjadania.play()
-                self.start_time = None
+                self.stan = "stojaca"
+
+        if time_delta > self.czas_dojscia + 2:
+            self.stan = "martwa"
+
+        if time_delta > self.czas_dojscia + 5:
+            self.stan = "anihilowana"
         return self.pos
 
     def ktory_obraz(self):
-        if self.start_time is None:
+        if self.stan == "stojaca":
             return 3  # Szarancza.stoi
+        elif self.stan == "martwa":
+            return 4  # odwrocona Szarancza.stoi
+        # if self.start_time is None:
+        #     return 3  # Szarancza.stoi
         now = time.time()
         time_delta = now - self.start_time
         ile_machniec = int(time_delta / self.czas_machniecia_skrzydel)
@@ -66,6 +80,8 @@ class Szarancza(Player):
         return ktora_pozycja_lotu
 
     def draw(self, screen):
+        if self.stan == "anihilowana":
+            return
         # Copy image to screen:
         self.biezaca_pozycja()
         image_index = self.ktory_obraz()
