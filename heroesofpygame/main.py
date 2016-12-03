@@ -120,6 +120,8 @@ def sprawdz_strzal(strzal, x, y):
     if key[pygame.K_SPACE]:
         strzal.ustaw_pozycje(x, y)
         strzal.start()
+        return True
+    return False
 
 
 def muzyka_pod_przyciskiem():
@@ -149,7 +151,10 @@ while running:
     move_player_using_keyboard(pygame.K_j, pygame.K_l, pygame.K_i, pygame.K_k, player3, all_objects, None)
     move_player_using_keyboard(pygame.K_f, pygame.K_h, pygame.K_t, pygame.K_g, player4, all_objects, None)
 
-    sprawdz_strzal(strzal, x=active_player.rect.x, y=active_player.rect.y)
+    czy_strzela = sprawdz_strzal(strzal, x=active_player.rect.x, y=active_player.rect.y)
+    if czy_strzela:
+        active_player.zmien_humor("angry")
+
     aktywna_szarancza.update_pozycji_i_kolizji(all_objects)
     muzyka_pod_przyciskiem()
     # Draw the scenea

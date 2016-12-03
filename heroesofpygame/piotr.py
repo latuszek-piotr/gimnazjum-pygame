@@ -23,3 +23,6 @@ class Piotr(Player):
         # Copy image to screen:
         img = self.images[self.mood]
         screen.blit(img, [self.rect.x, self.rect.y])
+
+    def zmien_humor(self, mood):
+        self.mood = mood
