@@ -1,8 +1,11 @@
-import Mapa
-import pygame
 import sys
+
+import pygame
 from pygame.locals import QUIT
-import time
+
+import Mapa
+
+
 def pobierz_wspolrzedne(event, x, y):
     if event.type == pygame.KEYDOWN:
         delta_x = 0

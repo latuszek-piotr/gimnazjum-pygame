@@ -1,8 +1,9 @@
-import pygame
-import sys
-from pygame.locals import QUIT
-import time
 import math
+import sys
+
+import pygame
+from pygame.locals import QUIT
+
 import sale
 
 ostatnio_x = 0
