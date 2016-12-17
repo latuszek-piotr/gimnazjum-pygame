@@ -2,7 +2,7 @@ import os
 import sys
 from pygame.locals import *
 import pygame
-
+from heroesofpygame.przegrana import Przegrana
 from heroesofpygame import Pietro
 from heroesofpygame.player import Player
 from heroesofpygame.wiktor import Wiktor
@@ -22,12 +22,13 @@ pygame.init()
 pygame.mixer.init()
 
 pygame.display.set_caption("szkola_1_pietro")
-screen = pygame.display.set_mode((1300, 650))
 srodek_ekranu = (650, 325)
 
 ########################### zmienne globalne
 
-
+szerokosc_ekranu = 1300
+wysokosc_ekranu = 650
+screen = pygame.display.set_mode((szerokosc_ekranu, wysokosc_ekranu))
 players = {  # lista mozliwych graczy
     "Wiktor":  Wiktor(),
     "Dominik":  Dominik(),
@@ -57,20 +58,23 @@ sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
 all_objects = None  # wszystkie obiekty ktore moga wchodzic w kolizje
 
 stan_gry = "rozgrywka"  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
+stan_gry = "przegrana"
+przegrana = Przegrana(szerokosc_ekranu, wysokosc_ekranu)
 
 ######################################## inicjalizacja
+
 all_objects = aktywna_sala.walls()
 for player_name in players:
     all_objects.append(players[player_name])
 all_objects.append(strzal)
 
-def is_game_finished():
+
+def is_game_finished(event):
     running = True
-    for e in pygame.event.get():
-        if e.type == pygame.QUIT:
-            running = False
-        if e.type == pygame.KEYDOWN and e.key == pygame.K_ESCAPE:
-            running = False
+    if event.type == pygame.QUIT:
+        running = False
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
+        running = False
     return running
 
 
@@ -149,40 +153,62 @@ while running:
 
     clock.tick(60)
 
-    running = is_game_finished()
+    for event in pygame.event.get():
 
-    if stan_gry == "rozgrywka":  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
-        handle_remote_player(net_connection, active_player, players, remote_players)
+        running = is_game_finished(event)
 
-        # Move the player if an arrow key is pressed
-        move_player_using_keyboard(pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN, active_player, all_objects, net_connection)
-        move_player_using_keyboard(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, player2, all_objects, None)
-        move_player_using_keyboard(pygame.K_j, pygame.K_l, pygame.K_i, pygame.K_k, player3, all_objects, None)
-        move_player_using_keyboard(pygame.K_f, pygame.K_h, pygame.K_t, pygame.K_g, player4, all_objects, None)
+        ################################### Akcje na planszy gry
 
-        czy_strzela = sprawdz_strzal(strzal, x=active_player.rect.x, y=active_player.rect.y)
-        if czy_strzela:
-            active_player.zmien_humor("angry")
+        if stan_gry == "rozgrywka":  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
+            handle_remote_player(net_connection, active_player, players, remote_players)
 
-        aktywna_szarancza.update_pozycji_i_kolizji(all_objects)
-        muzyka_pod_przyciskiem()
-        # Draw the scenea
+            # Move the player if an arrow key is pressed
+            move_player_using_keyboard(pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN, active_player, all_objects, net_connection)
+            move_player_using_keyboard(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, player2, all_objects, None)
+            move_player_using_keyboard(pygame.K_j, pygame.K_l, pygame.K_i, pygame.K_k, player3, all_objects, None)
+            move_player_using_keyboard(pygame.K_f, pygame.K_h, pygame.K_t, pygame.K_g, player4, all_objects, None)
 
-    screen.fill((0, 0, 0))
-    if stan_gry == "rozgrywka":  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
-        # parter.draw(screen)     # rysujemy go tylko w trybie "podglad mapy"
-        aktywna_sala.draw(screen)
-        # flower_1.draw(screen)   # to ma sie narysowac w sali
-        # flower_2.draw(screen)
-        active_player.draw(screen)
-        draw_remote(screen, remote_players)
-        # player1.draw(screen)
-        # player2.draw(screen)
-        # player3.draw(screen)
-        # player4.draw(screen)
-        aktywna_szarancza.draw(screen)
-        strzal.draw(screen)
+            czy_strzela = sprawdz_strzal(strzal, x=active_player.rect.x, y=active_player.rect.y)
+            if czy_strzela:
+                active_player.zmien_humor("angry")
 
-    pygame.display.flip()
+            aktywna_szarancza.update_pozycji_i_kolizji(all_objects)
+            muzyka_pod_przyciskiem()
+        elif stan_gry == "wygrana":
+            pass
+        elif stan_gry == "przegrana":
+            decyzja = przegrana.grac_ponownie(event)
+            if decyzja is None:
+                pass  # nic nie robie, brak decyzji
+            elif decyzja == "TAK":
+                stan_gry = "rozgrywka"
+            else:
+                stan_gry = "zakonczenie"
+                running = False
+                break
+
+
+        ################################### Rysowanie planszy gry
+
+        screen.fill((0, 0, 0))
+        if stan_gry == "rozgrywka":  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
+            # parter.draw(screen)     # rysujemy go tylko w trybie "podglad mapy"
+            aktywna_sala.draw(screen)
+            # flower_1.draw(screen)   # to ma sie narysowac w sali
+            # flower_2.draw(screen)
+            active_player.draw(screen)
+            draw_remote(screen, remote_players)
+            # player1.draw(screen)
+            # player2.draw(screen)
+            # player3.draw(screen)
+            # player4.draw(screen)
+            aktywna_szarancza.draw(screen)
+            strzal.draw(screen)
+        elif stan_gry == "wygrana":
+            pass
+        elif stan_gry == "przegrana":
+            przegrana.draw(screen)
+
+        pygame.display.flip()
 
 #broadcast_active_player(active_player, net_connection, action='leave')
