@@ -3,6 +3,8 @@ import sys
 from pygame.locals import *
 import pygame
 from heroesofpygame.przegrana import Przegrana
+from heroesofpygame.wygrana import Wygrana
+from heroesofpygame.rozpoczecie import Rozpoczecie
 from heroesofpygame import Pietro
 from heroesofpygame.player import Player
 from heroesofpygame.wiktor import Wiktor
@@ -59,7 +61,11 @@ all_objects = None  # wszystkie obiekty ktore moga wchodzic w kolizje
 
 stan_gry = "rozgrywka"  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
 stan_gry = "przegrana"
+stan_gry = "wygrana"
+stan_gry = "rozpoczecie"
 przegrana = Przegrana(szerokosc_ekranu, wysokosc_ekranu)
+wygrana = Wygrana(szerokosc_ekranu, wysokosc_ekranu)
+rozpoczecie = Rozpoczecie(szerokosc_ekranu, wysokosc_ekranu)
 
 ######################################## inicjalizacja
 
@@ -158,8 +164,17 @@ while running:
         running = is_game_finished(event)
 
         ################################### Akcje na planszy gry
-
-        if stan_gry == "rozgrywka":  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
+        if stan_gry == "rozpoczecie":
+            decyzja = rozpoczecie.grac_ponownie(event)
+            if decyzja is None:
+                pass  # nic nie robie, brak decyzji
+            elif decyzja == "TAK":
+                stan_gry = "rozgrywka"
+            else:
+                stan_gry = "zakonczenie"
+                running = False
+                break
+        elif stan_gry == "rozgrywka":  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
             handle_remote_player(net_connection, active_player, players, remote_players)
 
             # Move the player if an arrow key is pressed
@@ -175,7 +190,15 @@ while running:
             aktywna_szarancza.update_pozycji_i_kolizji(all_objects)
             muzyka_pod_przyciskiem()
         elif stan_gry == "wygrana":
-            pass
+            decyzja = wygrana.grac_ponownie(event)
+            if decyzja is None:
+                pass  # nic nie robie, brak decyzji
+            elif decyzja == "TAK":
+                stan_gry = "rozgrywka"
+            else:
+                stan_gry = "zakonczenie"
+                running = False
+                break
         elif stan_gry == "przegrana":
             decyzja = przegrana.grac_ponownie(event)
             if decyzja is None:
@@ -191,7 +214,9 @@ while running:
         ################################### Rysowanie planszy gry
 
         screen.fill((0, 0, 0))
-        if stan_gry == "rozgrywka":  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
+        if stan_gry == "rozpoczecie":
+            rozpoczecie.draw(screen)
+        elif stan_gry == "rozgrywka":  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
             # parter.draw(screen)     # rysujemy go tylko w trybie "podglad mapy"
             aktywna_sala.draw(screen)
             # flower_1.draw(screen)   # to ma sie narysowac w sali
@@ -205,7 +230,7 @@ while running:
             aktywna_szarancza.draw(screen)
             strzal.draw(screen)
         elif stan_gry == "wygrana":
-            pass
+            wygrana.draw(screen)
         elif stan_gry == "przegrana":
             przegrana.draw(screen)
 
