@@ -7,7 +7,7 @@ class Rozpoczecie(OknoWyboru):
     pygame_logo = os.path.join('grafika', 'pygame_logo.png')
 
     def __init__(self, szerokosc, wysokosc):
-        super(Rozpoczecie, self).__init__(szerokosc, wysokosc, "Heroes of", button_play_text1="Start", button_play_text2="")
+        super(Rozpoczecie, self).__init__(szerokosc, wysokosc, "Heroes of", button_quit=False, button_play_text1="Start", button_play_text2="")
         self.rect_tytulu.left = 0.05 * self.szerokosc
         self.rect_logo = self.wylicz_rect_logo()
         self.pygame_logo_img = pygame.transform.scale(pygame.image.load(Rozpoczecie.pygame_logo).convert_alpha(),

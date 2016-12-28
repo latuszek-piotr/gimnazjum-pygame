@@ -5,6 +5,7 @@ import pygame
 from heroesofpygame.przegrana import Przegrana
 from heroesofpygame.wygrana import Wygrana
 from heroesofpygame.rozpoczecie import Rozpoczecie
+from heroesofpygame.zakonczenie import Zakonczenie
 from heroesofpygame import Pietro
 from heroesofpygame.player import Player
 from heroesofpygame.wiktor import Wiktor
@@ -61,11 +62,13 @@ all_objects = None  # wszystkie obiekty ktore moga wchodzic w kolizje
 
 stan_gry = "rozgrywka"  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
 stan_gry = "przegrana"
-stan_gry = "wygrana"
-stan_gry = "rozpoczecie"
+# stan_gry = "wygrana"
+# stan_gry = "rozpoczecie"
+# stan_gry = "zakonczenie"
 przegrana = Przegrana(szerokosc_ekranu, wysokosc_ekranu)
 wygrana = Wygrana(szerokosc_ekranu, wysokosc_ekranu)
 rozpoczecie = Rozpoczecie(szerokosc_ekranu, wysokosc_ekranu)
+zakonczenie = Zakonczenie(szerokosc_ekranu, wysokosc_ekranu)
 
 ######################################## inicjalizacja
 
@@ -170,10 +173,7 @@ while running:
                 pass  # nic nie robie, brak decyzji
             elif decyzja == "TAK":
                 stan_gry = "rozgrywka"
-            else:
-                stan_gry = "zakonczenie"
-                running = False
-                break
+
         elif stan_gry == "rozgrywka":  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
             handle_remote_player(net_connection, active_player, players, remote_players)
 
@@ -189,6 +189,7 @@ while running:
 
             aktywna_szarancza.update_pozycji_i_kolizji(all_objects)
             muzyka_pod_przyciskiem()
+
         elif stan_gry == "wygrana":
             decyzja = wygrana.grac_ponownie(event)
             if decyzja is None:
@@ -197,8 +198,7 @@ while running:
                 stan_gry = "rozgrywka"
             else:
                 stan_gry = "zakonczenie"
-                running = False
-                break
+
         elif stan_gry == "przegrana":
             decyzja = przegrana.grac_ponownie(event)
             if decyzja is None:
@@ -207,9 +207,14 @@ while running:
                 stan_gry = "rozgrywka"
             else:
                 stan_gry = "zakonczenie"
+
+        elif stan_gry == "zakonczenie":
+            decyzja = zakonczenie.grac_ponownie(event)
+            if decyzja is None:
+                pass  # nic nie robie, brak decyzji
+            elif decyzja == "NIE":
                 running = False
                 break
-
 
         ################################### Rysowanie planszy gry
 
@@ -233,6 +238,8 @@ while running:
             wygrana.draw(screen)
         elif stan_gry == "przegrana":
             przegrana.draw(screen)
+        elif stan_gry == "zakonczenie":
+            zakonczenie.draw(screen)
 
         pygame.display.flip()
 
