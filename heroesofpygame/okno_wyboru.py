@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import pygame
 import os
 
@@ -96,7 +97,7 @@ class OknoWyboru(object):
 
         if self.button_quit:
             screen.blit(self.button_gameover, self.rect_gameover.topleft)
-            text = self.font.render("Wyjdz", False, (0,0,0))
+            text = self.font.render(u"Wyjdź", False, (0,0,0))
             screen.blit(text, [self.rect_gameover.centerx - 100, self.rect_gameover.centery - 70])
             text = self.font.render("z gry", False, (0,0,0))
             screen.blit(text, [self.rect_gameover.centerx - 100, self.rect_gameover.centery + 10])

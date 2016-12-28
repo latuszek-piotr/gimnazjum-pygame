@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import pygame
 import os
 from heroesofpygame.okno_wyboru import OknoWyboru
@@ -27,7 +28,7 @@ class Zakonczenie(OknoWyboru):
         text = self.font.render(" Autorzy:", False, (255,255,255))
         screen.blit(text, [self.rect_rozgrywka.left + 50, self.rect_rozgrywka.top + 0])
 
-        text = self.font.render("    Wiktor Powroznik", False, (255,255,255))
+        text = self.font.render(u"    Wiktor Powroźnik", False, (255,255,255))
         screen.blit(text, [self.rect_rozgrywka.left + 50, self.rect_rozgrywka.top + 50])
 
         text = self.font.render("    Piotr Latuszek", False, (255,255,255))
@@ -36,7 +37,7 @@ class Zakonczenie(OknoWyboru):
         text = self.font.render("    Dawid Puka", False, (255,255,255))
         screen.blit(text, [self.rect_rozgrywka.left + 50, self.rect_rozgrywka.top + 150])
 
-        text = self.font.render("    Dominik Matula", False, (255,255,255))
+        text = self.font.render(u"    Dominik Matuła", False, (255,255,255))
         screen.blit(text, [self.rect_rozgrywka.left + 50, self.rect_rozgrywka.top + 200])
 
         text = self.font.render(" Opieka programistyczna:", False, (255,255,255))
