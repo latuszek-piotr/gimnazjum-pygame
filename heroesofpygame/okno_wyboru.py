@@ -84,21 +84,31 @@ class OknoWyboru(object):
                 self.pressed_button = 'gameover'
         return None
 
-    def draw(self, screen):
+
+    def draw_button_ok(self, screen):
+        screen.blit(self.button_rozgrywka, self.rect_rozgrywka.topleft)
+        text = self.font.render(self.button_play_text1, False, (0,0,0))
+        screen.blit(text, [self.rect_rozgrywka.centerx - 100, self.rect_rozgrywka.centery - 70])
+        text = self.font.render(self.button_play_text2, False, (0,0,0))
+        screen.blit(text, [self.rect_rozgrywka.centerx - 100, self.rect_rozgrywka.centery + 10])
+
+    def draw_button_quit(self, screen):
+        screen.blit(self.button_gameover, self.rect_gameover.topleft)
+        text = self.font.render(u"Wyjdź", False, (0,0,0))
+        screen.blit(text, [self.rect_gameover.centerx - 100, self.rect_gameover.centery - 70])
+        text = self.font.render("z gry", False, (0,0,0))
+        screen.blit(text, [self.rect_gameover.centerx - 100, self.rect_gameover.centery + 10])
+
+    def draw_title(self, screen):
         text = self.font_wyniku.render(self.tytul_okna, False, (255,0,0))
         screen.blit(text, [self.rect_tytulu.x + 20, self.rect_tytulu.y + 20])
 
+    def draw(self, screen):
+        self.draw_title(screen)
+
         if self.button_ok:
-            screen.blit(self.button_rozgrywka, self.rect_rozgrywka.topleft)
-            text = self.font.render(self.button_play_text1, False, (0,0,0))
-            screen.blit(text, [self.rect_rozgrywka.centerx - 100, self.rect_rozgrywka.centery - 70])
-            text = self.font.render(self.button_play_text2, False, (0,0,0))
-            screen.blit(text, [self.rect_rozgrywka.centerx - 100, self.rect_rozgrywka.centery + 10])
+            self.draw_button_ok(screen)
 
         if self.button_quit:
-            screen.blit(self.button_gameover, self.rect_gameover.topleft)
-            text = self.font.render(u"Wyjdź", False, (0,0,0))
-            screen.blit(text, [self.rect_gameover.centerx - 100, self.rect_gameover.centery - 70])
-            text = self.font.render("z gry", False, (0,0,0))
-            screen.blit(text, [self.rect_gameover.centerx - 100, self.rect_gameover.centery + 10])
+            self.draw_button_quit(screen)
 

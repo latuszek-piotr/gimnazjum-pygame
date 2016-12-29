@@ -23,6 +23,7 @@ os.environ["SDL_VIDEO_CENTERED"] = "1"
 
 pygame.init()
 pygame.mixer.init()
+pygame.mixer.quit()
 
 pygame.display.set_caption("szkola_1_pietro")
 srodek_ekranu = (650, 325)
@@ -57,13 +58,13 @@ aktywna_szarancza = Szarancza(pozycja_startowa)
 aktywna_szarancza.start(aktywna_sala.daj_kwiat())
 
 strzal = Strzal()
-sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
+# sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
 all_objects = None  # wszystkie obiekty ktore moga wchodzic w kolizje
 
 stan_gry = "rozgrywka"  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
 stan_gry = "przegrana"
 # stan_gry = "wygrana"
-# stan_gry = "rozpoczecie"
+stan_gry = "rozpoczecie"
 # stan_gry = "zakonczenie"
 przegrana = Przegrana(szerokosc_ekranu, wysokosc_ekranu)
 wygrana = Wygrana(szerokosc_ekranu, wysokosc_ekranu)
@@ -146,9 +147,9 @@ def sprawdz_strzal(strzal, x, y):
 
 def muzyka_pod_przyciskiem():
     key = pygame.key.get_pressed()
-    muza = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_porazki.wav')
-    if key[pygame.K_b]:
-        muza.play()
+    # muza = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_porazki.wav')
+    # if key[pygame.K_b]:
+    #     muza.play()
 
 
 # ---------------------------- glowna petla zdarzen pygame
@@ -172,6 +173,7 @@ while running:
             if decyzja is None:
                 pass  # nic nie robie, brak decyzji
             elif decyzja == "TAK":
+                pygame.mixer.init()
                 stan_gry = "rozgrywka"
 
         elif stan_gry == "rozgrywka":  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"

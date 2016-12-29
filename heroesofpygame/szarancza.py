@@ -25,7 +25,7 @@ class Szarancza(Player):
                        (pygame.transform.flip(szarancza_stojaca, False, True), (0, 0)),
                       ]
         # self.images[3][0] = pygame.transform.flip(self.images[3][0], False, True)
-        self.dzwiek_zjadania = pygame.mixer.Sound('dzwiek/dzwiek_walki/szarancza_zjada_kwiat.wav')
+        # self.dzwiek_zjadania = pygame.mixer.Sound('dzwiek/dzwiek_walki/szarancza_zjada_kwiat.wav')
         self.start_time = None
         self.czas_dojscia = 10
         self.czas_machniecia_skrzydel = 0.1
@@ -78,7 +78,7 @@ class Szarancza(Player):
             self.rect.x = pos_x
             self.rect.y = pos_y
             if self.collides(self.kwiat_docelowy):
-                self.dzwiek_zjadania.play()
+                # self.dzwiek_zjadania.play()
                 self.stan = "stojaca"
 
         #
