@@ -43,5 +43,5 @@ class Zakonczenie(OknoWyboru):
         text = self.font.render(" Opieka programistyczna:", False, (255,255,255))
         screen.blit(text, [self.rect_rozgrywka.left + 50, self.rect_rozgrywka.top + 300])
 
-        text = self.font.render("    mgr inz Grzegorz Latuszek", False, (255,255,255))
+        text = self.font.render(u"    mgr inż. Grzegorz Latuszek", False, (255,255,255))
         screen.blit(text, [self.rect_rozgrywka.left + 50, self.rect_rozgrywka.top + 350])

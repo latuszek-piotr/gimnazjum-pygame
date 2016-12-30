@@ -20,7 +20,7 @@ class Strzal(object):
                        (pygame.transform.scale(pygame.image.load(Strzal.strzal_img[7]).convert_alpha(), (70, 120)),(110, 0)),
                        (pygame.transform.scale(pygame.image.load(Strzal.strzal_img[8]).convert_alpha(), (60, 120)),(110, 0)),
                        ]
-        # self.dzwiek_strzalu = pygame.mixer.Sound('dzwiek/dzwiek_walki/strzal.wav')
+        self.dzwiek_strzalu = pygame.mixer.Sound('dzwiek/dzwiek_walki/strzal.wav')
         self.pos = list(pos)
         self.size = size
         self.ustaw_pozycje(pos[0], pos[1])
@@ -38,7 +38,7 @@ class Strzal(object):
 
     def start(self):
         self.start_time = time.time()
-        # self.dzwiek_strzalu.play()
+        self.dzwiek_strzalu.play()
 
     def draw(self, screen):
         if self.start_time:

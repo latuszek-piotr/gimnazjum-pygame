@@ -23,7 +23,6 @@ os.environ["SDL_VIDEO_CENTERED"] = "1"
 
 pygame.init()
 pygame.mixer.init()
-pygame.mixer.quit()
 
 pygame.display.set_caption("szkola_1_pietro")
 srodek_ekranu = (650, 325)
@@ -58,13 +57,13 @@ aktywna_szarancza = Szarancza(pozycja_startowa)
 aktywna_szarancza.start(aktywna_sala.daj_kwiat())
 
 strzal = Strzal()
-# sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
+sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
 all_objects = None  # wszystkie obiekty ktore moga wchodzic w kolizje
 
-stan_gry = "rozgrywka"  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
-stan_gry = "przegrana"
-# stan_gry = "wygrana"
 stan_gry = "rozpoczecie"
+# stan_gry = "rozgrywka"  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
+# stan_gry = "przegrana"
+# stan_gry = "wygrana"
 # stan_gry = "zakonczenie"
 przegrana = Przegrana(szerokosc_ekranu, wysokosc_ekranu)
 wygrana = Wygrana(szerokosc_ekranu, wysokosc_ekranu)
@@ -147,9 +146,9 @@ def sprawdz_strzal(strzal, x, y):
 
 def muzyka_pod_przyciskiem():
     key = pygame.key.get_pressed()
-    # muza = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_porazki.wav')
-    # if key[pygame.K_b]:
-    #     muza.play()
+    muza = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_porazki.wav')
+    if key[pygame.K_b]:
+        muza.play()
 
 
 # ---------------------------- glowna petla zdarzen pygame
@@ -158,6 +157,7 @@ active_player.move_to(srodek_ekranu)
 # broadcast_active_player(active_player, net_connection, action='join', await_confirmation=True)
 
 running = True
+screen.fill((0, 0, 0))
 
 while running:
 
@@ -173,7 +173,6 @@ while running:
             if decyzja is None:
                 pass  # nic nie robie, brak decyzji
             elif decyzja == "TAK":
-                pygame.mixer.init()
                 stan_gry = "rozgrywka"
 
         elif stan_gry == "rozgrywka":  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
@@ -218,31 +217,35 @@ while running:
                 running = False
                 break
 
-        ################################### Rysowanie planszy gry
+    ################################### Rysowanie planszy gry
 
+
+    if stan_gry == "rozpoczecie":
+        rozpoczecie.draw(screen)
+    elif stan_gry == "rozgrywka":  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
         screen.fill((0, 0, 0))
-        if stan_gry == "rozpoczecie":
-            rozpoczecie.draw(screen)
-        elif stan_gry == "rozgrywka":  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
-            # parter.draw(screen)     # rysujemy go tylko w trybie "podglad mapy"
-            aktywna_sala.draw(screen)
-            # flower_1.draw(screen)   # to ma sie narysowac w sali
-            # flower_2.draw(screen)
-            active_player.draw(screen)
-            draw_remote(screen, remote_players)
-            # player1.draw(screen)
-            # player2.draw(screen)
-            # player3.draw(screen)
-            # player4.draw(screen)
-            aktywna_szarancza.draw(screen)
-            strzal.draw(screen)
-        elif stan_gry == "wygrana":
-            wygrana.draw(screen)
-        elif stan_gry == "przegrana":
-            przegrana.draw(screen)
-        elif stan_gry == "zakonczenie":
-            zakonczenie.draw(screen)
+        # parter.draw(screen)     # rysujemy go tylko w trybie "podglad mapy"
+        aktywna_sala.draw(screen)
+        # flower_1.draw(screen)   # to ma sie narysowac w sali
+        # flower_2.draw(screen)
+        active_player.draw(screen)
+        draw_remote(screen, remote_players)
+        # player1.draw(screen)
+        # player2.draw(screen)
+        # player3.draw(screen)
+        # player4.draw(screen)
+        aktywna_szarancza.draw(screen)
+        strzal.draw(screen)
+    elif stan_gry == "wygrana":
+        screen.fill((0, 0, 0))
+        wygrana.draw(screen)
+    elif stan_gry == "przegrana":
+        screen.fill((0, 0, 0))
+        przegrana.draw(screen)
+    elif stan_gry == "zakonczenie":
+        screen.fill((0, 0, 0))
+        zakonczenie.draw(screen)
 
-        pygame.display.flip()
+    pygame.display.flip()
 
 #broadcast_active_player(active_player, net_connection, action='leave')

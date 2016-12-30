@@ -17,9 +17,12 @@ class Rozpoczecie(OknoWyboru):
         self.pygame_logo_img = pygame.transform.scale(pygame.image.load(Rozpoczecie.pygame_logo).convert_alpha(),
                                                                         (self.rect_logo.width, self.rect_logo.height))
         self.prognoza_video = pygame.movie.Movie(Rozpoczecie.prognoza_szaranczy)
+        self.prognoza_soundtrack = pygame.mixer.Sound(os.path.join('film', 'prognoza_szaranczy.wav'))
         self.czas_startu_video = None
+        self.czas_startu_audio = None
         self.dlugosc_video = self.prognoza_video.get_length()
         self.film_wystartowany = False
+        self.soundtrack_wystartowany = False
 
     def wylicz_rect_logo(self):
         szerokosc = 0.4 * self.szerokosc
@@ -31,10 +34,14 @@ class Rozpoczecie(OknoWyboru):
     def draw(self, screen):
         self.draw_title(screen)
         screen.blit(self.pygame_logo_img, self.rect_logo.topleft)
-        if not self.film_wystartowany:
+        if not self.soundtrack_wystartowany:
+            self.czas_startu_audio = time.time()
+            self.prognoza_soundtrack.play()
+            self.soundtrack_wystartowany = True
+        elif (not self.film_wystartowany) and (time.time() - self.czas_startu_audio > 2.0):
             self.czas_startu_video = time.time()
             self.prognoza_video.set_display(screen, self.rect_gameover)
             self.prognoza_video.play()
             self.film_wystartowany = True
-        elif time.time() - self.czas_startu_video > self.dlugosc_video:
+        elif self.czas_startu_video and (time.time() - self.czas_startu_video > self.dlugosc_video):
             self.draw_button_ok(screen)
