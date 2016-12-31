@@ -25,7 +25,7 @@ class Szarancza(Player):
                        (pygame.transform.flip(szarancza_stojaca, False, True), (0, 0)),
                       ]
         # self.images[3][0] = pygame.transform.flip(self.images[3][0], False, True)
-        # self.dzwiek_zjadania = pygame.mixer.Sound('dzwiek/dzwiek_walki/szarancza_zjada_kwiat.wav')
+        self.dzwiek_zjadania = pygame.mixer.Sound('dzwiek/dzwiek_walki/szarancza_zjada_kwiat.wav')
         self.start_time = None
         self.czas_dojscia = 10
         self.czas_machniecia_skrzydel = 0.1
@@ -33,6 +33,9 @@ class Szarancza(Player):
         self.kwiat_docelowy = None
         self.stan = "lecaca"  # mozliwe wartosci: "lecaca", "stojaca", "martwa", "anihilowana"
         self.czas_trafienia = None
+
+    def is_started(self):
+        return self.start_time is not None
 
     def start(self, kwiat):
         if kwiat is None:
@@ -44,15 +47,18 @@ class Szarancza(Player):
 
     def update_pozycji_i_kolizji(self, all_objects_thay_may_colide):
         if self.stan == "anihilowana":
-            return
+            return None
         self.biezaca_pozycja()
         if self.stan == "martwa":
             now = time.time()
             czas_od_trafienia = now - self.czas_trafienia
             if czas_od_trafienia > 2:
                 self.stan = "anihilowana"
-            return
-
+            return None
+        if (self.stan != "stojaca") and self.collides(self.kwiat_docelowy):
+            self.dzwiek_zjadania.play()
+            self.stan = "stojaca"
+            return "zjedzony_kwiat"  # TODO opoznic by bylo widac ja stojaca
         for scene_object in all_objects_thay_may_colide:
             if scene_object is self:
                 continue
@@ -60,7 +66,8 @@ class Szarancza(Player):
                 if isinstance(scene_object, Strzal):
                     self.stan = "martwa"
                     self.czas_trafienia = time.time()
-
+                    return "martwa_szarancza"  # TODO opoznic by bylo widac ja odwrocona
+        return None
 
     def wylicz_odleglosc(self, pos_start, pos_koncowa):
         odleglosc = {'deltaX': pos_koncowa[0] - pos_start[0], 'deltaY': pos_koncowa[1] - pos_start[1]}
@@ -71,16 +78,12 @@ class Szarancza(Player):
             return self.pos
         now = time.time()
         time_delta = now - self.start_time
-        if time_delta < self.czas_dojscia / 2:
+        if time_delta < self.czas_dojscia:
             pos_x = (self.odleglosc_do_kwiatu['deltaX'] * time_delta / self.czas_dojscia) + self.start_pos[0]
             pos_y = (self.odleglosc_do_kwiatu['deltaY'] * time_delta / self.czas_dojscia) + self.start_pos[1]
             self.pos = (pos_x, pos_y)
             self.rect.x = pos_x
             self.rect.y = pos_y
-            if self.collides(self.kwiat_docelowy):
-                # self.dzwiek_zjadania.play()
-                self.stan = "stojaca"
-
         #
         # if time_delta > self.czas_dojscia + 5:
         #     self.stan = "anihilowana"
@@ -90,7 +93,7 @@ class Szarancza(Player):
         if self.stan == "stojaca":
             return 3  # Szarancza.stoi
         elif self.stan == "martwa":
-            return 4  # odwrocona Szarancza.stoi
+            return 4  # odwrocona Szarancza.stoi  # TODO zamienic na zweglona
         # if self.start_time is None:
         #     return 3  # Szarancza.stoi
         now = time.time()

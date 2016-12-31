@@ -53,8 +53,7 @@ aktywna_sala.dodaj_kwiat()
 
 lewy_dol = aktywna_sala.daj_naroznik(ktory='lewy-dolny')
 pozycja_startowa = (lewy_dol[0]+10, lewy_dol[1] - 60)
-aktywna_szarancza = Szarancza(pozycja_startowa)
-aktywna_szarancza.start(aktywna_sala.daj_kwiat())
+aktywna_szarancza = None
 
 strzal = Strzal()
 sound = pygame.mixer.Sound('dzwiek/fanfary.wav')
@@ -164,10 +163,11 @@ while running:
     clock.tick(60)
 
     for event in pygame.event.get():
+        print event
 
         running = is_game_finished(event)
 
-        ################################### Akcje na planszy gry
+        ################################### Akcje na planszy gry zalezne od eventow pygame
         if stan_gry == "rozpoczecie":
             decyzja = rozpoczecie.grac_ponownie(event)
             if decyzja is None:
@@ -188,7 +188,6 @@ while running:
             if czy_strzela:
                 active_player.zmien_humor("angry")
 
-            aktywna_szarancza.update_pozycji_i_kolizji(all_objects)
             muzyka_pod_przyciskiem()
 
         elif stan_gry == "wygrana":
@@ -217,8 +216,24 @@ while running:
                 running = False
                 break
 
-    ################################### Rysowanie planszy gry
+    ################################### Akcje na planszy gry niezalezne od eventow pygame
+    if stan_gry == "rozgrywka":
+        if aktywna_szarancza is None:
+            aktywna_szarancza = Szarancza(pozycja_startowa)
+            aktywna_szarancza.start(aktywna_sala.daj_kwiat())
+        # handle_remote_player(net_connection, active_player, players, remote_players)
 
+        wynik = aktywna_szarancza.update_pozycji_i_kolizji(all_objects)
+        if wynik is None:
+            pass  # nic nie robie, nic sie nie stalo
+        elif wynik == "zjedzony_kwiat":
+            aktywna_szarancza = None
+            stan_gry = "przegrana"
+        elif wynik == "martwa_szarancza":
+            aktywna_szarancza = None
+            stan_gry = "wygrana"
+
+    ################################### Rysowanie planszy gry
 
     if stan_gry == "rozpoczecie":
         rozpoczecie.draw(screen)
@@ -234,7 +249,8 @@ while running:
         # player2.draw(screen)
         # player3.draw(screen)
         # player4.draw(screen)
-        aktywna_szarancza.draw(screen)
+        if aktywna_szarancza and aktywna_szarancza.is_started():
+            aktywna_szarancza.draw(screen)
         strzal.draw(screen)
     elif stan_gry == "wygrana":
         screen.fill((0, 0, 0))
