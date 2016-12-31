@@ -64,9 +64,10 @@ class Szarancza(Player):
                 continue
             if self.collides(scene_object):
                 if isinstance(scene_object, Strzal):
-                    self.stan = "martwa"
-                    self.czas_trafienia = time.time()
-                    return "martwa_szarancza"  # TODO opoznic by bylo widac ja odwrocona
+                    if scene_object.is_running():
+                        self.stan = "martwa"
+                        self.czas_trafienia = time.time()
+                        return "martwa_szarancza"  # TODO opoznic by bylo widac ja odwrocona
         return None
 
     def wylicz_odleglosc(self, pos_start, pos_koncowa):

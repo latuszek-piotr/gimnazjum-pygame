@@ -178,16 +178,6 @@ while running:
         elif stan_gry == "rozgrywka":  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
             handle_remote_player(net_connection, active_player, players, remote_players)
 
-            # Move the player if an arrow key is pressed
-            move_player_using_keyboard(pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN, active_player, all_objects, net_connection)
-            move_player_using_keyboard(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, player2, all_objects, None)
-            move_player_using_keyboard(pygame.K_j, pygame.K_l, pygame.K_i, pygame.K_k, player3, all_objects, None)
-            move_player_using_keyboard(pygame.K_f, pygame.K_h, pygame.K_t, pygame.K_g, player4, all_objects, None)
-
-            czy_strzela = sprawdz_strzal(strzal, x=active_player.rect.x, y=active_player.rect.y)
-            if czy_strzela:
-                active_player.zmien_humor("angry")
-
             muzyka_pod_przyciskiem()
 
         elif stan_gry == "wygrana":
@@ -222,6 +212,16 @@ while running:
             aktywna_szarancza = Szarancza(pozycja_startowa)
             aktywna_szarancza.start(aktywna_sala.daj_kwiat())
         # handle_remote_player(net_connection, active_player, players, remote_players)
+
+        # Move the player if an arrow key is pressed
+        move_player_using_keyboard(pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN, active_player, all_objects, net_connection)
+        move_player_using_keyboard(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, player2, all_objects, None)
+        move_player_using_keyboard(pygame.K_j, pygame.K_l, pygame.K_i, pygame.K_k, player3, all_objects, None)
+        move_player_using_keyboard(pygame.K_f, pygame.K_h, pygame.K_t, pygame.K_g, player4, all_objects, None)
+
+        czy_strzela = sprawdz_strzal(strzal, x=active_player.rect.x, y=active_player.rect.y)
+        if czy_strzela:
+            active_player.zmien_humor("angry")
 
         wynik = aktywna_szarancza.update_pozycji_i_kolizji(all_objects)
         if wynik is None:

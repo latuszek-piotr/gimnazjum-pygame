@@ -36,6 +36,9 @@ class Strzal(object):
     def ustaw_rect_do_kolizji(self, x, y):
         self.rect = pygame.Rect(x, y, self.size, self.size)
 
+    def is_running(self):
+        return self.start_time is not None
+
     def start(self):
         self.start_time = time.time()
         self.dzwiek_strzalu.play()
