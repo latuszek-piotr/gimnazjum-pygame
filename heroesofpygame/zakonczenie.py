@@ -21,6 +21,18 @@ class Zakonczenie(OknoWyboru):
         pos_y = 0.05 * self.wysokosc
         return pygame.Rect(pos_x, pos_y, szerokosc, wysokosc)
 
+    def on_entry(self):
+        super(Zakonczenie, self).on_entry()
+
+    def on_exit(self):
+        super(Zakonczenie, self).on_exit()
+
+    def on_clock_tick(self):
+        return "zakonczenie"
+
+    def on_event(self, event):
+        return "zakonczenie"
+
     def draw(self, screen):
         super(Zakonczenie, self).draw(screen)
         screen.blit(self.pygame_logo_img, self.rect_logo.topleft)
@@ -34,7 +46,7 @@ class Zakonczenie(OknoWyboru):
         text = self.font.render("    Piotr Latuszek", False, (255,255,255))
         screen.blit(text, [self.rect_rozgrywka.left + 50, self.rect_rozgrywka.top + 100])
 
-        text = self.font.render("    Dawid Puka", False, (255,255,255))
+        text = self.font.render(u"    Dawid Pułka", False, (255,255,255))
         screen.blit(text, [self.rect_rozgrywka.left + 50, self.rect_rozgrywka.top + 150])
 
         text = self.font.render(u"    Dominik Matuła", False, (255,255,255))

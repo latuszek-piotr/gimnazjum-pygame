@@ -1,8 +1,10 @@
 # -*- coding: UTF-8 -*-
 import pygame
 import os
+from heroesofpygame.stan_gry import StanGry
 
-class OknoWyboru(object):
+
+class OknoWyboru(StanGry):
     green_depressed = os.path.join('grafika', 'button', 'green_depressed.png')
     green_pressed = os.path.join('grafika', 'button', 'green_pressed.png')
     red_depressed = os.path.join('grafika', 'button', 'red_depressed.png')
@@ -83,7 +85,6 @@ class OknoWyboru(object):
                 self.button_gameover = self.button_red_pressed
                 self.pressed_button = 'gameover'
         return None
-
 
     def draw_button_ok(self, screen):
         screen.blit(self.button_rozgrywka, self.rect_rozgrywka.topleft)

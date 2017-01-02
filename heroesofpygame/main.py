@@ -9,10 +9,6 @@ from heroesofpygame.przegrana import Przegrana
 from heroesofpygame.wygrana import Wygrana
 from heroesofpygame.zakonczenie import Zakonczenie
 
-from heroesofpygame import Pietro
-
-from heroesofpygame.szarancza import Szarancza
-
 clock = pygame.time.Clock()
 
 os.environ["SDL_VIDEO_CENTERED"] = "1"
@@ -31,7 +27,7 @@ wysokosc_ekranu = 650
 screen = pygame.display.set_mode((szerokosc_ekranu, wysokosc_ekranu))
 
 stan_gry = "rozpoczecie"
-stan_gry = "rozgrywka"  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
+# stan_gry = "rozgrywka"  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
 # stan_gry = "przegrana"
 # stan_gry = "wygrana"
 # stan_gry = "zakonczenie"
@@ -41,6 +37,12 @@ rozgrywka = Rozgrywka(szerokosc_ekranu, wysokosc_ekranu, active_player_name)
 przegrana = Przegrana(szerokosc_ekranu, wysokosc_ekranu)
 wygrana = Wygrana(szerokosc_ekranu, wysokosc_ekranu)
 zakonczenie = Zakonczenie(szerokosc_ekranu, wysokosc_ekranu)
+
+mozliwe_stany_gry = {"rozpoczecie": rozpoczecie,
+                     "rozgrywka": rozgrywka,
+                     "przegrana": przegrana,
+                     "wygrana": wygrana,
+                     "zakonczenie": zakonczenie}
 
 
 ######################################## inicjalizacja
@@ -56,9 +58,6 @@ def is_game_finished(event):
 
 
 # ---------------------------- glowna petla zdarzen pygame
-
-rozgrywka.active_player.move_to(srodek_ekranu)  # TODO do on_entry() stanu rozgrywka
-# rozgrywka.broadcast_active_player(active_player, rozgrywka.net_connection, action='join', await_confirmation=True)
 
 running = True
 screen.fill((0, 0, 0))
@@ -100,7 +99,7 @@ while running:
 
     ################################### Akcje na planszy gry niezalezne od eventow pygame
     if stan_gry == "rozgrywka":
-        stan_gry = rozgrywka.handle_clock_tick()
+        stan_gry = rozgrywka.on_clock_tick()
 
     ################################### Rysowanie planszy gry
 
@@ -108,12 +107,6 @@ while running:
         rozpoczecie.draw(screen)
     elif stan_gry == "rozgrywka":
         screen.fill((0, 0, 0))
-        # flower_1.draw(screen)   # to ma sie narysowac w sali
-        # flower_2.draw(screen)
-        # player1.draw(screen)
-        # player2.draw(screen)
-        # player3.draw(screen)
-        # player4.draw(screen)
         rozgrywka.draw(screen)
     elif stan_gry == "wygrana":
         screen.fill((0, 0, 0))

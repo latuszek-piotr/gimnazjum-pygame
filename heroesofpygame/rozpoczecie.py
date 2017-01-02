@@ -31,6 +31,18 @@ class Rozpoczecie(OknoWyboru):
         pos_y = 0.05 * self.wysokosc
         return pygame.Rect(pos_x, pos_y, szerokosc, wysokosc)
 
+    def on_entry(self):
+        super(Rozpoczecie, self).on_entry()
+
+    def on_exit(self):
+        super(Rozpoczecie, self).on_exit()
+
+    def on_clock_tick(self):
+        return "rozpoczecie"
+
+    def on_event(self, event):
+        return "rozpoczecie"
+
     def draw(self, screen):
         self.draw_title(screen)
         screen.blit(self.pygame_logo_img, self.rect_logo.topleft)

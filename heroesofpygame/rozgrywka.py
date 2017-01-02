@@ -12,10 +12,14 @@ from heroesofpygame.dawid import Dawid
 from heroesofpygame.szarancza import Szarancza
 
 from heroesofpygame.parter import Parter
+from heroesofpygame.Pietro import Pietro
 
 from heroesofpygame.udp_broadcast_client_server import NetworkConnection
 
-class Rozgrywka(object):
+from heroesofpygame.stan_gry import StanGry
+
+
+class Rozgrywka(StanGry):
     def __init__(self, szerokosc, wysokosc, active_player_name):
         self.szerokosc = szerokosc
         self.wysokosc = wysokosc
@@ -107,19 +111,34 @@ class Rozgrywka(object):
         pozycja_startowa = (lewy_dol[0]+przesuniecie, lewy_dol[1] - 60)
         return pozycja_startowa
 
+    def wylosuj_pozycje_startowa_gracza(self):
+        (x_start, y_start) = self.aktywna_sala.daj_naroznik(ktory='lewy-gorny')
+        (x_end, y_end) = self.aktywna_sala.daj_naroznik(ktory='prawy-dolny')
+        #TODO dopracowac to losowanie
+        x = x_start + int((x_end - x_start) / 2)
+        y = y_start + int((y_end - y_start) / 2)
+        return (x, y)
+
     def on_entry(self):
+        super(Rozgrywka, self).on_entry()
         self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
         self.aktywna_sala.dodaj_kwiat()
-        pozycja_startowa = self.wylosuj_pozycje_startowa_szaranczy()
-        self.aktywna_szarancza = Szarancza(pozycja_startowa)
+        pozycja_startowa_szaranczy = self.wylosuj_pozycje_startowa_szaranczy()
+        self.aktywna_szarancza = Szarancza(pozycja_startowa_szaranczy)
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
         self.all_objects.extend(self.aktywna_sala.walls())
 
+        pozycja_startowa_gracza = self.wylosuj_pozycje_startowa_gracza()
+        self.active_player.move_to(pozycja_startowa_gracza)
         self.active_player.mood = 'happy'
+        # self.broadcast_active_player(active_player, self.net_connection, action='join', await_confirmation=True)
 
         self.aktywna_szarancza.start(self.aktywna_sala.daj_kwiat())
 
-    def handle_clock_tick(self):
+    def on_exit(self):
+        super(Rozgrywka, self).on_exit()
+
+    def on_clock_tick(self):
         if self.aktywna_szarancza is None:  # TODO: dac do on_entry() stanu rozgrywka
             self.on_entry()
 
@@ -149,6 +168,9 @@ class Rozgrywka(object):
             wygrana_sound.play()
             return "wygrana"
 
+        return "rozgrywka"
+
+    def on_event(self, event):
         return "rozgrywka"
 
     def draw(self, screen):
