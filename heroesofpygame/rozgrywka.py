@@ -54,9 +54,10 @@ class Rozgrywka(StanGry):
         all_objects.append(self.strzal)
         return all_objects
 
-    def sprawdz_strzal(self, x, y):
+    def sprawdz_strzal(self, x, y, kierunek):
         key = pygame.key.get_pressed()
         if key[pygame.K_SPACE]:
+            self.strzal.direction = kierunek
             self.strzal.ustaw_pozycje(x, y)
             self.strzal.start()
             return True
@@ -158,7 +159,8 @@ class Rozgrywka(StanGry):
         # rozgrywka.move_player_using_keyboard(pygame.K_j, pygame.K_l, pygame.K_i, pygame.K_k, player3, rozgrywka.all_objects)
         # rozgrywka.move_player_using_keyboard(pygame.K_f, pygame.K_h, pygame.K_t, pygame.K_g, player4, rozgrywka.all_objects)
 
-        czy_strzela = self.sprawdz_strzal(x=self.active_player.rect.x, y=self.active_player.rect.y)
+        czy_strzela = self.sprawdz_strzal(x=self.active_player.rect.centerx, y=self.active_player.rect.centery,
+                                          kierunek=self.active_player.direction)
         if czy_strzela:
             self.active_player.zmien_humor("angry")
 

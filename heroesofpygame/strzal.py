@@ -1,6 +1,8 @@
 import pygame
 import os
 import time
+from obliczenia import przesuniecie_w_kierunku, odleglosc
+
 
 class Strzal(object):
     strzal_img = []
@@ -27,6 +29,7 @@ class Strzal(object):
         self.start_time = None
         self.skok_czasu = 0.07
         self.skok_pozycji = 0
+        self.direction = 0  # in degrees
 
     def ustaw_pozycje(self, x, y):
         self.pos[0] = x
@@ -52,11 +55,22 @@ class Strzal(object):
                 # Copy image to screen:
                 (image, (delta_x, delta_y)) = self.images[image_index]
                 pos = (self.pos[0] - delta_x, self.pos[1] + delta_y)
+                final_image, nowa_pozycja_obrazu = self.obroc_obraz(image, self.pos, pos)
                 self.ustaw_rect_do_kolizji(pos[0], pos[1])
-                screen.blit(image, pos)
+                # screen.blit(image, pos)
+                screen.blit(final_image, nowa_pozycja_obrazu)
 
     def ktory_obraz(self):
         now = time.time()
         time_delta = now - self.start_time
         ktory = int(time_delta / self.skok_czasu)
         return ktory
+
+    def obroc_obraz(self, image, os_obrotu, pozycja_obrazu):
+        srodek_x = pozycja_obrazu[0] + image.get_width() / 2
+        srodek_y = pozycja_obrazu[1] + image.get_height() / 2
+        distance = odleglosc(os_obrotu, (srodek_x, srodek_y))
+        dx, dy = przesuniecie_w_kierunku(distance, self.direction)
+        nowa_pozycja_obrazu = (pozycja_obrazu[0] + dx, pozycja_obrazu[1] + dy)
+        obrocony_obraz = pygame.transform.rotate(image, self.direction)
+        return (obrocony_obraz, nowa_pozycja_obrazu)

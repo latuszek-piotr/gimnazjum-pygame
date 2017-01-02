@@ -2,6 +2,7 @@ import pygame
 import math
 from pixel import Pixel
 from strzal import Strzal
+from obliczenia import przesuniecie_w_kierunku
 
 
 class Player(Pixel):
@@ -28,14 +29,8 @@ class Player(Pixel):
         action = parts[3].split('=')[1]
         return ((x, y), name, action)
 
-    def _shift_at_direction(self, distance):
-        """action on time tick"""
-        dx = distance * math.cos(math.radians(self.direction))
-        dy = distance * math.sin(math.radians(self.direction))
-        return dx, dy
-
     def move_at_direction(self, distance, all_objects_thay_may_colide):
-        dx, dy = self._shift_at_direction(distance)
+        dx, dy = przesuniecie_w_kierunku(distance, self.direction)
         self.move(dx, dy, all_objects_thay_may_colide)
 
     def move_to(self, pos):
@@ -88,6 +83,6 @@ class Player(Pixel):
 
     def _draw_moving_direction(self, screen):
         direction_length = self.rect.right - self.rect.left
-        dx, dy = self._shift_at_direction(direction_length)
+        dx, dy = przesuniecie_w_kierunku(direction_length, self.direction)
         # print "Moving object area: {}, moving direction: {} degrees".format(self.rect, self.direction)
         pygame.draw.lines(screen, self.direction_color, False, [self.rect.center, (self.rect.centerx + dx, self.rect.centery + dy)], 1)
