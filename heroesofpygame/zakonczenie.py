@@ -26,14 +26,19 @@ class Zakonczenie(OknoWyboru):
 
     def on_exit(self):
         super(Zakonczenie, self).on_exit()
+        pygame.event.post(pygame.event.Event(pygame.QUIT, {'reason': 'quit by Zakonczenie'}))
 
     def on_clock_tick(self):
         return "zakonczenie"
 
     def on_event(self, event):
+        decyzja = self.grac_ponownie(event)
+        if decyzja == "NIE":
+            return "the-end"
         return "zakonczenie"
 
     def draw(self, screen):
+        screen.fill((0, 0, 0))
         super(Zakonczenie, self).draw(screen)
         screen.blit(self.pygame_logo_img, self.rect_logo.topleft)
 

@@ -11,6 +11,7 @@ class OknoWyboru(StanGry):
     red_pressed = os.path.join('grafika', 'button', 'red_pressed.png')
 
     def __init__(self, szerokosc, wysokosc, tytul_okna, button_ok=True, button_quit=True, button_play_text1="Ponowna", button_play_text2="rozgrywka"):
+        super(OknoWyboru, self).__init__()
         self.szerokosc = szerokosc
         self.wysokosc = wysokosc
         self.tytul_okna = tytul_okna

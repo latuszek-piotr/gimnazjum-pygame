@@ -17,4 +17,13 @@ class Wygrana(OknoWyboru):
         return "wygrana"
 
     def on_event(self, event):
+        decyzja = self.grac_ponownie(event)
+        if decyzja == "TAK":
+            return "rozgrywka"
+        elif decyzja == "NIE":
+            return "zakonczenie"
         return "wygrana"
+
+    def draw(self, screen):
+        screen.fill((0, 0, 0))
+        super(Wygrana, self).draw(screen)

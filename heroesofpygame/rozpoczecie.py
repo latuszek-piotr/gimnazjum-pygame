@@ -22,6 +22,7 @@ class Rozpoczecie(OknoWyboru):
         self.czas_startu_audio = None
         self.dlugosc_video = self.prognoza_video.get_length()
         self.film_wystartowany = False
+        self.film_zakonczony = False
         self.soundtrack_wystartowany = False
 
     def wylicz_rect_logo(self):
@@ -41,6 +42,10 @@ class Rozpoczecie(OknoWyboru):
         return "rozpoczecie"
 
     def on_event(self, event):
+        if self.film_zakonczony:
+            decyzja = self.grac_ponownie(event)
+            if decyzja == "TAK":
+                return "rozgrywka"
         return "rozpoczecie"
 
     def draw(self, screen):
@@ -56,4 +61,5 @@ class Rozpoczecie(OknoWyboru):
             self.prognoza_video.play()
             self.film_wystartowany = True
         elif self.czas_startu_video and (time.time() - self.czas_startu_video > self.dlugosc_video):
+            self.film_zakonczony = True
             self.draw_button_ok(screen)

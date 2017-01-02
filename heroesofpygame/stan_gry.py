@@ -8,10 +8,12 @@ class StanGry(object):
     def on_entry(self):
         '''Akcje wykonywane gdy zaczyna sie dany stan gry'''
         self.zaczety = True
+        self.zakonczony = False
 
     def on_exit(self):
         '''Akcje wykonywane gdy konczy sie dany stan gry'''
         self.zakonczony = True
+        self.zaczety = False
 
     def on_clock_tick(self):
         '''

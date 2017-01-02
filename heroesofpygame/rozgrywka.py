@@ -21,6 +21,7 @@ from heroesofpygame.stan_gry import StanGry
 
 class Rozgrywka(StanGry):
     def __init__(self, szerokosc, wysokosc, active_player_name):
+        super(Rozgrywka, self).__init__()
         self.szerokosc = szerokosc
         self.wysokosc = wysokosc
         self.strzal = Strzal()
@@ -174,6 +175,7 @@ class Rozgrywka(StanGry):
         return "rozgrywka"
 
     def draw(self, screen):
+        screen.fill((0, 0, 0))
         # # parter.draw(screen)     # rysujemy go tylko w trybie "podglad mapy"
         self.aktywna_sala.draw(screen)
         # # flower_1.draw(screen)   # to ma sie narysowac w sali

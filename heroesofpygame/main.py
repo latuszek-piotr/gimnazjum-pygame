@@ -17,7 +17,6 @@ pygame.init()
 pygame.mixer.init()
 
 pygame.display.set_caption("szkola_1_pietro")
-srodek_ekranu = (650, 325)
 
 ########################### zmienne globalne
 active_player_name = sys.argv[1]
@@ -25,12 +24,6 @@ active_player_name = sys.argv[1]
 szerokosc_ekranu = 1300
 wysokosc_ekranu = 650
 screen = pygame.display.set_mode((szerokosc_ekranu, wysokosc_ekranu))
-
-stan_gry = "rozpoczecie"
-# stan_gry = "rozgrywka"  #mozliwe : "rozpoczecie", "rozgrywka", "przegrana", "wygrana", "zakonczenie"
-# stan_gry = "przegrana"
-# stan_gry = "wygrana"
-# stan_gry = "zakonczenie"
 
 rozpoczecie = Rozpoczecie(szerokosc_ekranu, wysokosc_ekranu)
 rozgrywka = Rozgrywka(szerokosc_ekranu, wysokosc_ekranu, active_player_name)
@@ -42,20 +35,30 @@ mozliwe_stany_gry = {"rozpoczecie": rozpoczecie,
                      "rozgrywka": rozgrywka,
                      "przegrana": przegrana,
                      "wygrana": wygrana,
-                     "zakonczenie": zakonczenie}
-
+                     "zakonczenie": zakonczenie,
+                     "the-end": zakonczenie}
 
 ######################################## inicjalizacja
 
-
 def is_game_finished(event):
-    running = True
+    finished = False
     if event.type == pygame.QUIT:
-        running = False
+        finished = True
     if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
-        running = False
-    return running
+        finished = True
+    return finished
 
+
+def zmien_stan_gry(obecny_stan, nowy_stan_gry):
+    if obecny_stan and (not obecny_stan.zakonczony):
+        obecny_stan.on_exit()
+    nowy_stan = mozliwe_stany_gry[nowy_stan_gry]
+    if nowy_stan and (not nowy_stan.zaczety):
+        nowy_stan.on_entry()
+    return nowy_stan
+
+stan_gry = "rozpoczecie"
+obecny_stan = zmien_stan_gry(None, stan_gry)
 
 # ---------------------------- glowna petla zdarzen pygame
 
@@ -69,55 +72,26 @@ while running:
     for event in pygame.event.get():
         print event
 
-        running = is_game_finished(event)
+        if is_game_finished(event):
+            running = False
+            break
 
-        ################################### Akcje na planszy gry zalezne od eventow pygame
-        if stan_gry == "rozpoczecie":
-            decyzja = rozpoczecie.grac_ponownie(event)
-            if decyzja == "TAK":
-                stan_gry = "rozgrywka"
+        #--------------------------------------------- Akcje na planszy gry zalezne od eventow pygame
+        nowy_stan_gry = obecny_stan.on_event(event)
+        if nowy_stan_gry != stan_gry:
+            obecny_stan = zmien_stan_gry(obecny_stan, nowy_stan_gry)
+            stan_gry = nowy_stan_gry
 
-        elif stan_gry == "wygrana":
-            decyzja = wygrana.grac_ponownie(event)
-            if decyzja == "TAK":
-                stan_gry = "rozgrywka"
-            elif decyzja == "NIE":
-                stan_gry = "zakonczenie"
+    #------------------------------------------------- Akcje na planszy gry niezalezne od eventow pygame
+    nowy_stan_gry = obecny_stan.on_clock_tick()
+    if nowy_stan_gry != stan_gry:
+        obecny_stan = zmien_stan_gry(obecny_stan, nowy_stan_gry)
+        stan_gry = nowy_stan_gry
 
-        elif stan_gry == "przegrana":
-            decyzja = przegrana.grac_ponownie(event)
-            if decyzja == "TAK":
-                stan_gry = "rozgrywka"
-            elif decyzja == "NIE":
-                stan_gry = "zakonczenie"
-
-        elif stan_gry == "zakonczenie":
-            decyzja = zakonczenie.grac_ponownie(event)
-            if decyzja == "NIE":
-                running = False
-                break
-
-    ################################### Akcje na planszy gry niezalezne od eventow pygame
-    if stan_gry == "rozgrywka":
-        stan_gry = rozgrywka.on_clock_tick()
 
     ################################### Rysowanie planszy gry
 
-    if stan_gry == "rozpoczecie":
-        rozpoczecie.draw(screen)
-    elif stan_gry == "rozgrywka":
-        screen.fill((0, 0, 0))
-        rozgrywka.draw(screen)
-    elif stan_gry == "wygrana":
-        screen.fill((0, 0, 0))
-        wygrana.draw(screen)
-    elif stan_gry == "przegrana":
-        screen.fill((0, 0, 0))
-        przegrana.draw(screen)
-    elif stan_gry == "zakonczenie":
-        screen.fill((0, 0, 0))
-        zakonczenie.draw(screen)
-
+    obecny_stan.draw(screen)
     pygame.display.flip()
 
 #rozgrywka.broadcast_active_player(rozgrywka.active_player, rozgrywka.net_connection, action='leave')
