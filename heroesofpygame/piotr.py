@@ -20,6 +20,7 @@ class Piotr(Player):
                        'scared': pygame.transform.scale(pygame.image.load(Piotr.scared_img).convert_alpha(), (size, size+10))}
 
     def draw(self, screen):
+        super(Piotr, self).draw(screen)
         # Copy image to screen:
         img = self.images[self.mood]
         screen.blit(img, [self.rect.x, self.rect.y])

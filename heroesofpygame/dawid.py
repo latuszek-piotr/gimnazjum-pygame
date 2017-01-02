@@ -16,5 +16,6 @@ class Dawid(Player):
         self.img = pygame.transform.scale(pygame.image.load(Dawid.happy_img).convert_alpha(), (size, size+10))
 
     def draw(self, screen):
+        super(Dawid, self).draw(screen)
         # Copy image to screen:
         screen.blit(self.img, [self.rect.x, self.rect.y])

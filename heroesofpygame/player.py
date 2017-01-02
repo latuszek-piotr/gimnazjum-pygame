@@ -1,4 +1,5 @@
 import pygame
+import math
 from pixel import Pixel
 from strzal import Strzal
 
@@ -7,6 +8,10 @@ class Player(Pixel):
     def __init__(self, pos=(30, 30), size=4, color=(255,255,255)):
         super(Player, self).__init__(pos, size, color)
         self.nazwa = self.__class__.__name__
+        self.direction = 0  # in degrees
+        self.direction_color = (255, 0, 0)
+        self.real_x = pos[0] * 1.0
+        self.real_y = pos[1] * 1.0
 
     def serialize_for_network(self, action='move'):
         # Serialize only what is important to send over network.
@@ -23,15 +28,29 @@ class Player(Pixel):
         action = parts[3].split('=')[1]
         return ((x, y), name, action)
 
+    def _shift_at_direction(self, distance):
+        """action on time tick"""
+        dx = distance * math.cos(math.radians(self.direction))
+        dy = distance * math.sin(math.radians(self.direction))
+        return dx, dy
+
+    def move_at_direction(self, distance, all_objects_thay_may_colide):
+        dx, dy = self._shift_at_direction(distance)
+        self.move(dx, dy, all_objects_thay_may_colide)
+
     def move_to(self, pos):
         # Move the rect
+        self.real_x = pos[0]
+        self.real_y = pos[1]
         self.rect.x = pos[0]
         self.rect.y = pos[1]
 
     def move_single_axis(self, dx, dy, all_objects_thay_may_colide):
         # Move the rect
-        self.rect.x += dx
-        self.rect.y += dy
+        self.real_x += dx
+        self.real_y += dy
+        self.rect.x = self.real_x
+        self.rect.y = self.real_y
         # If you collide with a wall, move out based on velocity
         for scene_object in all_objects_thay_may_colide:
             if scene_object is self:
@@ -42,8 +61,6 @@ class Player(Pixel):
                 ### print "kolizja: ja:{} on:{}".format(self.rect, scene_object.rect)
                 # I have collision with him
                 self.collision(dx, dy, scene_object)
-                # and he has collision with me
-                #scene_object.collision(dx, dy, self)
 
     def collides(self, other_scene_object):
         return self.rect.colliderect(other_scene_object.rect)
@@ -55,9 +72,22 @@ class Player(Pixel):
     def _step_outside_colission(self, last_move_dx, last_move_dy, other_scene_object):
         if last_move_dx > 0: # Moving right; Hit the left side of other_scene_object
             self.rect.right = other_scene_object.rect.left
+            self.real_x = self.rect.x
         if last_move_dx < 0: # Moving left; Hit the right side of other_scene_object
             self.rect.left = other_scene_object.rect.right
+            self.real_x = self.rect.x
         if last_move_dy > 0: # Moving down; Hit the top side of other_scene_object
             self.rect.bottom = other_scene_object.rect.top
+            self.real_y = self.rect.y
         if last_move_dy < 0: # Moving up; Hit the bottom side of other_scene_object
             self.rect.top = other_scene_object.rect.bottom
+            self.real_y = self.rect.y
+
+    def draw(self, screen):
+        self._draw_moving_direction(screen)
+
+    def _draw_moving_direction(self, screen):
+        direction_length = self.rect.right - self.rect.left
+        dx, dy = self._shift_at_direction(direction_length)
+        # print "Moving object area: {}, moving direction: {} degrees".format(self.rect, self.direction)
+        pygame.draw.lines(screen, self.direction_color, False, [self.rect.center, (self.rect.centerx + dx, self.rect.centery + dy)], 1)

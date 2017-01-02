@@ -16,5 +16,6 @@ class Dominik(Player):
         self.img = pygame.transform.scale(pygame.image.load(Dominik.sad_img).convert_alpha(), (size, size+10))
 
     def draw(self, screen):
+        super(Dominik, self).draw(screen)
         # Copy image to screen:
         screen.blit(self.img, [self.rect.x, self.rect.y])

@@ -65,13 +65,19 @@ class Rozgrywka(StanGry):
     def move_player_using_keyboard(self, key_left, key_right, key_up, key_down, active_player, all_objects):
         key = pygame.key.get_pressed()
         if key[key_left]:
-            active_player.move(-1, 0, all_objects)
+            # active_player.move(-1, 0, all_objects)
+            active_player.direction -= 2
+            active_player.move_at_direction(0, all_objects)
         elif key[key_right]:
-            active_player.move(1, 0, all_objects)
+            # active_player.move(1, 0, all_objects)
+            active_player.direction += 2
+            active_player.move_at_direction(0, all_objects)
         elif key[key_up]:
-            active_player.move(0, -1, all_objects)
+            # active_player.move(0, -1, all_objects)
+            active_player.move_at_direction(2, all_objects)
         elif key[key_down]:
-            active_player.move(0, 1, all_objects)
+            # active_player.move(0, 1, all_objects)
+            active_player.move_at_direction(-2, all_objects)
         else:
             return  # no move
         self.broadcast_active_player(active_player)
@@ -132,6 +138,7 @@ class Rozgrywka(StanGry):
         pozycja_startowa_gracza = self.wylosuj_pozycje_startowa_gracza()
         self.active_player.move_to(pozycja_startowa_gracza)
         self.active_player.mood = 'happy'
+        self.active_player.direction = 0
         # self.broadcast_active_player(active_player, self.net_connection, action='join', await_confirmation=True)
 
         self.aktywna_szarancza.start(self.aktywna_sala.daj_kwiat())
