@@ -67,12 +67,13 @@ class Rozgrywka(StanGry):
         key = pygame.key.get_pressed()
         if key[key_left]:
             # active_player.move(-1, 0, all_objects)
-            # obrot w lewo zwieksza kat (zgodnie z katami w ukladzie kartezjanskim)
-            active_player.direction += 2
+            # katy rosna zgodnie ze wskazowkami zegara (odwrotnie niz w ukladzie kartezjanskim)
+            # obrot w lewo zmniejsza kat
+            active_player.direction -= 2
             active_player.move_at_direction(0, all_objects)
         elif key[key_right]:
             # active_player.move(1, 0, all_objects)
-            active_player.direction -= 2
+            active_player.direction += 2
             active_player.move_at_direction(0, all_objects)
         elif key[key_up]:
             # active_player.move(0, -1, all_objects)

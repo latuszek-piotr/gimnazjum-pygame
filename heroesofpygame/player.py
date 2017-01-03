@@ -89,5 +89,4 @@ class Player(Pixel):
         direction_length = self.rect.right - self.rect.left
         dx, dy = przesuniecie_w_kierunku(direction_length, self.direction)
         # print "Moving object area: {}, moving direction: {} degrees".format(self.rect, self.direction)
-        # wspolrzedne y w pygame rosna w inna strone niz w ukladzie wsp. kartezjanskich
-        pygame.draw.lines(screen, self.direction_color, False, [self.rect.center, (self.rect.centerx + dx, self.rect.centery - dy)], 1)
+        pygame.draw.lines(screen, self.direction_color, False, [self.rect.center, (self.rect.centerx + dx, self.rect.centery + dy)], 1)
