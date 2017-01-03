@@ -27,7 +27,7 @@ class Strzal(object):
         self.size = size
         self.ustaw_pozycje(pos[0], pos[1])
         self.start_time = None
-        self.skok_czasu = 1.07
+        self.skok_czasu = 0.07
         self.skok_pozycji = 0
         self.direction = 0  # in degrees
 

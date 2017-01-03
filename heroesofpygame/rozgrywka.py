@@ -67,19 +67,23 @@ class Rozgrywka(StanGry):
         key = pygame.key.get_pressed()
         if key[key_left]:
             # active_player.move(-1, 0, all_objects)
+            self.active_player.zmien_humor("suprised")
             # katy rosna zgodnie ze wskazowkami zegara (odwrotnie niz w ukladzie kartezjanskim)
             # obrot w lewo zmniejsza kat
             active_player.direction -= 2
             active_player.move_at_direction(0, all_objects)
         elif key[key_right]:
             # active_player.move(1, 0, all_objects)
+            self.active_player.zmien_humor("suprised")
             active_player.direction += 2
             active_player.move_at_direction(0, all_objects)
         elif key[key_up]:
             # active_player.move(0, -1, all_objects)
+            self.active_player.zmien_humor("happy")
             active_player.move_at_direction(2, all_objects)
         elif key[key_down]:
             # active_player.move(0, 1, all_objects)
+            self.active_player.zmien_humor("happy")
             active_player.move_at_direction(-2, all_objects)
         else:
             return  # no move
@@ -186,7 +190,7 @@ class Rozgrywka(StanGry):
         return "rozgrywka"
 
     def draw(self, screen):
-        # screen.fill((0, 0, 0))
+        screen.fill((0, 0, 0))
         # parter.draw(screen)     # rysujemy go tylko w trybie "podglad mapy"
         self.aktywna_sala.draw(screen)
         # # flower_1.draw(screen)   # to ma sie narysowac w sali
