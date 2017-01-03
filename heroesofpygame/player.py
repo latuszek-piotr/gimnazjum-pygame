@@ -14,6 +14,9 @@ class Player(Pixel):
         self.real_x = pos[0] * 1.0
         self.real_y = pos[1] * 1.0
 
+    def __str__(self):
+        return "%s(x=%.2f, y=%.2f, dir=%s)" % (self.nazwa, self.real_x, self.real_y, self.direction)
+
     def serialize_for_network(self, action='move'):
         # Serialize only what is important to send over network.
         network_record = "x=%s, y=%s, name=%s, action=%s" % (self.rect.x, self.rect.y, self.nazwa, action)
@@ -32,6 +35,7 @@ class Player(Pixel):
     def move_at_direction(self, distance, all_objects_thay_may_colide):
         dx, dy = przesuniecie_w_kierunku(distance, self.direction)
         self.move(dx, dy, all_objects_thay_may_colide)
+        print self
 
     def move_to(self, pos):
         # Move the rect
@@ -85,4 +89,5 @@ class Player(Pixel):
         direction_length = self.rect.right - self.rect.left
         dx, dy = przesuniecie_w_kierunku(direction_length, self.direction)
         # print "Moving object area: {}, moving direction: {} degrees".format(self.rect, self.direction)
-        pygame.draw.lines(screen, self.direction_color, False, [self.rect.center, (self.rect.centerx + dx, self.rect.centery + dy)], 1)
+        # wspolrzedne y w pygame rosna w inna strone niz w ukladzie wsp. kartezjanskich
+        pygame.draw.lines(screen, self.direction_color, False, [self.rect.center, (self.rect.centerx + dx, self.rect.centery - dy)], 1)
