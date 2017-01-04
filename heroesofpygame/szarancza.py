@@ -52,13 +52,13 @@ class Szarancza(Player):
     def update_pozycji_i_kolizji(self, all_objects_thay_may_colide):
         if self.stan == "anihilowana":
             return None
-        self.biezaca_pozycja()
         if self.stan == "martwa":
             now = time.time()
             czas_od_trafienia = now - self.czas_trafienia
             if czas_od_trafienia > 2:
                 self.stan = "anihilowana"
             return None
+        self.biezaca_pozycja()
         if (self.stan != "stojaca"):
             if self.kwiat_docelowy.zjedzony:  # inna szarancza zjadla go wczesniej
                 self.stan = "stojaca"
