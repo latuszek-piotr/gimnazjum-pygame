@@ -139,7 +139,10 @@ class Rozgrywka(StanGry):
     def on_entry(self):
         super(Rozgrywka, self).on_entry()
         self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
-        self.aktywna_sala.dodaj_kwiat()
+        ilosc_kwiatow = random.randint(1, 3)
+        ilosc_szaranczy = random.randint(1, 5)
+        for nr in range(ilosc_kwiatow):
+            self.aktywna_sala.dodaj_kwiat()
         pozycja_startowa_szaranczy = self.wylosuj_pozycje_startowa_szaranczy(self.aktywna_sala)
         self.aktywna_szarancza = Szarancza(pozycja_startowa_szaranczy)
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
@@ -151,7 +154,7 @@ class Rozgrywka(StanGry):
         self.active_player.direction = 0
         # self.broadcast_active_player(active_player, self.net_connection, action='join', await_confirmation=True)
 
-        self.aktywna_szarancza.start(self.aktywna_sala.daj_kwiat())
+        self.aktywna_szarancza.start(self.aktywna_sala.daj_losowy_kwiat())
 
     def on_exit(self):
         super(Rozgrywka, self).on_exit()
