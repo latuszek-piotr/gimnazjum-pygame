@@ -10,7 +10,7 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
         self.osiem_a = ClassRoom(pos=(10,181), room_width=30, room_length=69, drzwi={'location':'right', 'door_delta': 20})
         self.osiem = ClassRoom(pos=(40,181), room_width=46, room_length=36, drzwi={'location':'right', 'door_delta': 20})
         self.archiwum = ClassRoom(pos=(40,214), room_width=20, room_length=36, drzwi={'location':'left', 'door_delta': 20})
-        self.siudemka = ClassRoom(pos=(60,214), room_width=50, room_length=36, drzwi={'location':'up', 'door_delta': 20})
+        self.siodemka = ClassRoom(pos=(60,214), room_width=50, room_length=36, drzwi={'location':'up', 'door_delta': 20})
         self.szostka = ClassRoom(pos=(110,214), room_width=50, room_length=36, drzwi={'location':'up', 'door_delta': 20})
         self.korytarz_do_sali_siedem = ClassRoom(pos=(83,197), room_width=77, room_length=20, drzwi={'location':'right', 'door_delta': 20}) # TODO jest kilka wyjsc z korytarza
         self.kantorek_wf = ClassRoom(pos=(149,163), room_width=19, room_length=18, drzwi={'location':'up', 'door_delta': 20})
@@ -34,9 +34,9 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
                 self.osiem_a,
                 self.osiem,
                 self.archiwum,
-                self.siudemka,
+                self.siodemka,
                 self.szostka,
-                self.korytarz_do_salisiedem,
+                self.korytarz_do_sali_siedem,
                 self.kantorek_wf,
                 self.korytarz_do_szatni,
                 self.stolowka,

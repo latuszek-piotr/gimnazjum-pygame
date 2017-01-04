@@ -46,7 +46,8 @@ class Rozgrywka(StanGry):
         self.statusbar = None
 
     def wylosuj_sale(self):
-        sala = self.parter.klasa_info  # wyswietlana sala na ktorej dzieje sie akcja #TODO losowanie; teraz na sztywno
+        # sala = self.parter.klasa_info  # wyswietlana sala na ktorej dzieje sie akcja #TODO losowanie; teraz na sztywno
+        sala = random.choice(self.parter.sale())
         return sala
 
     def obiekty_mogace_wchodzic_w_kolizje(self):
@@ -124,15 +125,15 @@ class Rozgrywka(StanGry):
     def wylosuj_pozycje_startowa_szaranczy(self, sala):
         (x_start, y_start) = sala.daj_naroznik(ktory='lewy-dolny')
         (x_end, y_end) = self.aktywna_sala.daj_naroznik(ktory='prawy-dolny')
-        room_width = x_end - x_start
-        przesuniecie = random.randint(10, room_width - 80)
+        room_width = int(x_end - x_start)
+        przesuniecie = random.randint(1, room_width - 1)
         pozycja_startowa = (x_start+przesuniecie, y_start - 60)
         return pozycja_startowa
 
     def wylosuj_pozycje_startowa_gracza(self, sala):
         (x_start, y_start) = sala.daj_naroznik(ktory='lewy-gorny')
         (x_end, y_end) = sala.daj_naroznik(ktory='prawy-dolny')
-        room_width = x_end - x_start
+        room_width = int(x_end - x_start)
         przesuniecie = random.randint(10, room_width - 80)
         x = x_start + przesuniecie
         y = y_start + int((y_end - y_start) / 2)
@@ -188,6 +189,7 @@ class Rozgrywka(StanGry):
 
     def on_entry(self):
         super(Rozgrywka, self).on_entry()
+        self.aktywna_sala = self.wylosuj_sale()
         self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
 
         self.zainicjuj_kwiaty(self.aktywna_sala)
