@@ -57,7 +57,7 @@ def zmien_stan_gry(obecny_stan, nowy_stan_gry):
         nowy_stan.on_entry()
     return nowy_stan
 
-stan_gry = "rozpoczecie"
+stan_gry = "rozgrywka" #"rozpoczecie"
 obecny_stan = zmien_stan_gry(None, stan_gry)
 
 # ---------------------------- glowna petla zdarzen pygame
