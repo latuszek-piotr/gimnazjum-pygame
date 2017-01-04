@@ -1,6 +1,7 @@
 import pygame
 import os
 import time
+import random
 from player import Player
 from strzal import Strzal
 
@@ -40,10 +41,13 @@ class Szarancza(Player):
     def start(self, kwiat):
         if kwiat is None:
             return
+        self.czas_dojscia = random.choice([8,10,12,14,16])
         self.kwiat_docelowy = kwiat
         self.start_time = time.time()
         self.start_pos = self.pos
+        self.rect.topleft = self.start_pos
         self.odleglosc_do_kwiatu = self.wylicz_odleglosc(self.rect.center, kwiat.rect.midright)
+        self.stan = "lecaca"
 
     def update_pozycji_i_kolizji(self, all_objects_thay_may_colide):
         if self.stan == "anihilowana":
@@ -55,11 +59,14 @@ class Szarancza(Player):
             if czas_od_trafienia > 2:
                 self.stan = "anihilowana"
             return None
-        if (self.stan != "stojaca") and self.collides(self.kwiat_docelowy):
-            self.dzwiek_zjadania.play()
-            self.kwiat_docelowy.zjedzony = True
-            self.stan = "stojaca"
-            return "zjedzony_kwiat"  # TODO opoznic by bylo widac ja stojaca
+        if (self.stan != "stojaca"):
+            if self.kwiat_docelowy.zjedzony:  # inna szarancza zjadla go wczesniej
+                self.stan = "stojaca"
+            elif self.collides(self.kwiat_docelowy):
+                self.dzwiek_zjadania.play()
+                self.kwiat_docelowy.zjedzony = True
+                self.stan = "stojaca"
+                return "zjedzony_kwiat"  # TODO opoznic by bylo widac ja stojaca
         for scene_object in all_objects_thay_may_colide:
             if scene_object is self:
                 continue

@@ -40,7 +40,7 @@ class Rozgrywka(StanGry):
         self.remote_players = {}  # lista graczy zdalnych
         self.parter = Parter()
         self.aktywna_sala = self.wylosuj_sale()
-        self.aktywna_szarancza = None
+        self.aktywne_szarancze = []
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
         self.wszystkie_kwiaty = []
 
@@ -151,11 +151,30 @@ class Rozgrywka(StanGry):
         zjedzone = [kwiat for kwiat in self.wszystkie_kwiaty if kwiat.zjedzony]
         return len(zjedzone)
 
-    def zainicjuj_szarancze(self, sala):
-        ilosc_szaranczy = random.randint(1, 5)
+    def reinicjuj_pojedyncza_szarancze(self, szarancza, sala):
         pozycja_startowa_szaranczy = self.wylosuj_pozycje_startowa_szaranczy(sala)
-        self.aktywna_szarancza = Szarancza(pozycja_startowa_szaranczy)
-        self.aktywna_szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
+        szarancza.pos = pozycja_startowa_szaranczy
+        szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
+
+    def zainicjuj_szarancze(self, sala):
+        self.aktywne_szarancze = []
+        ilosc_szaranczy = random.randint(1, 5)
+        for nr in range(ilosc_szaranczy):
+            pozycja_startowa_szaranczy = self.wylosuj_pozycje_startowa_szaranczy(sala)
+            szarancza = Szarancza(pozycja_startowa_szaranczy)
+            szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
+            self.aktywne_szarancze.append(szarancza)
+
+    def ilosc_wszystkich_szaranczy(self):
+        return len(self.aktywne_szarancze)
+
+    def ilosc_zabitych_szaranczy(self):
+        zabite = [szarancza for szarancza in self.aktywne_szarancze if (szarancza.stan == "martwa") or (szarancza.stan == "anihilowana")]
+        return len(zabite)
+
+    def szarancze_ktore_juz_zjadly_kwiat(self):
+        najedzone = [szarancza for szarancza in self.aktywne_szarancze if (szarancza.stan == "stojaca")]
+        return najedzone
 
     def zainicjuj_gracza(self, sala):
         pozycja_startowa_gracza = self.wylosuj_pozycje_startowa_gracza(sala)
@@ -179,9 +198,6 @@ class Rozgrywka(StanGry):
         super(Rozgrywka, self).on_exit()
 
     def on_clock_tick(self):
-        if self.aktywna_szarancza is None:  # TODO: dac do on_entry() stanu rozgrywka
-            self.on_entry()
-
         self.handle_remote_player()
 
         # Move the player if an arrow key is pressed
@@ -195,23 +211,22 @@ class Rozgrywka(StanGry):
         if czy_strzela:
             self.active_player.zmien_humor("angry")
 
-        wynik = self.aktywna_szarancza.update_pozycji_i_kolizji(self.all_objects)
-        if wynik is None:
-            pass  # nic nie robie, nic sie nie stalo
-        elif wynik == "zjedzony_kwiat":
-            self.aktywna_szarancza = None
-            if self.ilosc_zjedzonych_kwiatow() < self.ilosc_wszystkich_kwiatow():
-                self.zainicjuj_szarancze(self.aktywna_sala)
-            else:
-                self.aktywna_sala.usun_zjedzone_kwiaty()
-                porazka_sound = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_porazki.wav') # TODO: dac do on_exit() stanu rozgrywka
-                porazka_sound.play()
-                return "przegrana"
-        elif wynik == "martwa_szarancza":
-            self.aktywna_szarancza = None
+        for szarancza in self.aktywne_szarancze:
+            szarancza.update_pozycji_i_kolizji(self.all_objects)
+
+        if self.ilosc_zjedzonych_kwiatow() >= self.ilosc_wszystkich_kwiatow():
+            self.aktywna_sala.usun_zjedzone_kwiaty()
+            porazka_sound = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_porazki.wav') # TODO: dac do on_exit() stanu rozgrywka
+            porazka_sound.play()
+            return "przegrana"
+        elif self.ilosc_zabitych_szaranczy() >= self.ilosc_wszystkich_szaranczy():
+            self.aktywna_sala.usun_zjedzone_kwiaty()
             wygrana_sound = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_sukcesu.wav')
             wygrana_sound.play()
             return "wygrana"
+
+        for szarancza in self.szarancze_ktore_juz_zjadly_kwiat():
+            self.reinicjuj_pojedyncza_szarancze(szarancza, self.aktywna_sala)
 
         return "rozgrywka"
 
@@ -230,6 +245,7 @@ class Rozgrywka(StanGry):
         # # player2.draw(screen)
         # # player3.draw(screen)
         # # player4.draw(screen)
-        if self.aktywna_szarancza and self.aktywna_szarancza.is_started():
-            self.aktywna_szarancza.draw(screen)
+        for szarancza in self.aktywne_szarancze:
+            if szarancza.is_started():
+                szarancza.draw(screen)
         self.strzal.draw(screen)
