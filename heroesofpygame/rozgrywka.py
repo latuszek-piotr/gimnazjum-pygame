@@ -119,17 +119,20 @@ class Rozgrywka(StanGry):
         for player in remote_players.values():
             player.draw(screen)
 
-    def wylosuj_pozycje_startowa_szaranczy(self):
-        lewy_dol = self.aktywna_sala.daj_naroznik(ktory='lewy-dolny')
-        przesuniecie = random.randint(10, self.aktywna_sala.room_width - 10)  #TODO dopracowac to losowanie
-        pozycja_startowa = (lewy_dol[0]+przesuniecie, lewy_dol[1] - 60)
+    def wylosuj_pozycje_startowa_szaranczy(self, sala):
+        (x_start, y_start) = sala.daj_naroznik(ktory='lewy-dolny')
+        (x_end, y_end) = self.aktywna_sala.daj_naroznik(ktory='prawy-dolny')
+        room_width = x_end - x_start
+        przesuniecie = random.randint(10, room_width - 80)
+        pozycja_startowa = (x_start+przesuniecie, y_start - 60)
         return pozycja_startowa
 
-    def wylosuj_pozycje_startowa_gracza(self):
-        (x_start, y_start) = self.aktywna_sala.daj_naroznik(ktory='lewy-gorny')
-        (x_end, y_end) = self.aktywna_sala.daj_naroznik(ktory='prawy-dolny')
-        #TODO dopracowac to losowanie
-        x = x_start + int((x_end - x_start) / 2)
+    def wylosuj_pozycje_startowa_gracza(self, sala):
+        (x_start, y_start) = sala.daj_naroznik(ktory='lewy-gorny')
+        (x_end, y_end) = sala.daj_naroznik(ktory='prawy-dolny')
+        room_width = x_end - x_start
+        przesuniecie = random.randint(10, room_width - 80)
+        x = x_start + przesuniecie
         y = y_start + int((y_end - y_start) / 2)
         return (x, y)
 
@@ -137,12 +140,12 @@ class Rozgrywka(StanGry):
         super(Rozgrywka, self).on_entry()
         self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
         self.aktywna_sala.dodaj_kwiat()
-        pozycja_startowa_szaranczy = self.wylosuj_pozycje_startowa_szaranczy()
+        pozycja_startowa_szaranczy = self.wylosuj_pozycje_startowa_szaranczy(self.aktywna_sala)
         self.aktywna_szarancza = Szarancza(pozycja_startowa_szaranczy)
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
         self.all_objects.extend(self.aktywna_sala.walls())
 
-        pozycja_startowa_gracza = self.wylosuj_pozycje_startowa_gracza()
+        pozycja_startowa_gracza = self.wylosuj_pozycje_startowa_gracza(self.aktywna_sala)
         self.active_player.move_to(pozycja_startowa_gracza)
         self.active_player.mood = 'happy'
         self.active_player.direction = 0

@@ -12,7 +12,7 @@ class Szarancza(Player):
     stoi = os.path.join('grafika', 'szarancza', 'szarancza_stoi.png')
 
 
-    def __init__(self, pos=(440, 120), size=70):
+    def __init__(self, pos=(440, 120), size=40):
         size_do_kolizji = size - 30  # rect kolizji jest mniejszy od rect obrazka
         super(Szarancza, self).__init__(pos, size_do_kolizji)
         self.mood = 'happy'
