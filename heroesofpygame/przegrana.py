@@ -1,13 +1,16 @@
 import pygame
 from heroesofpygame.okno_wyboru import OknoWyboru
+from heroesofpygame import statusbar
 
 
 class Przegrana(OknoWyboru):
     def __init__(self, szerokosc, wysokosc):
         super(Przegrana, self).__init__(szerokosc, wysokosc, "Przegrana ;-(")
+        self.statusbar = None
 
     def on_entry(self):
         super(Przegrana, self).on_entry()
+        self.statusbar = statusbar.StatusBar(pos=(5,5), size=50, pionowy=True)
 
     def on_exit(self):
         super(Przegrana, self).on_exit()
@@ -26,3 +29,4 @@ class Przegrana(OknoWyboru):
     def draw(self, screen):
         screen.fill((0, 0, 0))
         super(Przegrana, self).draw(screen)
+        self.statusbar.draw(screen)

@@ -47,7 +47,7 @@ class OknoWyboru(StanGry):
     def wylicz_button_rozgrywki(self):
         szerokosc_buttonu = 0.5 * self.szerokosc
         wysokosc_buttonu = 0.7 * self.wysokosc
-        pos_x_buttonu = 0.0 * self.szerokosc
+        pos_x_buttonu = 0.05 * self.szerokosc
         pos_y_buttonu = 0.3 * self.wysokosc
         return pygame.Rect(pos_x_buttonu, pos_y_buttonu, szerokosc_buttonu, wysokosc_buttonu)
 

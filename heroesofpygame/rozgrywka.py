@@ -17,7 +17,7 @@ from heroesofpygame.Pietro import Pietro
 from heroesofpygame.udp_broadcast_client_server import NetworkConnection
 
 from heroesofpygame.stan_gry import StanGry
-from heroesofpygame.statusbar import StatusBar
+from heroesofpygame import statusbar
 
 class Rozgrywka(StanGry):
     def __init__(self, szerokosc, wysokosc, active_player_name):
@@ -197,10 +197,8 @@ class Rozgrywka(StanGry):
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
         self.all_objects.extend(self.aktywna_sala.walls())
 
-        self.statusbar = StatusBar(pos=(5,5),
-                                   ile_kwiatow=self.ilosc_wszystkich_kwiatow(),
-                                   ile_szaranczy=self.ilosc_wszystkich_szaranczy(),
-                                   size=50, pionowy=True)
+        statusbar.resetuj_wynik(self.ilosc_wszystkich_kwiatow(), self.ilosc_wszystkich_szaranczy())
+        self.statusbar = statusbar.StatusBar(pos=(5,5), size=50, pionowy=True)
 
     def on_exit(self):
         super(Rozgrywka, self).on_exit()
@@ -222,14 +220,14 @@ class Rozgrywka(StanGry):
         for szarancza in self.aktywne_szarancze:
             szarancza.update_pozycji_i_kolizji(self.all_objects)
 
-        self.statusbar.zjedzone_kwiaty = self.ilosc_zjedzonych_kwiatow()
-        self.statusbar.zabite_szarancze = self.ilosc_zabitych_szaranczy()
+        statusbar.daj_wynik().zjedzone_kwiaty = self.ilosc_zjedzonych_kwiatow()
+        statusbar.daj_wynik().zabite_szarancze = self.ilosc_zabitych_szaranczy()
 
-        if self.statusbar.zjedzone_kwiaty >= self.ilosc_wszystkich_kwiatow():
+        if statusbar.daj_wynik().zjedzone_kwiaty >= self.ilosc_wszystkich_kwiatow():
             porazka_sound = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_porazki.wav') # TODO: dac do on_exit() stanu rozgrywka
             porazka_sound.play()
             return "przegrana"
-        elif self.statusbar.zabite_szarancze >= self.ilosc_wszystkich_szaranczy():
+        elif statusbar.daj_wynik().zabite_szarancze >= self.ilosc_wszystkich_szaranczy():
             wygrana_sound = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_sukcesu.wav')
             wygrana_sound.play()
             return "wygrana"
@@ -246,8 +244,6 @@ class Rozgrywka(StanGry):
         screen.fill((0, 0, 0))
         # parter.draw(screen)     # rysujemy go tylko w trybie "podglad mapy"
         self.aktywna_sala.draw(screen)
-        # # flower_1.draw(screen)   # to ma sie narysowac w sali
-        # # flower_2.draw(screen)
         self.active_player.draw(screen)
         self.draw_remote(screen, self.remote_players)
         # # player1.draw(screen)
