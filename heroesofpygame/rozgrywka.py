@@ -138,6 +138,8 @@ class Rozgrywka(StanGry):
         return (x, y)
 
     def zainicjuj_kwiaty(self, sala):
+        self.wszystkie_kwiaty = []
+        sala.usun_wszystkie_kwiaty()
         ilosc_kwiatow = random.randint(1, 3)
         for nr in range(ilosc_kwiatow):
             kwiat = sala.dodaj_kwiat()
@@ -215,12 +217,10 @@ class Rozgrywka(StanGry):
             szarancza.update_pozycji_i_kolizji(self.all_objects)
 
         if self.ilosc_zjedzonych_kwiatow() >= self.ilosc_wszystkich_kwiatow():
-            self.aktywna_sala.usun_zjedzone_kwiaty()
             porazka_sound = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_porazki.wav') # TODO: dac do on_exit() stanu rozgrywka
             porazka_sound.play()
             return "przegrana"
         elif self.ilosc_zabitych_szaranczy() >= self.ilosc_wszystkich_szaranczy():
-            self.aktywna_sala.usun_zjedzone_kwiaty()
             wygrana_sound = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_sukcesu.wav')
             wygrana_sound.play()
             return "wygrana"

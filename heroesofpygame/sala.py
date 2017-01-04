@@ -51,6 +51,9 @@ class ClassRoom(object):
             return random.choice(niezjedzone)
         return None
 
+    def usun_wszystkie_kwiaty(self):
+        self.kwiaty = {}
+
     def usun_zjedzone_kwiaty(self):
         if self.kwiaty:
             zjedzone = [obszar_nr for obszar_nr in self.kwiaty if self.kwiaty[obszar_nr].zjedzony]
