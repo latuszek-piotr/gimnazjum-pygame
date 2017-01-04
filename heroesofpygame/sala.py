@@ -45,10 +45,17 @@ class ClassRoom(object):
                 puste_obszary.append(obszar_nr)
         return puste_obszary
 
-    def daj_losowy_kwiat(self):
+    def daj_losowy_niezjedzony_kwiat(self):
         if self.kwiaty:
-            return random.choice(self.kwiaty.values())
+            niezjedzone = [kwiat for kwiat in self.kwiaty.values() if not kwiat.zjedzony]
+            return random.choice(niezjedzone)
         return None
+
+    def usun_zjedzone_kwiaty(self):
+        if self.kwiaty:
+            zjedzone = [obszar_nr for obszar_nr in self.kwiaty if self.kwiaty[obszar_nr].zjedzony]
+            for obszar_nr in zjedzone:
+                del self.kwiaty[obszar_nr]
 
     def dodaj_kwiat(self):
         puste_obszary = self.puste_obszary_kwiatowe()
@@ -57,6 +64,8 @@ class ClassRoom(object):
             naroznik = self.obszary_kwiatowe[wybrany_obszar].topleft
             kwiat = Flower(pos=naroznik)
             self.kwiaty[wybrany_obszar] = kwiat
+            return kwiat
+        return None  # nie mozna juz dodac, brak miejsca
 
     def przelicz_sciany(self, pos, room_width, room_length, skala=1):
 

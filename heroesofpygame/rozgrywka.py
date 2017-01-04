@@ -42,6 +42,7 @@ class Rozgrywka(StanGry):
         self.aktywna_sala = self.wylosuj_sale()
         self.aktywna_szarancza = None
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
+        self.wszystkie_kwiaty = []
 
     def wylosuj_sale(self):
         sala = self.parter.klasa_info  # wyswietlana sala na ktorej dzieje sie akcja #TODO losowanie; teraz na sztywno
@@ -136,25 +137,43 @@ class Rozgrywka(StanGry):
         y = y_start + int((y_end - y_start) / 2)
         return (x, y)
 
-    def on_entry(self):
-        super(Rozgrywka, self).on_entry()
-        self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
+    def zainicjuj_kwiaty(self, sala):
         ilosc_kwiatow = random.randint(1, 3)
-        ilosc_szaranczy = random.randint(1, 5)
         for nr in range(ilosc_kwiatow):
-            self.aktywna_sala.dodaj_kwiat()
-        pozycja_startowa_szaranczy = self.wylosuj_pozycje_startowa_szaranczy(self.aktywna_sala)
-        self.aktywna_szarancza = Szarancza(pozycja_startowa_szaranczy)
-        self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
-        self.all_objects.extend(self.aktywna_sala.walls())
+            kwiat = sala.dodaj_kwiat()
+            if kwiat:
+                self.wszystkie_kwiaty.append(kwiat)
 
-        pozycja_startowa_gracza = self.wylosuj_pozycje_startowa_gracza(self.aktywna_sala)
+    def ilosc_wszystkich_kwiatow(self):
+        return len(self.wszystkie_kwiaty)
+
+    def ilosc_zjedzonych_kwiatow(self):
+        zjedzone = [kwiat for kwiat in self.wszystkie_kwiaty if kwiat.zjedzony]
+        return len(zjedzone)
+
+    def zainicjuj_szarancze(self, sala):
+        ilosc_szaranczy = random.randint(1, 5)
+        pozycja_startowa_szaranczy = self.wylosuj_pozycje_startowa_szaranczy(sala)
+        self.aktywna_szarancza = Szarancza(pozycja_startowa_szaranczy)
+        self.aktywna_szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
+
+    def zainicjuj_gracza(self, sala):
+        pozycja_startowa_gracza = self.wylosuj_pozycje_startowa_gracza(sala)
         self.active_player.move_to(pozycja_startowa_gracza)
         self.active_player.mood = 'happy'
         self.active_player.direction = 0
         # self.broadcast_active_player(active_player, self.net_connection, action='join', await_confirmation=True)
 
-        self.aktywna_szarancza.start(self.aktywna_sala.daj_losowy_kwiat())
+    def on_entry(self):
+        super(Rozgrywka, self).on_entry()
+        self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
+
+        self.zainicjuj_kwiaty(self.aktywna_sala)
+        self.zainicjuj_szarancze(self.aktywna_sala)
+        self.zainicjuj_gracza(self.aktywna_sala)
+
+        self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
+        self.all_objects.extend(self.aktywna_sala.walls())
 
     def on_exit(self):
         super(Rozgrywka, self).on_exit()
@@ -181,9 +200,13 @@ class Rozgrywka(StanGry):
             pass  # nic nie robie, nic sie nie stalo
         elif wynik == "zjedzony_kwiat":
             self.aktywna_szarancza = None
-            porazka_sound = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_porazki.wav') # TODO: dac do on_exit() stanu rozgrywka
-            porazka_sound.play()
-            return "przegrana"
+            if self.ilosc_zjedzonych_kwiatow() < self.ilosc_wszystkich_kwiatow():
+                self.zainicjuj_szarancze(self.aktywna_sala)
+            else:
+                self.aktywna_sala.usun_zjedzone_kwiaty()
+                porazka_sound = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_porazki.wav') # TODO: dac do on_exit() stanu rozgrywka
+                porazka_sound.play()
+                return "przegrana"
         elif wynik == "martwa_szarancza":
             self.aktywna_szarancza = None
             wygrana_sound = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_sukcesu.wav')

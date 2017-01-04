@@ -57,6 +57,7 @@ class Szarancza(Player):
             return None
         if (self.stan != "stojaca") and self.collides(self.kwiat_docelowy):
             self.dzwiek_zjadania.play()
+            self.kwiat_docelowy.zjedzony = True
             self.stan = "stojaca"
             return "zjedzony_kwiat"  # TODO opoznic by bylo widac ja stojaca
         for scene_object in all_objects_thay_may_colide:
