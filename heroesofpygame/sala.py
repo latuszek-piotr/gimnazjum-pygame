@@ -5,7 +5,9 @@ from heroesofpygame.flower import Flower
 
 
 class ClassRoom(object):
-    def __init__(self, pos, room_width, room_length, wall_width=3, color=(75, 5, 205), drzwi=None):
+    def __init__(self, nazwa, pos, room_width, room_length, wall_width=3, color=(75, 5, 205), drzwi=None):
+        self.nazwa = nazwa
+        self.font = pygame.font.SysFont("comic sans MS", 15, bold=True)
         self.room_width = room_width
         self.room_length = room_length
         self.pos = pos
@@ -129,6 +131,11 @@ class ClassRoom(object):
 
         self.obszary_kwiatowe = self.oblicz_obszary_kwiatowe()
 
+    def draw_nazwa(self, screen):
+        text = self.font.render(self.nazwa, False, (255,255,0))
+        pozycja_napisu = (3, 3)
+        screen.blit(text, pozycja_napisu)
+
     def draw(self, screen):
         for wall in self.walls():
             wall.draw(screen)
@@ -137,3 +144,4 @@ class ClassRoom(object):
         # for nr_obszaru in self.obszary_kwiatowe:
         #     rect = self.obszary_kwiatowe[nr_obszaru]
         #     pygame.draw.lines(screen, ((nr_obszaru*10)%255, (nr_obszaru*70)%255, (nr_obszaru*30)%255), False, [rect.topleft, rect.bottomleft, rect.bottomright, rect.topright, rect.topleft], 1)
+        self.draw_nazwa(screen)

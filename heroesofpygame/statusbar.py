@@ -35,12 +35,16 @@ class StatusBar(object):
     kwiat = os.path.join('grafika', 'status_flower.png')
 
     def __init__(self, pos, size=50, pionowy=True):
-        self.pos = pos
+        if pionowy:
+            kwiat_start_pos = (pos[0], pos[1] + 25)
+        else:
+            kwiat_start_pos = (pos[0] + 25, pos[1])
+        self.pos = kwiat_start_pos
         self.size = size
         self.ile_kwiatow = daj_wynik().ile_kwiatow
         self.ile_szaranczy = daj_wynik().ile_szaranczy
         self.pionowy = pionowy
-        self.obszary_kwiatow = self.oblicz_obszary_statusu(pos, size, self.ile_kwiatow, pionowy)
+        self.obszary_kwiatow = self.oblicz_obszary_statusu(self.pos, size, self.ile_kwiatow, pionowy)
         if pionowy:
             bottomleft = self.obszary_kwiatow[-1].bottomleft
             szarancza_start_pos = (bottomleft[0], bottomleft[1] + 10)
