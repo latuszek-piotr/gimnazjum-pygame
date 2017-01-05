@@ -24,21 +24,51 @@ class ClassRoom(object):
         elif ktory == 'lewy-dolny':
             return (self.left_wall.pos[0], self.left_wall.pos[1] + self.left_wall.length)
         elif ktory == 'prawy-gorny':
-            return (self.right_wall.pos[0] + self.right_wall.width, self.right_wall.pos[1] + self.right_wall.length)
+            return (self.right_wall.pos[0] + self.right_wall.width, self.right_wall.pos[1])
         elif ktory == 'prawy-dolny':
             return (self.right_wall.pos[0] + self.right_wall.width, self.right_wall.pos[1] + self.right_wall.length)
 
+    def widok_pionowy(self):
+        '''dla pionowego wyswietlania sali wspolrzedna y (odleglosc od gornej krawedzi)
+        jest mniejsza od wspolrzednej x (odleglosci od lewej krawedzi)'''
+        (x_start, y_start) = self.daj_naroznik(ktory='lewy-gorny')
+        return y_start < x_start
+
     def oblicz_obszary_kwiatowe(self, wielkosc_obszaru=65):
         (x_start, y_start) = self.daj_naroznik(ktory='lewy-gorny')
-        (x_end, y_end) = self.daj_naroznik(ktory='prawy-gorny')
-        room_width = x_end - x_start
-        ilosc_kolumn = int((room_width - 5 - 5) // wielkosc_obszaru)
-        obszary = {}
-        for nr_obszaru in range(ilosc_kolumn):
-            x = x_start + 5 + nr_obszaru*wielkosc_obszaru
-            y = 10
-            obszary[nr_obszaru] = pygame.Rect(x, y, wielkosc_obszaru, wielkosc_obszaru)
+        if self.widok_pionowy(): # widok pionowy sali to kwiaty w gornym wierszu
+            (x_end, y_end) = self.daj_naroznik(ktory='prawy-gorny')
+            room_width = x_end - x_start
+            ilosc_kolumn = int((room_width - 5 - 5) // wielkosc_obszaru)
+            obszary = {}
+            for nr_obszaru in range(ilosc_kolumn):
+                x = x_start + 5 + nr_obszaru*wielkosc_obszaru
+                y = 10
+                obszary[nr_obszaru] = pygame.Rect(x, y, wielkosc_obszaru, wielkosc_obszaru)
+        else:  # widok poziomy sali to kwiaty w lewej kolumnie
+            (x_end, y_end) = self.daj_naroznik(ktory='lewy-dolny')
+            room_heigth = y_end - y_start
+            ilosc_wierszy = int((room_heigth - 5 - 5) // wielkosc_obszaru)
+            obszary = {}
+            for nr_obszaru in range(ilosc_wierszy):
+                x = 10
+                y = y_start + 5 + nr_obszaru*wielkosc_obszaru
+                obszary[nr_obszaru] = pygame.Rect(x, y, wielkosc_obszaru, wielkosc_obszaru)
         return obszary
+
+    def wylosuj_pozycje_startowa_szaranczy(self):
+        (x_end, y_end) = self.daj_naroznik(ktory='prawy-dolny')
+        if self.widok_pionowy(): # widok pionowy sali to szarancze w dolnym wierszu
+            (x_start, y_start) = self.daj_naroznik(ktory='lewy-dolny')
+            room_width = int(x_end - x_start)
+            przesuniecie = random.randint(1, room_width - 1)
+            pozycja_startowa = (x_start + przesuniecie, y_start - 60)
+        else:  # widok poziomy sali to szarancze w prawej kolumnie
+            (x_start, y_start) = self.daj_naroznik(ktory='prawy-gorny')
+            room_heigth = int(y_end - y_start)
+            przesuniecie = random.randint(1, room_heigth - 1)
+            pozycja_startowa = (x_start - 60, y_start + przesuniecie)
+        return pozycja_startowa
 
     def puste_obszary_kwiatowe(self):
         puste_obszary = []

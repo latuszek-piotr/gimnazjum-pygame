@@ -38,7 +38,7 @@ class StatusBar(object):
         if pionowy:
             kwiat_start_pos = (pos[0], pos[1] + 25)
         else:
-            kwiat_start_pos = (pos[0] + 25, pos[1])
+            kwiat_start_pos = (pos[0], pos[1] + 25)
         self.pos = kwiat_start_pos
         self.size = size
         self.ile_kwiatow = daj_wynik().ile_kwiatow

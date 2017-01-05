@@ -122,14 +122,6 @@ class Rozgrywka(StanGry):
         for player in remote_players.values():
             player.draw(screen)
 
-    def wylosuj_pozycje_startowa_szaranczy(self, sala):
-        (x_start, y_start) = sala.daj_naroznik(ktory='lewy-dolny')
-        (x_end, y_end) = self.aktywna_sala.daj_naroznik(ktory='prawy-dolny')
-        room_width = int(x_end - x_start)
-        przesuniecie = random.randint(1, room_width - 1)
-        pozycja_startowa = (x_start+przesuniecie, y_start - 60)
-        return pozycja_startowa
-
     def wylosuj_pozycje_startowa_gracza(self, sala):
         (x_start, y_start) = sala.daj_naroznik(ktory='lewy-gorny')
         (x_end, y_end) = sala.daj_naroznik(ktory='prawy-dolny')
@@ -156,7 +148,7 @@ class Rozgrywka(StanGry):
         return len(zjedzone)
 
     def reinicjuj_pojedyncza_szarancze(self, szarancza, sala):
-        pozycja_startowa_szaranczy = self.wylosuj_pozycje_startowa_szaranczy(sala)
+        pozycja_startowa_szaranczy = sala.wylosuj_pozycje_startowa_szaranczy()
         szarancza.pos = pozycja_startowa_szaranczy
         szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
 
@@ -164,7 +156,7 @@ class Rozgrywka(StanGry):
         self.aktywne_szarancze = []
         ilosc_szaranczy = random.randint(1, 5)
         for nr in range(ilosc_szaranczy):
-            pozycja_startowa_szaranczy = self.wylosuj_pozycje_startowa_szaranczy(sala)
+            pozycja_startowa_szaranczy = sala.wylosuj_pozycje_startowa_szaranczy()
             szarancza = Szarancza(pozycja_startowa_szaranczy)
             szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
             self.aktywne_szarancze.append(szarancza)
@@ -200,7 +192,7 @@ class Rozgrywka(StanGry):
         self.all_objects.extend(self.aktywna_sala.walls())
 
         statusbar.resetuj_wynik(self.ilosc_wszystkich_kwiatow(), self.ilosc_wszystkich_szaranczy())
-        self.statusbar = statusbar.StatusBar(pos=(5,5), size=50, pionowy=True)
+        self.statusbar = statusbar.StatusBar(pos=(5,5), size=50, pionowy=self.aktywna_sala.widok_pionowy())
 
     def on_exit(self):
         super(Rozgrywka, self).on_exit()
