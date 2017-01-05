@@ -13,6 +13,7 @@ from heroesofpygame.szarancza import Szarancza
 
 from heroesofpygame.parter import Parter
 from heroesofpygame.Pietro import Pietro
+from heroesofpygame.mapa import Mapa
 
 from heroesofpygame.udp_broadcast_client_server import NetworkConnection
 
@@ -39,6 +40,8 @@ class Rozgrywka(StanGry):
         # self.player4 = self.players["Piotr"]
         self.remote_players = {}  # lista graczy zdalnych
         self.parter = Parter()
+        self.mapa = Mapa(self.parter.sale())
+        self.podglad_mapy = False
         self.aktywna_sala = self.wylosuj_sale()
         self.aktywne_szarancze = []
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
@@ -65,6 +68,13 @@ class Rozgrywka(StanGry):
             self.strzal.start()
             return True
         return False
+
+    def sprawdz_podglad_mapy(self):
+        key = pygame.key.get_pressed()
+        if key[pygame.K_m]:
+            self.podglad_mapy = True
+        else:
+            self.podglad_mapy = False
 
     def move_player_using_keyboard(self, key_left, key_right, key_up, key_down, active_player, all_objects):
         key = pygame.key.get_pressed()
@@ -208,6 +218,7 @@ class Rozgrywka(StanGry):
         # rozgrywka.move_player_using_keyboard(pygame.K_j, pygame.K_l, pygame.K_i, pygame.K_k, player3, rozgrywka.all_objects)
         # rozgrywka.move_player_using_keyboard(pygame.K_f, pygame.K_h, pygame.K_t, pygame.K_g, player4, rozgrywka.all_objects)
 
+        self.sprawdz_podglad_mapy()
         czy_strzela = self.sprawdz_strzal(x=self.active_player.rect.centerx, y=self.active_player.rect.centery,
                                           kierunek=self.active_player.direction)
         if czy_strzela:
@@ -238,7 +249,6 @@ class Rozgrywka(StanGry):
 
     def draw(self, screen):
         screen.fill((80,80,80))
-        # parter.draw(screen)     # rysujemy go tylko w trybie "podglad mapy"
         self.aktywna_sala.draw(screen)
         self.active_player.draw(screen)
         self.draw_remote(screen, self.remote_players)
@@ -250,4 +260,6 @@ class Rozgrywka(StanGry):
             if szarancza.is_started():
                 szarancza.draw(screen)
         self.strzal.draw(screen)
+        if self.podglad_mapy:
+            self.mapa.draw(screen)
         self.statusbar.draw(screen)
