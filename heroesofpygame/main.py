@@ -23,7 +23,8 @@ active_player_name = sys.argv[1]
 
 szerokosc_ekranu = 1300
 wysokosc_ekranu = 650
-screen = pygame.display.set_mode((szerokosc_ekranu, wysokosc_ekranu))
+wysokosc_belki_statusu = 70
+screen = pygame.display.set_mode((szerokosc_ekranu, wysokosc_ekranu + wysokosc_belki_statusu))
 
 rozpoczecie = Rozpoczecie(szerokosc_ekranu, wysokosc_ekranu)
 rozgrywka = Rozgrywka(szerokosc_ekranu, wysokosc_ekranu, active_player_name)

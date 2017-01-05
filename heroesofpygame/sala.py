@@ -161,11 +161,6 @@ class ClassRoom(object):
 
         self.obszary_kwiatowe = self.oblicz_obszary_kwiatowe()
 
-    def draw_nazwa(self, screen):
-        text = self.font.render(self.nazwa, False, (255,255,0))
-        pozycja_napisu = (3, 3)
-        screen.blit(text, pozycja_napisu)
-
     def draw(self, screen):
         for wall in self.walls():
             wall.draw(screen)
@@ -174,4 +169,3 @@ class ClassRoom(object):
         # for nr_obszaru in self.obszary_kwiatowe:
         #     rect = self.obszary_kwiatowe[nr_obszaru]
         #     pygame.draw.lines(screen, ((nr_obszaru*10)%255, (nr_obszaru*70)%255, (nr_obszaru*30)%255), False, [rect.topleft, rect.bottomleft, rect.bottomright, rect.topright, rect.topleft], 1)
-        self.draw_nazwa(screen)

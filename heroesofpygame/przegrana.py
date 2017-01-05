@@ -10,7 +10,7 @@ class Przegrana(OknoWyboru):
 
     def on_entry(self):
         super(Przegrana, self).on_entry()
-        self.statusbar = statusbar.StatusBar(pos=(5,5), size=50, pionowy=True)
+        self.statusbar = statusbar.StatusBar(pos=(0,self.wysokosc+1), size=(self.szerokosc,70), pionowy=False)
 
     def on_exit(self):
         super(Przegrana, self).on_exit()

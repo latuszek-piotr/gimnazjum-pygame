@@ -192,10 +192,12 @@ class Rozgrywka(StanGry):
         self.all_objects.extend(self.aktywna_sala.walls())
 
         statusbar.resetuj_wynik(self.ilosc_wszystkich_kwiatow(), self.ilosc_wszystkich_szaranczy())
-        self.statusbar = statusbar.StatusBar(pos=(5,5), size=50, pionowy=self.aktywna_sala.widok_pionowy())
+        statusbar.daj_status().nazwa_aktualnej_sali = self.aktywna_sala.nazwa
+        self.statusbar = statusbar.StatusBar(pos=(0,self.wysokosc+1), size=(self.szerokosc,70), pionowy=False)
 
     def on_exit(self):
         super(Rozgrywka, self).on_exit()
+        statusbar.daj_status().nazwa_aktualnej_sali = ''
 
     def on_clock_tick(self):
         self.handle_remote_player()
@@ -214,14 +216,14 @@ class Rozgrywka(StanGry):
         for szarancza in self.aktywne_szarancze:
             szarancza.update_pozycji_i_kolizji(self.all_objects)
 
-        statusbar.daj_wynik().zjedzone_kwiaty = self.ilosc_zjedzonych_kwiatow()
-        statusbar.daj_wynik().zabite_szarancze = self.ilosc_zabitych_szaranczy()
+        statusbar.daj_status().zjedzone_kwiaty = self.ilosc_zjedzonych_kwiatow()
+        statusbar.daj_status().zabite_szarancze = self.ilosc_zabitych_szaranczy()
 
-        if statusbar.daj_wynik().zjedzone_kwiaty >= self.ilosc_wszystkich_kwiatow():
+        if statusbar.daj_status().zjedzone_kwiaty >= self.ilosc_wszystkich_kwiatow():
             porazka_sound = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_porazki.wav') # TODO: dac do on_exit() stanu rozgrywka
             porazka_sound.play()
             return "przegrana"
-        elif statusbar.daj_wynik().zabite_szarancze >= self.ilosc_wszystkich_szaranczy():
+        elif statusbar.daj_status().zabite_szarancze >= self.ilosc_wszystkich_szaranczy():
             wygrana_sound = pygame.mixer.Sound('dzwiek/dzwiek_walki/dzwiek_sukcesu.wav')
             wygrana_sound.play()
             return "wygrana"
