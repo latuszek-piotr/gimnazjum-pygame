@@ -1,6 +1,5 @@
 import pygame
 from pixel import Pixel
-from heroesofpygame.door import Door
 
 
 class Wall(Pixel):
@@ -9,27 +8,20 @@ class Wall(Pixel):
 
 
 class NewWall(Pixel):
-    def __init__(self, pos, width, length, color=(75, 5, 205), door_delta=None):
+    def __init__(self, pos, width, length, color=(75, 5, 205)):
         self.pos = pos
         self.width = width
         self.length = length
         self.color = color
-        self.door_delta = door_delta
         self.rect = pygame.Rect(pos[0], pos[1], width, length)
         self.doors = []
-        self.door_length = 7
-        self.przelicz_drzwi()
 
-    def przelicz_drzwi(self, skala=1):
-        if self.door_delta is None:
-            self.doors = []
-            return
+    def oblicz_rect_drzwi(self, door_delta, skala=1, door_length = 7):
         if self.jest_pionowa():
-            pos = (self.pos[0], self.pos[1] + self.door_delta)
+            drzwi_rect = pygame.Rect(self.pos[0], self.pos[1] + door_delta, self.width, door_length * skala)
         else:
-            pos = (self.pos[0] + self.door_delta, self.pos[1])
-        drzwi = Door(pos, self.width, self.door_length * skala)
-        self.doors = [drzwi]
+            drzwi_rect = pygame.Rect(self.pos[0] + door_delta, self.pos[1], door_length * skala, self.width)
+        return drzwi_rect
 
     def poczatek_sciany(self):
         return self.pos

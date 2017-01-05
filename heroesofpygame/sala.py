@@ -2,6 +2,7 @@ import pygame
 import random
 from heroesofpygame.wall import NewWall
 from heroesofpygame.flower import Flower
+from heroesofpygame.door import Door
 
 
 class ClassRoom(object):
@@ -108,29 +109,41 @@ class ClassRoom(object):
         if self.door_definition and self.door_definition['location'] == 'left':
             door_delta = self.door_definition['door_delta'] * skala
         self.left_wall = NewWall((pos[0], pos[1]),
-                                 self.wall_width, room_length, door_delta=door_delta)
-        self.left_wall.przelicz_drzwi(skala=skala)
+                                 self.wall_width, room_length)
+        if door_delta:
+            rect = self.left_wall.oblicz_rect_drzwi(door_delta=door_delta, skala=skala)
+            door = Door(rect)
+            self.left_wall.doors = [door]
 
         door_delta = None
         if self.door_definition and self.door_definition['location'] == 'right':
             door_delta = self.door_definition['door_delta'] * skala
         self.right_wall = NewWall((pos[0]+room_width-self.wall_width, pos[1]),
-                                  self.wall_width, room_length, door_delta=door_delta)
-        self.right_wall.przelicz_drzwi(skala=skala)
+                                  self.wall_width, room_length)
+        if door_delta:
+            rect = self.right_wall.oblicz_rect_drzwi(door_delta=door_delta, skala=skala)
+            door = Door(rect)
+            self.right_wall.doors = [door]
 
         door_delta = None
         if self.door_definition and self.door_definition['location'] == 'top':
             door_delta = self.door_definition['door_delta'] * skala
         self.top_wall = NewWall((pos[0]+self.wall_width, pos[1]),
-                                room_width-2*self.wall_width, self.wall_width, door_delta=door_delta)
-        self.top_wall.przelicz_drzwi(skala=skala)
+                                room_width-2*self.wall_width, self.wall_width)
+        if door_delta:
+            rect = self.top_wall.oblicz_rect_drzwi(door_delta=door_delta, skala=skala)
+            door = Door(rect)
+            self.top_wall.doors = [door]
 
         door_delta = None
         if self.door_definition and self.door_definition['location'] == 'bottom':
             door_delta = self.door_definition['door_delta'] * skala
         self.bottom_wall = NewWall((pos[0]+self.wall_width, pos[1]+room_length-self.wall_width),
-                                   room_width-2*self.wall_width, self.wall_width, door_delta=door_delta)
-        self.bottom_wall.przelicz_drzwi(skala=skala)
+                                   room_width-2*self.wall_width, self.wall_width)
+        if door_delta:
+            rect = self.bottom_wall.oblicz_rect_drzwi(door_delta=door_delta, skala=skala)
+            door = Door(rect)
+            self.bottom_wall.doors = [door]
 
     def walls(self):
         return [self.left_wall, self.right_wall, self.top_wall, self.bottom_wall]

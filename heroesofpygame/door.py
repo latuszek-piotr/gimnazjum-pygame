@@ -3,12 +3,9 @@ from pixel import Pixel
 
 
 class Door(Pixel):
-    def __init__(self, pos, width, length, color=(255, 0, 0)):
-        self.pos = pos
-        self.width = width
-        self.length = length
+    def __init__(self, rect, color=(255, 0, 0)):
         self.color = color
-        self.rect = pygame.Rect(pos[0], pos[1], width, length)
+        self.rect = rect
 
     def ustaw_miedzy_salami(self, sala_1, sala_2):
         self.sala_1 = sala_1
