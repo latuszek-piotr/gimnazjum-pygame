@@ -197,6 +197,7 @@ class Rozgrywka(StanGry):
 
         self.zainicjuj_kwiaty(self.aktywna_sala)
         self.zainicjuj_szarancze(self.aktywna_sala)
+        self.mapa.ustaw_ilosc_szaranczy(self.ilosc_wszystkich_szaranczy())
         self.zainicjuj_gracza(self.aktywna_sala)
 
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
@@ -225,8 +226,9 @@ class Rozgrywka(StanGry):
         if czy_strzela:
             self.active_player.zmien_humor("angry")
 
-        for szarancza in self.aktywne_szarancze:
+        for idx, szarancza in enumerate(self.aktywne_szarancze):
             szarancza.update_pozycji_i_kolizji(self.all_objects)
+            self.mapa.update_pozycji_szaranczy(idx, szarancza, self.aktywna_sala)
 
         statusbar.daj_status().zjedzone_kwiaty = self.ilosc_zjedzonych_kwiatow()
         statusbar.daj_status().zabite_szarancze = self.ilosc_zabitych_szaranczy()
