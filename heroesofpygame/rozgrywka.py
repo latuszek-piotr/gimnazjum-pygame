@@ -237,7 +237,7 @@ class Rozgrywka(StanGry):
         return "rozgrywka"
 
     def draw(self, screen):
-        screen.fill((0, 0, 0))
+        screen.fill((80,80,80))
         # parter.draw(screen)     # rysujemy go tylko w trybie "podglad mapy"
         self.aktywna_sala.draw(screen)
         self.active_player.draw(screen)

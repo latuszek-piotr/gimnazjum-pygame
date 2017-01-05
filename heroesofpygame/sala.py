@@ -161,7 +161,15 @@ class ClassRoom(object):
 
         self.obszary_kwiatowe = self.oblicz_obszary_kwiatowe()
 
+
+    def draw_podloga(self, screen):
+        (x_start, y_start) = self.daj_naroznik(ktory='lewy-gorny')
+        (x_end, y_end) = self.daj_naroznik(ktory='prawy-dolny')
+        rect = pygame.Rect(x_start, y_start, x_end-x_start, y_end-y_start)
+        pygame.draw.rect(screen, (0,0,0), rect)
+
     def draw(self, screen):
+        self.draw_podloga(screen)
         for wall in self.walls():
             wall.draw(screen)
         for kwiat in self.kwiaty.values():
