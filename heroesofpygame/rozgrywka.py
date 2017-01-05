@@ -192,6 +192,7 @@ class Rozgrywka(StanGry):
     def on_entry(self):
         super(Rozgrywka, self).on_entry()
         self.aktywna_sala = self.wylosuj_sale()
+        self.mapa.ustaw_aktywna_sale(self.aktywna_sala)
         self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
 
         self.zainicjuj_kwiaty(self.aktywna_sala)
