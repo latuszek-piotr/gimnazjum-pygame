@@ -8,7 +8,10 @@ class Mapa(object):
         self.obszary_sal = self.daj_obszary_sal(sale)
         self.obszar_mapy = self.obszar_obejmujacy_wszystkie_sale()
         self.obszar_aktywnej_sali = None
+        self.aktywna_sala_skala_x = 1
+        self.aktywna_sala_skala_y = 1
         self.pos_szaranczy = []
+        self.pos_kwiatow = []
 
     def daj_obszary_sal(self, sale):
         obszary = []
@@ -21,27 +24,43 @@ class Mapa(object):
     def ustaw_aktywna_sale(self, sala):
         skala = self.skala
         self.obszar_aktywnej_sali = pygame.Rect(sala.pos[0]*skala, sala.pos[1]*skala, sala.room_width*skala, sala.room_length*skala)
+        (x_start, y_start) = sala.daj_naroznik(ktory='lewy-gorny')
+        (x_end, y_end) = sala.daj_naroznik(ktory='prawy-dolny')
+        self.aktywna_sala_skala_x = self.obszar_aktywnej_sali.width / (x_end - x_start)
+        self.aktywna_sala_skala_y = self.obszar_aktywnej_sali.height / (y_end - y_start)
+        self.aktywna_sala_pos = (x_start, y_start)
 
     def ustaw_ilosc_szaranczy(self, ilosc_wszystkich_szaranczy):
         self.pos_szaranczy = [None for szarancza in range(ilosc_wszystkich_szaranczy)]
 
-    def update_pozycji_szaranczy(self, idx_szaranczy, szarancza, aktywna_sala):
+    def ustaw_ilosc_kwiatow(self, ilosc_wszystkich_kwiatow):
+        self.pos_kwiatow = [None for kwiaty in range(ilosc_wszystkich_kwiatow)]
+
+    def update_pozycji_szaranczy(self, idx_szaranczy, szarancza):
         if not self.obszar_aktywnej_sali:
             return
         if (szarancza.stan == "martwa") or (szarancza.stan == "anihilowana"):
             self.pos_szaranczy[idx_szaranczy] = None
             return
-        (x_start, y_start) = aktywna_sala.daj_naroznik(ktory='lewy-gorny')
-        (x_end, y_end) = aktywna_sala.daj_naroznik(ktory='prawy-dolny')
-        dx_szaranczy_w_aktywnej_sali = szarancza.pos[0] - x_start
-        dy_szaranczy_w_aktywnej_sali = szarancza.pos[1] - y_start
-        skala_x = self.obszar_aktywnej_sali.width / (x_end - x_start)
-        skala_y = self.obszar_aktywnej_sali.height / (y_end - y_start)
-        dx_szaranczy = dx_szaranczy_w_aktywnej_sali * skala_x
-        dy_szaranczy = dy_szaranczy_w_aktywnej_sali * skala_y
+        dx_szaranczy_w_aktywnej_sali = szarancza.pos[0] - self.aktywna_sala_pos[0]
+        dy_szaranczy_w_aktywnej_sali = szarancza.pos[1] - self.aktywna_sala_pos[1]
+        dx_szaranczy = dx_szaranczy_w_aktywnej_sali * self.aktywna_sala_skala_x
+        dy_szaranczy = dy_szaranczy_w_aktywnej_sali * self.aktywna_sala_skala_y
         self.pos_szaranczy[idx_szaranczy] = pygame.Rect(self.obszar_aktywnej_sali.left + dx_szaranczy,
                                                         self.obszar_aktywnej_sali.top + dy_szaranczy,
                                                         2, 2)
+
+    def update_pozycji_kwiatu(self, idx_kwiatu, kwiat):
+        if kwiat.zjedzony:
+            self.pos_kwiatow[idx_kwiatu] = None
+            return
+        dx_kwiatu_w_aktywnej_sali = kwiat.rect.centerx - self.aktywna_sala_pos[0]
+        dy_kwiatu_w_aktywnej_sali = kwiat.rect.centery - self.aktywna_sala_pos[1]
+        dx_kwiatu = dx_kwiatu_w_aktywnej_sali * self.aktywna_sala_skala_x
+        dy_kwiatu = dy_kwiatu_w_aktywnej_sali * self.aktywna_sala_skala_y
+        self.pos_kwiatow[idx_kwiatu] = pygame.Rect(self.obszar_aktywnej_sali.left + dx_kwiatu,
+                                                   self.obszar_aktywnej_sali.top + dy_kwiatu,
+                                                   2, 2)
 
     def obszar_obejmujacy_wszystkie_sale(self):
         min_left = min([rect.left for rect in self.obszary_sal])
@@ -64,3 +83,6 @@ class Mapa(object):
         for rect_szaranczy in self.pos_szaranczy:
             if rect_szaranczy is not None:
                 pygame.draw.rect(screen, (255,0,0), rect_szaranczy)
+        for rect_kwiatu in self.pos_kwiatow:
+            if rect_kwiatu is not None:
+                pygame.draw.rect(screen, (0,255,0), rect_kwiatu)

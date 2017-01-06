@@ -192,10 +192,13 @@ class Rozgrywka(StanGry):
     def on_entry(self):
         super(Rozgrywka, self).on_entry()
         self.aktywna_sala = self.wylosuj_sale()
-        self.mapa.ustaw_aktywna_sale(self.aktywna_sala)
         self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
+        self.mapa.ustaw_aktywna_sale(self.aktywna_sala)
 
         self.zainicjuj_kwiaty(self.aktywna_sala)
+        self.mapa.ustaw_ilosc_kwiatow(self.ilosc_wszystkich_kwiatow())
+        for idx, kwiat in enumerate(self.wszystkie_kwiaty):
+            self.mapa.update_pozycji_kwiatu(idx, kwiat)
         self.zainicjuj_szarancze(self.aktywna_sala)
         self.mapa.ustaw_ilosc_szaranczy(self.ilosc_wszystkich_szaranczy())
         self.zainicjuj_gracza(self.aktywna_sala)
@@ -228,7 +231,7 @@ class Rozgrywka(StanGry):
 
         for idx, szarancza in enumerate(self.aktywne_szarancze):
             szarancza.update_pozycji_i_kolizji(self.all_objects)
-            self.mapa.update_pozycji_szaranczy(idx, szarancza, self.aktywna_sala)
+            self.mapa.update_pozycji_szaranczy(idx, szarancza)
 
         statusbar.daj_status().zjedzone_kwiaty = self.ilosc_zjedzonych_kwiatow()
         statusbar.daj_status().zabite_szarancze = self.ilosc_zabitych_szaranczy()
