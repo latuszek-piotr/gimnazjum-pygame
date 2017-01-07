@@ -20,7 +20,7 @@ class NewWall(Pixel):
         if self.jest_pionowa():
             drzwi_rect = pygame.Rect(self.pos[0], self.pos[1] + door_delta, self.width, door_length * skala)
         else:
-            drzwi_rect = pygame.Rect(self.pos[0] + door_delta, self.pos[1], door_length * skala, self.width)
+            drzwi_rect = pygame.Rect(self.pos[0] + door_delta, self.pos[1], door_length * skala, self.length)
         return drzwi_rect
 
     def poczatek_sciany(self):

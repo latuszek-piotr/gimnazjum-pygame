@@ -6,6 +6,7 @@ class Door(Pixel):
     def __init__(self, rect, color=(255, 0, 0)):
         self.color = color
         self.rect = rect
+        self.rect_def = rect.copy()  # definicja rect w momencie utworzenia drzwi
 
     def ustaw_miedzy_salami(self, sala_1, sala_2):
         self.sala_1 = sala_1

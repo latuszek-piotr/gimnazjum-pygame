@@ -6,7 +6,7 @@ from heroesofpygame.door import Door
 
 
 class ClassRoom(object):
-    def __init__(self, nazwa, pos, room_width, room_length, wall_width=3, color=(75, 5, 205), drzwi=None):
+    def __init__(self, nazwa, pos, room_width, room_length, wall_width=3, color=(75, 5, 205)):
         self.nazwa = nazwa
         self.font = pygame.font.SysFont("comic sans MS", 15, bold=True)
         self.room_width = room_width
@@ -14,7 +14,9 @@ class ClassRoom(object):
         self.pos = pos
         self.wall_width = wall_width
         self.color = color
-        self.door_definition = drzwi
+        self.skala_widoku = 1.0
+        self.drzwi = []
+        self.polozenie_drzwi = []
         self.przelicz_sciany(self.pos, self.room_width, self.room_length)
         self.obszary_kwiatowe = self.oblicz_obszary_kwiatowe()  # slownik postaci {nr_oszaru: rect_obszaru}
         self.kwiaty = {}  # slownik postaci {nr_oszaru: obiekt_kwiat}
@@ -35,7 +37,7 @@ class ClassRoom(object):
         (x_start, y_start) = self.daj_naroznik(ktory='lewy-gorny')
         return y_start < x_start
 
-    def oblicz_obszary_kwiatowe(self, wielkosc_obszaru=65):
+    def oblicz_obszary_kwiatowe(self, wielkosc_obszaru=60):
         (x_start, y_start) = self.daj_naroznik(ktory='lewy-gorny')
         if self.widok_pionowy(): # widok pionowy sali to kwiaty w gornym wierszu
             (x_end, y_end) = self.daj_naroznik(ktory='prawy-gorny')
@@ -103,47 +105,56 @@ class ClassRoom(object):
             return kwiat
         return None  # nie mozna juz dodac, brak miejsca
 
-    def przelicz_sciany(self, pos, room_width, room_length, skala=1):
+    def daj_sciane(self, nazwa_sciany):
+        if nazwa_sciany == 'left_wall':
+            return self.left_wall
+        elif nazwa_sciany == 'right_wall':
+            return self.right_wall
+        elif nazwa_sciany == 'top_wall':
+            return self.top_wall
+        elif nazwa_sciany == 'bottom_wall':
+            return self.bottom_wall
+        raise Exception("zla nazwa sciany")
 
-        door_delta = None
-        if self.door_definition and self.door_definition['location'] == 'left':
-            door_delta = self.door_definition['door_delta'] * skala
+    def oblicz_rect_drzwi(self, door_location, door_delta, skala=1):
+        door_delta = door_delta * skala
+        wall = self.daj_sciane(nazwa_sciany=door_location)
+        rect = wall.oblicz_rect_drzwi(door_delta=door_delta, skala=skala)
+        return rect
+
+    def wstaw_drzwi(self, door, door_location):
+        self.drzwi.append(door)
+        wektor_polozenia = (door.rect.left - self.pos[0], door.rect.top - self.pos[1])
+        self.polozenie_drzwi.append((wektor_polozenia, door_location))
+
+    def przelicz_drzwi(self, skala_widoku):
+        (x_start, y_start) = self.daj_naroznik(ktory='lewy-gorny')
+        for idx, drzwi in enumerate(self.drzwi):
+            (wektor_polozenia, door_location) = self.polozenie_drzwi[idx]
+            wall = self.daj_sciane(nazwa_sciany=door_location)
+            pos_drzwi = [x_start + wektor_polozenia[0]*skala_widoku, y_start + wektor_polozenia[1]*skala_widoku]
+            if drzwi.rect_def.height > drzwi.rect_def.width:  # pionowe drzwi
+                width = self.wall_width
+                height = drzwi.rect_def.height*skala_widoku
+                pos_drzwi[0] = wall.rect.left  # korekta polozenia, dosuniecie drzwi "w sciane"
+            else:
+                width = drzwi.rect_def.width*skala_widoku
+                height = self.wall_width
+                pos_drzwi[1] = wall.rect.top  # korekta polozenia, dosuniecie drzwi "w sciane"
+            drzwi.rect = pygame.Rect(pos_drzwi[0], pos_drzwi[1], width, height)
+
+    def przelicz_sciany(self, pos, room_width, room_length):
         self.left_wall = NewWall((pos[0], pos[1]),
                                  self.wall_width, room_length)
-        if door_delta:
-            rect = self.left_wall.oblicz_rect_drzwi(door_delta=door_delta, skala=skala)
-            door = Door(rect)
-            self.left_wall.doors = [door]
 
-        door_delta = None
-        if self.door_definition and self.door_definition['location'] == 'right':
-            door_delta = self.door_definition['door_delta'] * skala
         self.right_wall = NewWall((pos[0]+room_width-self.wall_width, pos[1]),
                                   self.wall_width, room_length)
-        if door_delta:
-            rect = self.right_wall.oblicz_rect_drzwi(door_delta=door_delta, skala=skala)
-            door = Door(rect)
-            self.right_wall.doors = [door]
 
-        door_delta = None
-        if self.door_definition and self.door_definition['location'] == 'top':
-            door_delta = self.door_definition['door_delta'] * skala
         self.top_wall = NewWall((pos[0]+self.wall_width, pos[1]),
                                 room_width-2*self.wall_width, self.wall_width)
-        if door_delta:
-            rect = self.top_wall.oblicz_rect_drzwi(door_delta=door_delta, skala=skala)
-            door = Door(rect)
-            self.top_wall.doors = [door]
 
-        door_delta = None
-        if self.door_definition and self.door_definition['location'] == 'bottom':
-            door_delta = self.door_definition['door_delta'] * skala
         self.bottom_wall = NewWall((pos[0]+self.wall_width, pos[1]+room_length-self.wall_width),
                                    room_width-2*self.wall_width, self.wall_width)
-        if door_delta:
-            rect = self.bottom_wall.oblicz_rect_drzwi(door_delta=door_delta, skala=skala)
-            door = Door(rect)
-            self.bottom_wall.doors = [door]
 
     def walls(self):
         return [self.left_wall, self.right_wall, self.top_wall, self.bottom_wall]
@@ -164,13 +175,16 @@ class ClassRoom(object):
         room_length_poziom = self.room_length * skala_poziom
 
         if (room_width_pion <= docelowa_szerokosc) and (room_length_pion <= docelowa_dlugosc):
+            self.skala_widoku = skala_pion
             roznica_szerokosci = docelowa_szerokosc - room_width_pion
             poz_x = roznica_szerokosci / 2
-            self.przelicz_sciany((poz_x,0), room_width_pion, room_length_pion, skala_pion)
+            self.przelicz_sciany((poz_x,0), room_width_pion, room_length_pion)
         else:
+            self.skala_widoku = skala_poziom
             roznica_dlugosci = docelowa_dlugosc - room_length_poziom
             poz_y = roznica_dlugosci / 2
-            self.przelicz_sciany((0,poz_y), room_width_poziom, room_length_poziom, skala_poziom)
+            self.przelicz_sciany((0,poz_y), room_width_poziom, room_length_poziom)
+        self.przelicz_drzwi(self.skala_widoku)
 
         self.obszary_kwiatowe = self.oblicz_obszary_kwiatowe()
 
@@ -187,6 +201,8 @@ class ClassRoom(object):
             wall.draw(screen)
         for kwiat in self.kwiaty.values():
             kwiat.draw(screen)
+        for drzwi in self.drzwi:
+            drzwi.draw(screen)
         # for nr_obszaru in self.obszary_kwiatowe:
         #     rect = self.obszary_kwiatowe[nr_obszaru]
         #     pygame.draw.lines(screen, ((nr_obszaru*10)%255, (nr_obszaru*70)%255, (nr_obszaru*30)%255), False, [rect.topleft, rect.bottomleft, rect.bottomright, rect.topright, rect.topleft], 1)

@@ -51,6 +51,9 @@ class Rozgrywka(StanGry):
     def wylosuj_sale(self):
         # sala = self.parter.klasa_info  # wyswietlana sala na ktorej dzieje sie akcja #TODO losowanie; teraz na sztywno
         sala = random.choice(self.parter.sale())
+        # sala = self.parter.lazienka_meska
+        # sala = self.parter.korytarz_parteru
+        # sala = self.parter.hall_glowny
         return sala
 
     def obiekty_mogace_wchodzic_w_kolizje(self):
@@ -136,7 +139,7 @@ class Rozgrywka(StanGry):
         (x_start, y_start) = sala.daj_naroznik(ktory='lewy-gorny')
         (x_end, y_end) = sala.daj_naroznik(ktory='prawy-dolny')
         room_width = int(x_end - x_start)
-        przesuniecie = random.randint(10, room_width - 80)
+        przesuniecie = random.randint(10, room_width - 60)
         x = x_start + przesuniecie
         y = y_start + int((y_end - y_start) / 2)
         return (x, y)
