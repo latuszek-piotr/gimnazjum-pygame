@@ -16,7 +16,7 @@ class NewWall(Pixel):
         self.rect = pygame.Rect(pos[0], pos[1], width, length)
         self.doors = []
 
-    def oblicz_rect_drzwi(self, door_delta, skala=1, door_length = 7):
+    def oblicz_rect_drzwi(self, door_delta, skala=1, door_length = 5):
         if self.jest_pionowa():
             drzwi_rect = pygame.Rect(self.pos[0], self.pos[1] + door_delta, self.width, door_length * skala)
         else:

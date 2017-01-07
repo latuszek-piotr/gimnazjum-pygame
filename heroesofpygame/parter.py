@@ -21,7 +21,7 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
         self.lazienka_meska = ClassRoom(nazwa=u"łazienka męska", pos=(122,181), room_width=46, room_length=18, drzwi={'location':'bottom', 'door_delta': 20})
         self.korytarz_parteru = ClassRoom(nazwa="korytarz parteru", pos=(86,199), room_width=82, room_length=19, drzwi={'location':'right', 'door_delta': 20}) # TODO jest kilka wyjsc z korytarza
 
-        self.stolowka = ClassRoom(nazwa=u"stołówka", pos=(235,181), room_width=49, room_length=37, drzwi={'location':'right', 'door_delta': 20})
+        self.stolowka = ClassRoom(nazwa=u"stołówka", pos=(235,181), room_width=49, room_length=37, drzwi={'location':'left', 'door_delta': 9})
         self.sekretariat = ClassRoom(nazwa="sekretariat", pos=(235,218), room_width=18, room_length=37, drzwi={'location':'right', 'door_delta': 20})
         self.gabinet_zast_dyrektora = ClassRoom(nazwa="gabinet z-cy dyrektora", pos=(253,218), room_width=15, room_length=37, drzwi={'location':'right', 'door_delta': 20})
         self.gabinet_dyrektora = ClassRoom(nazwa="gabinet dyrektora", pos=(268,218), room_width=16, room_length=37, drzwi={'location':'right', 'door_delta': 20})
