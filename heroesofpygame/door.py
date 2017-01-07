@@ -7,6 +7,16 @@ class Door(Pixel):
         self.color = color
         self.rect = rect
         self.rect_def = rect.copy()  # definicja rect w momencie utworzenia drzwi
+        self.sala_1 = None
+        self.sala_2 = None
+
+    def ustaw_w_sali(self, sala):
+        if (self.sala_1 is None) and (self.sala_2 is None):
+            self.sala_1 = sala
+        elif (self.sala_1 is not None) and (self.sala_2 is None):
+            self.sala_2 = sala
+        elif (self.sala_2 is not None) and (self.sala_1 is None):
+            self.sala_1 = sala
 
     def ustaw_miedzy_salami(self, sala_1, sala_2):
         self.sala_1 = sala_1

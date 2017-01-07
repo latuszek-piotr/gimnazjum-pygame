@@ -123,6 +123,7 @@ class ClassRoom(object):
         return rect
 
     def wstaw_drzwi(self, door, door_location):
+        door.ustaw_w_sali(sala=self)
         self.drzwi.append(door)
         wektor_polozenia = (door.rect.left - self.pos[0], door.rect.top - self.pos[1])
         self.polozenie_drzwi.append((wektor_polozenia, door_location))

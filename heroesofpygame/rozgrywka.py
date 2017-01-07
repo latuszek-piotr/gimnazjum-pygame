@@ -209,6 +209,7 @@ class Rozgrywka(StanGry):
 
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
         self.all_objects.extend(self.aktywna_sala.walls())
+        self.all_objects.extend(self.aktywna_sala.drzwi)
 
         statusbar.resetuj_wynik(self.ilosc_wszystkich_kwiatow(), self.ilosc_wszystkich_szaranczy())
         statusbar.daj_status().nazwa_aktualnej_sali = self.aktywna_sala.nazwa
