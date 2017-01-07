@@ -202,6 +202,7 @@ class Rozgrywka(StanGry):
         self.zainicjuj_szarancze(self.aktywna_sala)
         self.mapa.ustaw_ilosc_szaranczy(self.ilosc_wszystkich_szaranczy())
         self.zainicjuj_gracza(self.aktywna_sala)
+        self.mapa.ustaw_ilosc_graczy(ilosc_wszystkich_graczy=1)
 
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
         self.all_objects.extend(self.aktywna_sala.walls())
@@ -222,6 +223,7 @@ class Rozgrywka(StanGry):
         # rozgrywka.move_player_using_keyboard(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, player2, rozgrywka.all_objects)
         # rozgrywka.move_player_using_keyboard(pygame.K_j, pygame.K_l, pygame.K_i, pygame.K_k, player3, rozgrywka.all_objects)
         # rozgrywka.move_player_using_keyboard(pygame.K_f, pygame.K_h, pygame.K_t, pygame.K_g, player4, rozgrywka.all_objects)
+        self.mapa.update_pozycji_gracza(idx_gracza=0, gracz=self.active_player)
 
         self.sprawdz_podglad_mapy()
         czy_strzela = self.sprawdz_strzal(x=self.active_player.rect.centerx, y=self.active_player.rect.centery,

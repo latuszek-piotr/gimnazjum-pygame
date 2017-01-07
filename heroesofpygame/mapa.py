@@ -12,6 +12,7 @@ class Mapa(object):
         self.aktywna_sala_skala_y = 1
         self.pos_szaranczy = []
         self.pos_kwiatow = []
+        self.pos_graczy = []
 
     def daj_obszary_sal(self, sale):
         obszary = []
@@ -36,31 +37,36 @@ class Mapa(object):
     def ustaw_ilosc_kwiatow(self, ilosc_wszystkich_kwiatow):
         self.pos_kwiatow = [None for kwiaty in range(ilosc_wszystkich_kwiatow)]
 
+    def ustaw_ilosc_graczy(self, ilosc_wszystkich_graczy):
+        self.pos_graczy = [None for gracz in range(ilosc_wszystkich_graczy)]
+
     def update_pozycji_szaranczy(self, idx_szaranczy, szarancza):
         if not self.obszar_aktywnej_sali:
             return
         if (szarancza.stan == "martwa") or (szarancza.stan == "anihilowana"):
             self.pos_szaranczy[idx_szaranczy] = None
             return
-        dx_szaranczy_w_aktywnej_sali = szarancza.pos[0] - self.aktywna_sala_pos[0]
-        dy_szaranczy_w_aktywnej_sali = szarancza.pos[1] - self.aktywna_sala_pos[1]
-        dx_szaranczy = dx_szaranczy_w_aktywnej_sali * self.aktywna_sala_skala_x
-        dy_szaranczy = dy_szaranczy_w_aktywnej_sali * self.aktywna_sala_skala_y
-        self.pos_szaranczy[idx_szaranczy] = pygame.Rect(self.obszar_aktywnej_sali.left + dx_szaranczy,
-                                                        self.obszar_aktywnej_sali.top + dy_szaranczy,
-                                                        2, 2)
+        rect = self.oblicz_rect_pozycji_obiektu(game_object=szarancza)
+        self.pos_szaranczy[idx_szaranczy] = rect
 
     def update_pozycji_kwiatu(self, idx_kwiatu, kwiat):
         if kwiat.zjedzony:
             self.pos_kwiatow[idx_kwiatu] = None
             return
-        dx_kwiatu_w_aktywnej_sali = kwiat.rect.centerx - self.aktywna_sala_pos[0]
-        dy_kwiatu_w_aktywnej_sali = kwiat.rect.centery - self.aktywna_sala_pos[1]
-        dx_kwiatu = dx_kwiatu_w_aktywnej_sali * self.aktywna_sala_skala_x
-        dy_kwiatu = dy_kwiatu_w_aktywnej_sali * self.aktywna_sala_skala_y
-        self.pos_kwiatow[idx_kwiatu] = pygame.Rect(self.obszar_aktywnej_sali.left + dx_kwiatu,
-                                                   self.obszar_aktywnej_sali.top + dy_kwiatu,
-                                                   2, 2)
+        rect = self.oblicz_rect_pozycji_obiektu(game_object=kwiat)
+        self.pos_kwiatow[idx_kwiatu] = rect
+
+    def update_pozycji_gracza(self, idx_gracza, gracz):
+        rect = self.oblicz_rect_pozycji_obiektu(game_object=gracz)
+        self.pos_graczy[idx_gracza] = rect
+
+    def oblicz_rect_pozycji_obiektu(self, game_object):
+        dx_obiektu_w_aktywnej_sali = game_object.rect.centerx - self.aktywna_sala_pos[0]
+        dy_obiektu_w_aktywnej_sali = game_object.rect.centery - self.aktywna_sala_pos[1]
+        dx_obiektu = dx_obiektu_w_aktywnej_sali * self.aktywna_sala_skala_x
+        dy_obiektu = dy_obiektu_w_aktywnej_sali * self.aktywna_sala_skala_y
+        rect = pygame.Rect(self.obszar_aktywnej_sali.left + dx_obiektu, self.obszar_aktywnej_sali.top + dy_obiektu, 2, 2)
+        return rect
 
     def obszar_obejmujacy_wszystkie_sale(self):
         min_left = min([rect.left for rect in self.obszary_sal])
@@ -73,6 +79,11 @@ class Mapa(object):
     def draw_obrys(self, screen, rect, color=(255,255,255), grubosc_linii=1):
         pygame.draw.lines(screen, color, True, [rect.topleft, rect.bottomleft, rect.bottomright, rect.topright], grubosc_linii)
 
+    def draw_pozycje_obiektow(self, screen, color, game_objects):
+        for rect_obiektu in game_objects:
+            if rect_obiektu is not None:
+                pygame.draw.rect(screen, color, rect_obiektu)
+
     def draw(self, screen):
         # pygame.draw.rect(screen, (0,0,0), self.obszar_mapy)
         self.draw_obrys(screen, self.obszar_mapy, color=(255,255,0))
@@ -80,9 +91,6 @@ class Mapa(object):
             self.draw_obrys(screen, sala_rect)
         if self.obszar_aktywnej_sali:
             self.draw_obrys(screen, self.obszar_aktywnej_sali, color=(75, 5, 205), grubosc_linii=2)
-        for rect_szaranczy in self.pos_szaranczy:
-            if rect_szaranczy is not None:
-                pygame.draw.rect(screen, (255,0,0), rect_szaranczy)
-        for rect_kwiatu in self.pos_kwiatow:
-            if rect_kwiatu is not None:
-                pygame.draw.rect(screen, (0,255,0), rect_kwiatu)
+        self.draw_pozycje_obiektow(screen, color=(255,0,0), game_objects=self.pos_szaranczy)
+        self.draw_pozycje_obiektow(screen, color=(0,255,0), game_objects=self.pos_kwiatow)
+        self.draw_pozycje_obiektow(screen, color=(255,255,0), game_objects=self.pos_graczy)
