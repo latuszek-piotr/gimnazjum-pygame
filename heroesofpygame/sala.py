@@ -134,13 +134,13 @@ class ClassRoom(object):
             wall = self.daj_sciane(nazwa_sciany=door_location)
             pos_drzwi = [x_start + wektor_polozenia[0]*skala_widoku, y_start + wektor_polozenia[1]*skala_widoku]
             if drzwi.rect_def.height > drzwi.rect_def.width:  # pionowe drzwi
-                width = self.wall_width
+                width = self.wall_width + 4
                 height = drzwi.rect_def.height*skala_widoku
-                pos_drzwi[0] = wall.rect.left  # korekta polozenia, dosuniecie drzwi "w sciane"
+                pos_drzwi[0] = wall.rect.left - 2  # korekta polozenia, dosuniecie drzwi "w sciane"
             else:
                 width = drzwi.rect_def.width*skala_widoku
-                height = self.wall_width
-                pos_drzwi[1] = wall.rect.top  # korekta polozenia, dosuniecie drzwi "w sciane"
+                height = self.wall_width + 4
+                pos_drzwi[1] = wall.rect.top - 2 # korekta polozenia, dosuniecie drzwi "w sciane"
             drzwi.rect = pygame.Rect(pos_drzwi[0], pos_drzwi[1], width, height)
 
     def przelicz_sciany(self, pos, room_width, room_length):
