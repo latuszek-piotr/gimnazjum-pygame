@@ -4,7 +4,7 @@ import pygame
 
 class Mapa(object):
     def __init__(self, sale):
-        self.skala=1.2
+        self.skala=2.5
         self.obszary_sal = self.daj_obszary_sal(sale)
         self.obszar_mapy = self.obszar_obejmujacy_wszystkie_sale()
         self.obszar_aktywnej_sali = None
@@ -86,7 +86,7 @@ class Mapa(object):
 
     def draw(self, screen):
         # pygame.draw.rect(screen, (0,0,0), self.obszar_mapy)
-        self.draw_obrys(screen, self.obszar_mapy, color=(255,255,0))
+        # self.draw_obrys(screen, self.obszar_mapy, color=(255,255,0))
         for sala_rect in self.obszary_sal:
             self.draw_obrys(screen, sala_rect)
         if self.obszar_aktywnej_sali:
