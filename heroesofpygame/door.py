@@ -10,6 +10,11 @@ class Door(Pixel):
         self.sala_1 = None
         self.sala_2 = None
 
+    def sa_pionowe(self):
+        if self.rect_def.width < self.rect_def.height:
+            return True
+        return False
+
     def ustaw_w_sali(self, sala):
         if (self.sala_1 is None) and (self.sala_2 is None):
             self.sala_1 = sala

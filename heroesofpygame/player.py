@@ -1,8 +1,12 @@
 import pygame
 import math
+import time
 from pixel import Pixel
 from strzal import Strzal
 from obliczenia import przesuniecie_w_kierunku
+from heroesofpygame.door import Door
+from heroesofpygame.wall import NewWall
+from heroesofpygame.userevents import USEREVENT_PASS_DOOR
 
 
 class Player(Pixel):
@@ -13,6 +17,7 @@ class Player(Pixel):
         self.direction_color = (255, 0, 0)
         self.real_x = pos[0] * 1.0
         self.real_y = pos[1] * 1.0
+        self.last_door_pass_time = time.time()
 
     def __str__(self):
         return "%s(x=%.2f, y=%.2f, dir=%s)" % (self.nazwa, self.real_x, self.real_y, self.direction)
@@ -55,7 +60,7 @@ class Player(Pixel):
             if scene_object is self:
                 continue
             if self.collides(scene_object):
-                if isinstance(scene_object, Strzal):
+                if isinstance(scene_object, Strzal):  # gracze nie maja kolizji ze swoimi wlasnymi stralami
                     continue
                 ### print "kolizja: ja:{} on:{}".format(self.rect, scene_object.rect)
                 # I have collision with him
@@ -66,7 +71,25 @@ class Player(Pixel):
 
     def collision(self, last_move_dx, last_move_dy, other_scene_object):
         """what is impact of collision on me (self)"""
-        self._step_outside_colission(last_move_dx, last_move_dy, other_scene_object)
+        if isinstance(other_scene_object, Door):
+            door = other_scene_object
+            now = time.time()
+            czas_od_ostatniego_przejscia = now - self.last_door_pass_time
+            if door.sala_1 and door.sala_2 and (czas_od_ostatniego_przejscia > 0.5):
+                self.last_door_pass_time = now
+                if door.sa_pionowe():
+                    if door.rect.left < self.rect.left:
+                        move_direction = 'left'
+                    else:
+                        move_direction = 'right'
+                else:
+                    if door.rect.top < self.rect.top:
+                        move_direction = 'top'
+                    else:
+                        move_direction = 'bottom'
+                pygame.event.post(pygame.event.Event(USEREVENT_PASS_DOOR, {'door': door, 'move_direction': move_direction}))
+        elif isinstance(other_scene_object, NewWall):
+            self._step_outside_colission(last_move_dx, last_move_dy, other_scene_object)
 
     def _step_outside_colission(self, last_move_dx, last_move_dy, other_scene_object):
         if last_move_dx > 0: # Moving right; Hit the left side of other_scene_object

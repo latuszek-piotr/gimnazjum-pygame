@@ -87,7 +87,7 @@ class Szarancza(Player):
             return self.pos
         now = time.time()
         time_delta = now - self.start_time
-        if time_delta < self.czas_dojscia / 1.0:
+        if time_delta < self.czas_dojscia / 2.0:
             pos_x = (self.odleglosc_do_kwiatu['deltaX'] * time_delta / self.czas_dojscia) + self.start_pos[0]
             pos_y = (self.odleglosc_do_kwiatu['deltaY'] * time_delta / self.czas_dojscia) + self.start_pos[1]
             self.pos = (pos_x, pos_y)

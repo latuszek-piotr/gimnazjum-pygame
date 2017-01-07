@@ -19,6 +19,8 @@ from heroesofpygame.udp_broadcast_client_server import NetworkConnection
 
 from heroesofpygame.stan_gry import StanGry
 from heroesofpygame import statusbar
+from heroesofpygame.userevents import USEREVENT_PASS_DOOR
+
 
 class Rozgrywka(StanGry):
     def __init__(self, szerokosc, wysokosc, active_player_name):
@@ -51,7 +53,7 @@ class Rozgrywka(StanGry):
     def wylosuj_sale(self):
         # sala = self.parter.klasa_info  # wyswietlana sala na ktorej dzieje sie akcja #TODO losowanie; teraz na sztywno
         sala = random.choice(self.parter.sale())
-        # sala = self.parter.lazienka_meska
+        # sala = self.parter.korytarz_szatni
         # sala = self.parter.korytarz_parteru
         # sala = self.parter.hall_glowny
         return sala
@@ -256,7 +258,46 @@ class Rozgrywka(StanGry):
 
         return "rozgrywka"
 
+    def wysun_gracza_za_drzwi(self, gracz, move_direction, drzwi):
+        if move_direction == 'right': # Moving right; Hit the left side of drzwi
+            gracz.rect.left = drzwi.rect.right + 2
+            gracz.rect.top = drzwi.rect.top
+            gracz.real_x = gracz.rect.x
+            gracz.real_y = gracz.rect.y
+        elif move_direction == 'left': # Moving left; Hit the right side of drzwi
+            gracz.rect.right = drzwi.rect.left - 2
+            gracz.rect.top = drzwi.rect.top
+            gracz.real_x = gracz.rect.x
+            gracz.real_y = gracz.rect.y
+        elif move_direction == 'bottom': # Moving down; Hit the top side of drzwi
+            gracz.rect.top = drzwi.rect.bottom + 2
+            gracz.rect.left = drzwi.rect.left
+            gracz.real_x = gracz.rect.x
+            gracz.real_y = gracz.rect.y
+        elif move_direction == 'top': # Moving up; Hit the bottom side of drzwi
+            gracz.rect.bottom = drzwi.rect.top - 2
+            gracz.rect.left = drzwi.rect.left
+            gracz.real_x = gracz.rect.x
+            gracz.real_y = gracz.rect.y
+
     def on_event(self, event):
+        if event.type == USEREVENT_PASS_DOOR:
+            door = event.door
+            move_direction = event.move_direction
+            if door.sala_1 and door.sala_2:
+                sasiednia = door.daj_sale_sasiednia(self.aktywna_sala)
+                self.aktywna_sala = sasiednia
+                self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
+                self.wysun_gracza_za_drzwi(self.active_player, move_direction, door)
+                self.mapa.ustaw_aktywna_sale(self.aktywna_sala)
+
+                #TODO szarancze i kwiaty po zmianie sali
+
+                self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
+                self.all_objects.extend(self.aktywna_sala.walls())
+                self.all_objects.extend(self.aktywna_sala.drzwi)
+
+                statusbar.daj_status().nazwa_aktualnej_sali = self.aktywna_sala.nazwa
         return "rozgrywka"
 
     def draw(self, screen):
