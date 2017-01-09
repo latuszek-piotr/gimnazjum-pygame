@@ -12,6 +12,7 @@ class Status(object):
         self.zjedzone_kwiaty = 0
         self.zabite_szarancze = 0
         self.nazwa_aktualnej_sali = ''
+        self.active_player_name = ''
 
 
 __status = None

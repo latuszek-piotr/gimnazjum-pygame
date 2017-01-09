@@ -22,7 +22,7 @@ class Wygrana(OknoWyboru):
     def on_event(self, event):
         decyzja = self.grac_ponownie(event)
         if decyzja == "TAK":
-            return "rozgrywka"
+            return "wybor_pogromcy"
         elif decyzja == "NIE":
             return "zakonczenie"
         return "wygrana"

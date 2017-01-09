@@ -188,6 +188,8 @@ class Rozgrywka(StanGry):
         return najedzone
 
     def zainicjuj_gracza(self, sala):
+        active_player_name = statusbar.daj_status().active_player_name
+        self.active_player = self.players[active_player_name]
         pozycja_startowa_gracza = self.wylosuj_pozycje_startowa_gracza(sala)
         self.active_player.move_to(pozycja_startowa_gracza)
         self.active_player.mood = 'happy'

@@ -8,7 +8,7 @@ class Piotr(Player):
     sad_img = os.path.join('grafika', 'piotr_smutny.png')
     angry_img = os.path.join('grafika', 'piotr_zly.png')
     surprised_img = os.path.join('grafika', 'piotr_zdziwiony.png')
-    scared_img = os.path.join('grafika', 'piotr_zdziwiony.png')  # TODO dorobic 'piotr_przestraszony.png')
+    scared_img = os.path.join('grafika', 'piotr_zdziwiony.png')  # TODO dorobic 'piotr_przestraszony.png'
 
     def __init__(self, pos=(350, 50), size=50):
         super(Piotr, self).__init__(pos, size)

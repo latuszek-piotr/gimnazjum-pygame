@@ -45,7 +45,7 @@ class Rozpoczecie(OknoWyboru):
         if self.film_zakonczony:
             decyzja = self.grac_ponownie(event)
             if decyzja == "TAK":
-                return "rozgrywka"
+                return "wybor_pogromcy"
         return "rozpoczecie"
 
     def draw(self, screen):

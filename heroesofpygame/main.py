@@ -4,6 +4,7 @@ from pygame.locals import *
 import pygame
 
 from heroesofpygame.rozpoczecie import Rozpoczecie
+from heroesofpygame.wybor_pogromcy import WyborPogromcy
 from heroesofpygame.rozgrywka import Rozgrywka
 from heroesofpygame.przegrana import Przegrana
 from heroesofpygame.wygrana import Wygrana
@@ -19,7 +20,7 @@ pygame.mixer.init()
 pygame.display.set_caption("szkola_1_pietro")
 
 ########################### zmienne globalne
-active_player_name = sys.argv[1]
+active_player_name = "Piotr"
 
 szerokosc_ekranu = 1300
 wysokosc_ekranu = 650
@@ -27,12 +28,14 @@ wysokosc_belki_statusu = 70
 screen = pygame.display.set_mode((szerokosc_ekranu, wysokosc_ekranu + wysokosc_belki_statusu))
 
 rozpoczecie = Rozpoczecie(szerokosc_ekranu, wysokosc_ekranu)
+wybor_pogromcy = WyborPogromcy(szerokosc_ekranu, wysokosc_ekranu)
 rozgrywka = Rozgrywka(szerokosc_ekranu, wysokosc_ekranu, active_player_name)
 przegrana = Przegrana(szerokosc_ekranu, wysokosc_ekranu)
 wygrana = Wygrana(szerokosc_ekranu, wysokosc_ekranu)
 zakonczenie = Zakonczenie(szerokosc_ekranu, wysokosc_ekranu)
 
 mozliwe_stany_gry = {"rozpoczecie": rozpoczecie,
+                     "wybor_pogromcy": wybor_pogromcy,
                      "rozgrywka": rozgrywka,
                      "przegrana": przegrana,
                      "wygrana": wygrana,
@@ -58,7 +61,7 @@ def zmien_stan_gry(obecny_stan, nowy_stan_gry):
         nowy_stan.on_entry()
     return nowy_stan
 
-stan_gry = "rozpoczecie" #"rozgrywka"
+stan_gry = "rozpoczecie"  #"wybor_pogromcy" #"rozpoczecie" #"rozgrywka"
 obecny_stan = zmien_stan_gry(None, stan_gry)
 
 # ---------------------------- glowna petla zdarzen pygame

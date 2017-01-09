@@ -13,9 +13,17 @@ class Dawid(Player):
     def __init__(self, pos=(440, 120), size=50):
         super(Dawid, self).__init__(pos, size)
         self.mood = 'happy'
-        self.img = pygame.transform.scale(pygame.image.load(Dawid.happy_img).convert_alpha(), (size, size+10))
+        self.images = {'happy': pygame.transform.scale(pygame.image.load(Dawid.happy_img).convert_alpha(), (size, size+10)),
+                       'sad': pygame.transform.scale(pygame.image.load(Dawid.sad_img).convert_alpha(), (size, size+10)),
+                       'angry': pygame.transform.scale(pygame.image.load(Dawid.angry_img).convert_alpha(), (size, size+10)),
+                       'suprised': pygame.transform.scale(pygame.image.load(Dawid.surprised_img).convert_alpha(), (size, size+10)),
+                       'scared': pygame.transform.scale(pygame.image.load(Dawid.scared_img).convert_alpha(), (size, size+10))}
 
     def draw(self, screen):
         super(Dawid, self).draw(screen)
         # Copy image to screen:
-        screen.blit(self.img, [self.rect.x, self.rect.y])
+        img = self.images[self.mood]
+        screen.blit(img, [self.rect.x, self.rect.y])
+
+    def zmien_humor(self, mood):
+        self.mood = mood
