@@ -44,19 +44,32 @@ class Rozgrywka(StanGry):
         self.parter = Parter()
         self.mapa = Mapa(self.parter.sale())
         self.podglad_mapy = False
-        self.aktywna_sala = self.wylosuj_sale()
+        self.aktywna_sala = self.ustaw_sale_startowa()
+        self.zaatakowane_sale = []
         self.aktywne_szarancze = []
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
         self.wszystkie_kwiaty = []
         self.statusbar = None
 
-    def wylosuj_sale(self):
-        # sala = self.parter.klasa_info  # wyswietlana sala na ktorej dzieje sie akcja #TODO losowanie; teraz na sztywno
-        sala = random.choice(self.parter.sale())
+    def wylosuj_sale_zaatakowane(self):
+        sale_mozliwe_do_zaatakowania = self.parter.sale_do_losowania()
+        max_ilosc_sal = len(sale_mozliwe_do_zaatakowania)
+        ilosc_sal_zaatakowanych = random.randint(1, int(max_ilosc_sal*0.75))
+        zaatakowane_sale = random.sample(sale_mozliwe_do_zaatakowania,  ilosc_sal_zaatakowanych)
+        return zaatakowane_sale
+    
+    def ustaw_sale_startowa(self):
+        '''wyswietlana sala na ktorej dzieje sie akcja'''
+        sala = random.choice(self.parter.sale_do_losowania())
         # sala = self.parter.korytarz_szatni
         # sala = self.parter.korytarz_parteru
-        # sala = self.parter.hall_glowny
+        sala = self.parter.hall_glowny  # wejscie glowne jest w hallu glownym
         return sala
+
+    def przeskaluj_wszystkie_sale(self, szerokosc, wysokosc):
+        for sala in self.parter.sale():
+            sala.oblicz_rect_widoku(szerokosc, wysokosc)
+            # sala.przeskaluj(szerokosc, wysokosc)
 
     def obiekty_mogace_wchodzic_w_kolizje(self):
         all_objects = []
@@ -146,14 +159,18 @@ class Rozgrywka(StanGry):
         y = y_start + int((y_end - y_start) / 2)
         return (x, y)
 
-    def zainicjuj_kwiaty(self, sala):
+    def zainicjuj_kwiaty(self, sale):
         self.wszystkie_kwiaty = []
-        sala.usun_wszystkie_kwiaty()
-        ilosc_kwiatow = random.randint(1, 3)
-        for nr in range(ilosc_kwiatow):
-            kwiat = sala.dodaj_kwiat()
-            if kwiat:
-                self.wszystkie_kwiaty.append(kwiat)
+        for sala in sale:
+            sala.usun_wszystkie_kwiaty()
+            ilosc_kwiatow = random.randint(1, 3)
+            for nr in range(ilosc_kwiatow):
+                kwiat = sala.dodaj_kwiat()
+                if kwiat:
+                    self.wszystkie_kwiaty.append(kwiat)
+        self.mapa.ustaw_ilosc_kwiatow(self.ilosc_wszystkich_kwiatow())
+        for idx, kwiat in enumerate(self.wszystkie_kwiaty):
+            self.mapa.update_pozycji_kwiatu(idx, kwiat, sala)
 
     def ilosc_wszystkich_kwiatow(self):
         return len(self.wszystkie_kwiaty)
@@ -169,12 +186,18 @@ class Rozgrywka(StanGry):
 
     def zainicjuj_szarancze(self, sala):
         self.aktywne_szarancze = []
-        ilosc_szaranczy = random.randint(1, 5)
+        ilosc_szaranczy = random.randint(1, 11)
+        max_ilosc_sal = len(self.parter.sale_do_losowania())
+        ilosc_sal_zaatakowanych = random.randint(1, int(max_ilosc_sal*0.75))
+        zaatakowane_sale = random.sample([1, 2, 3, 4, 5],  3)
+        if ilosc_szaranczy < ilosc_sal_zaatakowanych:
+            ilosc_sal_zaatakowanych = ilosc_szaranczy
         for nr in range(ilosc_szaranczy):
             pozycja_startowa_szaranczy = sala.wylosuj_pozycje_startowa_szaranczy()
             szarancza = Szarancza(pozycja_startowa_szaranczy)
             szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
             self.aktywne_szarancze.append(szarancza)
+        self.mapa.ustaw_ilosc_szaranczy(self.ilosc_wszystkich_szaranczy())
 
     def ilosc_wszystkich_szaranczy(self):
         return len(self.aktywne_szarancze)
@@ -195,21 +218,25 @@ class Rozgrywka(StanGry):
         self.active_player.mood = 'happy'
         self.active_player.direction = 0
         # self.broadcast_active_player(active_player, self.net_connection, action='join', await_confirmation=True)
+        self.mapa.ustaw_ilosc_graczy(ilosc_wszystkich_graczy=1)
 
+    def zainicjuj_sale(self):
+        self.zaatakowane_sale = self.wylosuj_sale_zaatakowane()
+        self.aktywna_sala = self.ustaw_sale_startowa()
+        self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
+        self.przeskaluj_wszystkie_sale(self.szerokosc, self.wysokosc)
+        self.mapa.ustaw_aktywna_sale(self.aktywna_sala)
+        
     def on_entry(self):
         super(Rozgrywka, self).on_entry()
-        self.aktywna_sala = self.wylosuj_sale()
-        self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
-        self.mapa.ustaw_aktywna_sale(self.aktywna_sala)
-
-        self.zainicjuj_kwiaty(self.aktywna_sala)
-        self.mapa.ustaw_ilosc_kwiatow(self.ilosc_wszystkich_kwiatow())
-        for idx, kwiat in enumerate(self.wszystkie_kwiaty):
-            self.mapa.update_pozycji_kwiatu(idx, kwiat)
+        self.zainicjuj_sale()
+        sale = self.zaatakowane_sale[:]
+        sale.append(self.aktywna_sala)
+        # sale = [self.aktywna_sala, self.parter.sekretariat]
+        # sale = [self.aktywna_sala]
+        self.zainicjuj_kwiaty(sale)
         self.zainicjuj_szarancze(self.aktywna_sala)
-        self.mapa.ustaw_ilosc_szaranczy(self.ilosc_wszystkich_szaranczy())
         self.zainicjuj_gracza(self.aktywna_sala)
-        self.mapa.ustaw_ilosc_graczy(ilosc_wszystkich_graczy=1)
 
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
         self.all_objects.extend(self.aktywna_sala.walls())

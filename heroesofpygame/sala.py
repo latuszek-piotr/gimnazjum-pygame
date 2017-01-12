@@ -9,17 +9,28 @@ class ClassRoom(object):
     def __init__(self, nazwa, pos, room_width, room_length, wall_width=3, color=(75, 5, 205)):
         self.nazwa = nazwa
         self.font = pygame.font.SysFont("comic sans MS", 15, bold=True)
+        self.pos = pos
         self.room_width = room_width
         self.room_length = room_length
-        self.pos = pos
         self.wall_width = wall_width
+        self.skala_terenu = 10
+        skala = self.skala_terenu
+        self.teren = pygame.Rect(pos[0]*skala, pos[1]*skala, room_width*skala, room_length*skala) # wirtualne wspolrzedne na mapie calosci
+        self.rect_widoku = None  # wspolrzedne wyswietlane
         self.color = color
         self.skala_widoku = 1.0
         self.drzwi = []
         self.polozenie_drzwi = []
         self.przelicz_sciany(self.pos, self.room_width, self.room_length)
-        self.obszary_kwiatowe = self.oblicz_obszary_kwiatowe()  # slownik postaci {nr_oszaru: rect_obszaru}
+        self.obszary_kwiatowe = {}  # slownik postaci {nr_oszaru: rect_obszaru}
         self.kwiaty = {}  # slownik postaci {nr_oszaru: obiekt_kwiat}
+
+
+    def skala_widok_teren(self):
+        if self.rect_widoku is None:
+            return 1
+        skala = float(self.teren.width) / self.rect_widoku.width
+        return skala
 
     def daj_naroznik(self, ktory):
         if ktory == 'lewy-gorny':
@@ -34,14 +45,13 @@ class ClassRoom(object):
     def widok_pionowy(self):
         '''dla pionowego wyswietlania sali wspolrzedna y (odleglosc od gornej krawedzi)
         jest mniejsza od wspolrzednej x (odleglosci od lewej krawedzi)'''
-        (x_start, y_start) = self.daj_naroznik(ktory='lewy-gorny')
+        (x_start, y_start) = self.rect_widoku.topleft
         return y_start < x_start
 
     def oblicz_obszary_kwiatowe(self, wielkosc_obszaru=60):
-        (x_start, y_start) = self.daj_naroznik(ktory='lewy-gorny')
+        (x_start, y_start) = self.rect_widoku.topleft
         if self.widok_pionowy(): # widok pionowy sali to kwiaty w gornym wierszu
-            (x_end, y_end) = self.daj_naroznik(ktory='prawy-gorny')
-            room_width = x_end - x_start
+            room_width = self.rect_widoku.width
             ilosc_kolumn = int((room_width - 5 - 5) // wielkosc_obszaru)
             obszary = {}
             for nr_obszaru in range(ilosc_kolumn):
@@ -49,15 +59,14 @@ class ClassRoom(object):
                 y = 10
                 obszary[nr_obszaru] = pygame.Rect(x, y, wielkosc_obszaru, wielkosc_obszaru)
         else:  # widok poziomy sali to kwiaty w lewej kolumnie
-            (x_end, y_end) = self.daj_naroznik(ktory='lewy-dolny')
-            room_heigth = y_end - y_start
+            room_heigth = self.rect_widoku.height
             ilosc_wierszy = int((room_heigth - 5 - 5) // wielkosc_obszaru)
             obszary = {}
             for nr_obszaru in range(ilosc_wierszy):
                 x = 10
                 y = y_start + 5 + nr_obszaru*wielkosc_obszaru
                 obszary[nr_obszaru] = pygame.Rect(x, y, wielkosc_obszaru, wielkosc_obszaru)
-        return obszary
+        self.obszary_kwiatowe = obszary
 
     def wylosuj_pozycje_startowa_szaranczy(self):
         (x_end, y_end) = self.daj_naroznik(ktory='prawy-dolny')
@@ -100,7 +109,16 @@ class ClassRoom(object):
         if puste_obszary:
             wybrany_obszar = random.choice(puste_obszary)
             naroznik = self.obszary_kwiatowe[wybrany_obszar].topleft
-            kwiat = Flower(pos=naroznik)
+            srodek = self.obszary_kwiatowe[wybrany_obszar].center
+            naroznik_widoku = self.rect_widoku.topleft
+            naroznik_terenu = self.teren.topleft
+            dx_w_widoku = srodek[0] - naroznik_widoku[0]
+            dy_w_widoku = srodek[1] - naroznik_widoku[1]
+            skala = self.skala_widok_teren()
+            dx_w_terenie = dx_w_widoku * skala
+            dy_w_terenie = dy_w_widoku * skala
+            pozycja_w_terenie = (naroznik_terenu[0] + dx_w_terenie, naroznik_terenu[1] + dy_w_terenie)
+            kwiat = Flower(pos=naroznik, pos_teren=pozycja_w_terenie)
             self.kwiaty[wybrany_obszar] = kwiat
             return kwiat
         return None  # nie mozna juz dodac, brak miejsca
@@ -166,6 +184,27 @@ class ClassRoom(object):
     def skala_pionowa(self, docelowa_dlugosc):
         return docelowa_dlugosc / float(self.room_length)
 
+    def oblicz_rect_widoku(self, docelowa_szerokosc, docelowa_dlugosc):
+        skala_pion = self.skala_pionowa(docelowa_dlugosc)
+        skala_poziom = self.skala_pozioma(docelowa_szerokosc)
+
+        room_width_pion = self.room_width * skala_pion
+        room_length_pion = self.room_length * skala_pion
+        room_width_poziom = self.room_width * skala_poziom
+        room_length_poziom = self.room_length * skala_poziom
+
+        if (room_width_pion <= docelowa_szerokosc) and (room_length_pion <= docelowa_dlugosc):
+            self.skala_widoku = skala_pion
+            roznica_szerokosci = docelowa_szerokosc - room_width_pion
+            poz_x = roznica_szerokosci / 2
+            self.rect_widoku = pygame.Rect(poz_x, 0, room_width_pion, room_length_pion)
+        else:
+            self.skala_widoku = skala_poziom
+            roznica_dlugosci = docelowa_dlugosc - room_length_poziom
+            poz_y = roznica_dlugosci / 2
+            self.rect_widoku = pygame.Rect(0, poz_y, room_width_poziom, room_length_poziom)
+        self.oblicz_obszary_kwiatowe()
+
     def przeskaluj(self, docelowa_szerokosc, docelowa_dlugosc):
         skala_pion = self.skala_pionowa(docelowa_dlugosc)
         skala_poziom = self.skala_pozioma(docelowa_szerokosc)
@@ -187,7 +226,7 @@ class ClassRoom(object):
             self.przelicz_sciany((0,poz_y), room_width_poziom, room_length_poziom)
         self.przelicz_drzwi(self.skala_widoku)
 
-        self.obszary_kwiatowe = self.oblicz_obszary_kwiatowe()
+        # self.obszary_kwiatowe = self.oblicz_obszary_kwiatowe()
 
 
     def draw_podloga(self, screen):

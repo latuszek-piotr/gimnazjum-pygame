@@ -13,9 +13,10 @@ class Flower(object):
                      os.path.join('grafika', 'kwiat.jpg')]
 
 
-    def __init__(self, pos=(410, 300), size=50):
+    def __init__(self, pos, pos_teren, size=50):
         selected_img =random.choice(Flower.flowers_img)
         self.pos = pos
+        self.pos_teren = pos_teren
         self.img = pygame.transform.scale(pygame.image.load(selected_img).convert_alpha(), (size, size+10))
         self.rect = pygame.Rect(pos[0]+20, pos[1]+10, 10, 10)  # rect kolizji jest mniejszy od rect obrazka
         self.zjedzony = False

@@ -149,14 +149,14 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
 
     def sale(self):
         return [self.sala_gimn,
-                self.korytarz_sali_gimn,  # tam jest za wasko --> ciasno ulokowac graczy
+                self.korytarz_sali_gimn,
                 self.sala_zabaw,
                 self.szatnia_gimn,
                 self.biblioteka,
                 self.szatnia_duza,
                 self.korytarz_szatni,
                 self.szatnia_mala,
-                # self.kantorek_wf,  # nie można wylosować bo tam nie ma okien --> nie może wlecieć szarańcza
+                self.kantorek_wf,
                 self.hall_glowny,
                 self.osiem_a,
                 self.osiem,
@@ -169,7 +169,34 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
                 self.stolowka,
                 self.sekretariat,
                 self.gabinet_zast_dyrektora,
-                self.gabinet_dyrektora]
+                self.gabinet_dyrektora
+               ]
+
+    def sale_do_losowania(self):
+        '''Tylko te sale w ktorych chcemy rozlokowywac kwiaty i szarancze'''
+        return [self.sala_gimn,
+                # self.korytarz_sali_gimn,  # tam jest za wasko
+                self.sala_zabaw,
+                self.szatnia_gimn,
+                self.biblioteka,
+                self.szatnia_duza,
+                # self.korytarz_szatni, # tam jest wasko
+                self.szatnia_mala,
+                # self.kantorek_wf,  # tam nie ma okien --> nie może wlecieć szarańcza
+                # self.hall_glowny, # tam wchodzimy do szkoly, punkt startowy gracza, nie chcemy miec tu kwiatow - byloby za latwo
+                self.osiem_a,
+                self.osiem,
+                self.archiwum,
+                self.siodemka,
+                self.szostka,
+                # self.lazienka_damska,  # jestesmy gentelman-ami - nie wchodzimy do damskiej
+                self.lazienka_meska,
+                # self.korytarz_parteru,  # nie ma okien --> nie może wlecieć szarańcza
+                self.stolowka,
+                self.sekretariat,
+                self.gabinet_zast_dyrektora,
+                self.gabinet_dyrektora
+               ]
 
     def walls(self):
         sciany = []
