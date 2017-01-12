@@ -55,20 +55,17 @@ class Mapa(object):
         if (szarancza.stan == "martwa") or (szarancza.stan == "anihilowana"):
             self.pos_szaranczy[idx_szaranczy] = None
             return
-        rect = self.oblicz_rect_pozycji_obiektu(game_object=szarancza, sala_pos=self.aktywna_sala_pos, sala_skala_x=self.aktywna_sala_skala_x, sala_skala_y=self.aktywna_sala_skala_y)
+        rect = self.oblicz_rect_pozycji_w_terenie(game_object=szarancza)
         self.pos_szaranczy[idx_szaranczy] = rect
 
     def update_pozycji_kwiatu(self, idx_kwiatu, kwiat, sala):
         if kwiat.zjedzony:
             self.pos_kwiatow[idx_kwiatu] = None
             return
-        # (sala_pos, sala_skala_x, sala_skala_y) = self.daj_przeskalowania_sali(sala)
-        # rect = self.oblicz_rect_pozycji_obiektu(game_object=kwiat, sala_pos=sala_pos, sala_skala_x=sala_skala_x, sala_skala_y=sala_skala_y)
         rect = self.oblicz_rect_pozycji_w_terenie(game_object=kwiat)
         self.pos_kwiatow[idx_kwiatu] = rect
 
     def update_pozycji_gracza(self, idx_gracza, gracz):
-        # rect = self.oblicz_rect_pozycji_obiektu(game_object=gracz, sala_pos=self.aktywna_sala_pos, sala_skala_x=self.aktywna_sala_skala_x, sala_skala_y=self.aktywna_sala_skala_y)
         rect = self.oblicz_rect_pozycji_w_terenie(game_object=gracz)
         self.pos_graczy[idx_gracza] = rect
 
@@ -77,14 +74,6 @@ class Mapa(object):
         x = (x / 10.0 ) * self.skala_podgladu
         y = (y / 10.0 ) * self.skala_podgladu
         rect = pygame.Rect(x - 2, y - 2, 4, 4)
-        return rect
-
-    def oblicz_rect_pozycji_obiektu(self, game_object, sala_pos, sala_skala_x, sala_skala_y):
-        dx_obiektu_w_aktywnej_sali = game_object.rect.centerx - sala_pos[0]
-        dy_obiektu_w_aktywnej_sali = game_object.rect.centery - sala_pos[1]
-        dx_obiektu = dx_obiektu_w_aktywnej_sali * sala_skala_x
-        dy_obiektu = dy_obiektu_w_aktywnej_sali * sala_skala_y
-        rect = pygame.Rect(self.obszar_aktywnej_sali.left + dx_obiektu - 2, self.obszar_aktywnej_sali.top + dy_obiektu - 2, 4, 4)
         return rect
 
     def obszar_obejmujacy_wszystkie_sale(self, obszary_sal):

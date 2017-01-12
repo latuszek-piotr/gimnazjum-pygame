@@ -265,6 +265,7 @@ class Rozgrywka(StanGry):
 
         for idx, szarancza in enumerate(self.aktywne_szarancze):
             szarancza.update_pozycji_i_kolizji(self.all_objects)
+            szarancza.pos_teren = self.aktywna_sala.wylicz_pozycje_w_terenie(szarancza.rect.center)
             self.mapa.update_pozycji_szaranczy(idx, szarancza)
 
         statusbar.daj_status().zjedzone_kwiaty = self.ilosc_zjedzonych_kwiatow()
