@@ -104,20 +104,24 @@ class ClassRoom(object):
             for obszar_nr in zjedzone:
                 del self.kwiaty[obszar_nr]
 
+    def wylicz_pozycje_w_terenie(self, pozycja_w_widoku):
+        naroznik_widoku = self.rect_widoku.topleft
+        naroznik_terenu = self.teren.topleft
+        dx_w_widoku = pozycja_w_widoku[0] - naroznik_widoku[0]
+        dy_w_widoku = pozycja_w_widoku[1] - naroznik_widoku[1]
+        skala = self.skala_widok_teren()
+        dx_w_terenie = dx_w_widoku * skala
+        dy_w_terenie = dy_w_widoku * skala
+        pozycja_w_terenie = (naroznik_terenu[0] + dx_w_terenie, naroznik_terenu[1] + dy_w_terenie)
+        return pozycja_w_terenie
+
     def dodaj_kwiat(self):
         puste_obszary = self.puste_obszary_kwiatowe()
         if puste_obszary:
             wybrany_obszar = random.choice(puste_obszary)
             naroznik = self.obszary_kwiatowe[wybrany_obszar].topleft
             srodek = self.obszary_kwiatowe[wybrany_obszar].center
-            naroznik_widoku = self.rect_widoku.topleft
-            naroznik_terenu = self.teren.topleft
-            dx_w_widoku = srodek[0] - naroznik_widoku[0]
-            dy_w_widoku = srodek[1] - naroznik_widoku[1]
-            skala = self.skala_widok_teren()
-            dx_w_terenie = dx_w_widoku * skala
-            dy_w_terenie = dy_w_widoku * skala
-            pozycja_w_terenie = (naroznik_terenu[0] + dx_w_terenie, naroznik_terenu[1] + dy_w_terenie)
+            pozycja_w_terenie = self.wylicz_pozycje_w_terenie(srodek)
             kwiat = Flower(pos=naroznik, pos_teren=pozycja_w_terenie)
             self.kwiaty[wybrany_obszar] = kwiat
             return kwiat

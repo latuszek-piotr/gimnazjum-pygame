@@ -68,7 +68,8 @@ class Mapa(object):
         self.pos_kwiatow[idx_kwiatu] = rect
 
     def update_pozycji_gracza(self, idx_gracza, gracz):
-        rect = self.oblicz_rect_pozycji_obiektu(game_object=gracz, sala_pos=self.aktywna_sala_pos, sala_skala_x=self.aktywna_sala_skala_x, sala_skala_y=self.aktywna_sala_skala_y)
+        # rect = self.oblicz_rect_pozycji_obiektu(game_object=gracz, sala_pos=self.aktywna_sala_pos, sala_skala_x=self.aktywna_sala_skala_x, sala_skala_y=self.aktywna_sala_skala_y)
+        rect = self.oblicz_rect_pozycji_w_terenie(game_object=gracz)
         self.pos_graczy[idx_gracza] = rect
 
     def oblicz_rect_pozycji_w_terenie(self, game_object):

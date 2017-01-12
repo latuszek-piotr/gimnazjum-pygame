@@ -96,29 +96,28 @@ class Rozgrywka(StanGry):
 
     def move_player_using_keyboard(self, key_left, key_right, key_up, key_down, active_player, all_objects):
         key = pygame.key.get_pressed()
+        moved = True
         if key[key_left]:
-            # active_player.move(-1, 0, all_objects)
-            self.active_player.zmien_humor("suprised")
+            active_player.zmien_humor("suprised")
             # katy rosna zgodnie ze wskazowkami zegara (odwrotnie niz w ukladzie kartezjanskim)
             # obrot w lewo zmniejsza kat
             active_player.direction -= 2
             active_player.move_at_direction(0, all_objects)
         elif key[key_right]:
-            # active_player.move(1, 0, all_objects)
-            self.active_player.zmien_humor("suprised")
+            active_player.zmien_humor("suprised")
             active_player.direction += 2
             active_player.move_at_direction(0, all_objects)
         elif key[key_up]:
-            # active_player.move(0, -1, all_objects)
-            self.active_player.zmien_humor("happy")
+            active_player.zmien_humor("happy")
             active_player.move_at_direction(2, all_objects)
         elif key[key_down]:
-            # active_player.move(0, 1, all_objects)
-            self.active_player.zmien_humor("happy")
+            active_player.zmien_humor("happy")
             active_player.move_at_direction(-2, all_objects)
         else:
-            return  # no move
-        self.broadcast_active_player(active_player)
+            moved = False  # no move
+        if moved:
+            active_player.pos_teren = self.aktywna_sala.wylicz_pozycje_w_terenie(active_player.rect.center)
+            self.broadcast_active_player(active_player)
 
     def broadcast_active_player(self, active_player, action='move', await_confirmation=False):
         if self.net_connection != None:
@@ -151,12 +150,9 @@ class Rozgrywka(StanGry):
             player.draw(screen)
 
     def wylosuj_pozycje_startowa_gracza(self, sala):
-        (x_start, y_start) = sala.daj_naroznik(ktory='lewy-gorny')
-        (x_end, y_end) = sala.daj_naroznik(ktory='prawy-dolny')
-        room_width = int(x_end - x_start)
-        przesuniecie = random.randint(10, room_width - 60)
-        x = x_start + przesuniecie
-        y = y_start + int((y_end - y_start) / 2)
+        przesuniecie = random.randint(10, sala.rect_widoku.width - 60)
+        x = sala.rect_widoku.left + przesuniecie
+        y = sala.rect_widoku.centery
         return (x, y)
 
     def zainicjuj_kwiaty(self, sale):
@@ -215,6 +211,7 @@ class Rozgrywka(StanGry):
         self.active_player = self.players[active_player_name]
         pozycja_startowa_gracza = self.wylosuj_pozycje_startowa_gracza(sala)
         self.active_player.move_to(pozycja_startowa_gracza)
+        self.active_player.pos_teren = sala.wylicz_pozycje_w_terenie(pozycja_startowa_gracza)
         self.active_player.mood = 'happy'
         self.active_player.direction = 0
         # self.broadcast_active_player(active_player, self.net_connection, action='join', await_confirmation=True)

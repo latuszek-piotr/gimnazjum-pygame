@@ -12,6 +12,7 @@ from heroesofpygame.userevents import USEREVENT_PASS_DOOR
 class Player(Pixel):
     def __init__(self, pos=(30, 30), size=4, color=(255,255,255)):
         super(Player, self).__init__(pos, size, color)
+        self.pos_teren = pos
         self.nazwa = self.__class__.__name__
         self.direction = 0  # in degrees
         self.direction_color = (255, 0, 0)
