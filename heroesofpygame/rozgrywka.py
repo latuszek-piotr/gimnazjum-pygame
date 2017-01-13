@@ -153,12 +153,6 @@ class Rozgrywka(StanGry):
         for player in remote_players.values():
             player.draw(screen)
 
-    def wylosuj_pozycje_startowa_gracza(self, sala):
-        przesuniecie = random.randint(10, sala.rect_widoku.width - 60)
-        x = sala.rect_widoku.left + przesuniecie
-        y = sala.rect_widoku.centery
-        return (x, y)
-
     def zainicjuj_kwiaty(self, sale):
         self.wszystkie_kwiaty = []
         for sala in sale:
@@ -213,7 +207,7 @@ class Rozgrywka(StanGry):
     def zainicjuj_gracza(self, sala):
         active_player_name = statusbar.daj_status().active_player_name
         self.active_player = self.players[active_player_name]
-        pozycja_startowa_gracza = self.wylosuj_pozycje_startowa_gracza(sala)
+        pozycja_startowa_gracza = sala.wylosuj_pozycje_startowa_gracza()
         self.active_player.move_to(pozycja_startowa_gracza)
         self.active_player.pos_teren = sala.wylicz_pozycje_w_terenie(pozycja_startowa_gracza)
         self.active_player.mood = 'happy'
@@ -227,7 +221,7 @@ class Rozgrywka(StanGry):
         self.przeskaluj_wszystkie_sale(self.szerokosc, self.wysokosc)
         self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
         self.mapa.ustaw_aktywna_sale(self.aktywna_sala)
-        
+
     def on_entry(self):
         super(Rozgrywka, self).on_entry()
         self.zainicjuj_sale()

@@ -11,8 +11,6 @@ class Mapa(object):
         self.indeksy_sal = {sala.nazwa: idx for (idx, sala) in enumerate(sale)}
         self.obszar_mapy = self.obszar_obejmujacy_wszystkie_sale(self.obszary_sal)
         self.obszar_aktywnej_sali = None
-        self.aktywna_sala_skala_x = 1.0
-        self.aktywna_sala_skala_y = 1.0
         self.pos_szaranczy = []
         self.pos_kwiatow = []
         self.pos_graczy = []
@@ -24,21 +22,9 @@ class Mapa(object):
             obszary.append(obszar)
         return obszary
 
-    def daj_przeskalowania_sali(self, sala):
+    def ustaw_aktywna_sale(self, sala):
         idx_sali = self.indeksy_sal[sala.nazwa]
         self.obszar_aktywnej_sali = self.obszary_podgladu_sal[idx_sali]
-        (x_start, y_start) = sala.daj_naroznik(ktory='lewy-gorny')
-        (x_end, y_end) = sala.daj_naroznik(ktory='prawy-dolny')
-        sala_skala_x = float(self.obszar_aktywnej_sali.width) / (x_end - x_start)
-        sala_skala_y = float(self.obszar_aktywnej_sali.height) / (y_end - y_start)
-        sala_pos = (x_start, y_start)
-        return (sala_pos, sala_skala_x, sala_skala_y)
-
-    def ustaw_aktywna_sale(self, sala):
-        (sala_pos, sala_skala_x, sala_skala_y) = self.daj_przeskalowania_sali(sala)
-        self.aktywna_sala_skala_x = sala_skala_x
-        self.aktywna_sala_skala_y = sala_skala_y
-        self.aktywna_sala_pos = sala_pos
 
     def ustaw_ilosc_szaranczy(self, ilosc_wszystkich_szaranczy):
         self.pos_szaranczy = [None for szarancza in range(ilosc_wszystkich_szaranczy)]

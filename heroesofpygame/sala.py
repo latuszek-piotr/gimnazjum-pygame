@@ -80,6 +80,12 @@ class ClassRoom(object):
             pozycja_startowa = (rect.right - 60, rect.top + przesuniecie)
         return pozycja_startowa
 
+    def wylosuj_pozycje_startowa_gracza(self):
+        przesuniecie = random.randint(10, self.rect_widoku.width - 60)
+        x = self.rect_widoku.left + przesuniecie
+        y = self.rect_widoku.centery
+        return (x, y)
+
     def puste_obszary_kwiatowe(self):
         puste_obszary = []
         for obszar_nr in self.obszary_kwiatowe:
@@ -244,9 +250,6 @@ class ClassRoom(object):
             poz_y = roznica_dlugosci / 2
             self.przelicz_sciany((0,poz_y), room_width_poziom, room_length_poziom)
         self.przelicz_drzwi(self.skala_widoku)
-
-        # self.obszary_kwiatowe = self.oblicz_obszary_kwiatowe()
-
 
     def draw_podloga(self, screen):
         pygame.draw.rect(screen, (0,0,0), self.rect_widoku)
