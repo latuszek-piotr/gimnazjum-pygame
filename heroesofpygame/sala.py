@@ -24,7 +24,6 @@ class ClassRoom(object):
         self.obszary_kwiatowe = {}  # slownik postaci {nr_oszaru: rect_obszaru}
         self.kwiaty = {}  # slownik postaci {nr_oszaru: obiekt_kwiat}
 
-
     def skala_widok_teren(self):
         if self.rect_widoku is None:
             return 1
@@ -40,6 +39,11 @@ class ClassRoom(object):
             return (self.right_wall.pos[0] + self.right_wall.width, self.right_wall.pos[1])
         elif ktory == 'prawy-dolny':
             return (self.right_wall.pos[0] + self.right_wall.width, self.right_wall.pos[1] + self.right_wall.length)
+
+    def daj_obrys_sali(self, skala):
+        obszar = pygame.Rect(self.pos[0]*skala, self.pos[1]*skala, self.room_width*skala, self.room_length*skala)
+        punkty_obrysu = [obszar.topleft, obszar.bottomleft, obszar.bottomright, obszar.topright]
+        return punkty_obrysu
 
     def widok_pionowy(self):
         '''dla pionowego wyswietlania sali wspolrzedna y (odleglosc od gornej krawedzi)

@@ -6,11 +6,11 @@ class Mapa(object):
     def __init__(self, sale):
         self.skala_podgladu = 2.5
         self.skala_terenu = 10.0
-        self.obszary_podgladu_sal = self.daj_obszary_sal(sale, self.skala_podgladu)
+        self.obrysy_podgladu_sal = self.daj_obrysy_sal(sale, self.skala_podgladu)
         self.obszary_sal = self.daj_obszary_sal(sale, self.skala_terenu)
         self.indeksy_sal = {sala.nazwa: idx for (idx, sala) in enumerate(sale)}
         self.obszar_mapy = self.obszar_obejmujacy_wszystkie_sale(self.obszary_sal)
-        self.obszar_aktywnej_sali = None
+        self.obrys_aktywnej_sali = None
         self.pos_szaranczy = []
         self.pos_kwiatow = []
         self.pos_graczy = []
@@ -22,9 +22,16 @@ class Mapa(object):
             obszary.append(obszar)
         return obszary
 
+    def daj_obrysy_sal(self, sale, skala):
+        obrysy = []
+        for sala in sale:
+            obrys = sala.daj_obrys_sali(skala)
+            obrysy.append(obrys)
+        return obrysy
+
     def ustaw_aktywna_sale(self, sala):
         idx_sali = self.indeksy_sal[sala.nazwa]
-        self.obszar_aktywnej_sali = self.obszary_podgladu_sal[idx_sali]
+        self.obrys_aktywnej_sali = self.obrysy_podgladu_sal[idx_sali]
 
     def ustaw_ilosc_szaranczy(self, ilosc_wszystkich_szaranczy):
         self.pos_szaranczy = [None for szarancza in range(ilosc_wszystkich_szaranczy)]
@@ -36,7 +43,7 @@ class Mapa(object):
         self.pos_graczy = [None for gracz in range(ilosc_wszystkich_graczy)]
 
     def update_pozycji_szaranczy(self, idx_szaranczy, szarancza):
-        if not self.obszar_aktywnej_sali:
+        if not self.obrys_aktywnej_sali:
             return
         if (szarancza.stan == "martwa") or (szarancza.stan == "anihilowana"):
             self.pos_szaranczy[idx_szaranczy] = None
@@ -70,8 +77,8 @@ class Mapa(object):
         obszar = pygame.Rect(min_left, min_top, max_right - min_left, max_bottom - min_top)
         return obszar
 
-    def draw_obrys(self, screen, rect, color=(255,255,255), grubosc_linii=1):
-        pygame.draw.lines(screen, color, True, [rect.topleft, rect.bottomleft, rect.bottomright, rect.topright], grubosc_linii)
+    def draw_obrys(self, screen, punkty_obrysu, color=(255,255,255), grubosc_linii=1):
+        pygame.draw.lines(screen, color, True, punkty_obrysu, grubosc_linii)
 
     def draw_pozycje_obiektow(self, screen, color, game_objects):
         for rect_obiektu in game_objects:
@@ -79,10 +86,10 @@ class Mapa(object):
                 pygame.draw.rect(screen, color, rect_obiektu)
 
     def draw(self, screen):
-        for sala_rect in self.obszary_podgladu_sal:
-            self.draw_obrys(screen, sala_rect)
-        if self.obszar_aktywnej_sali:
-            self.draw_obrys(screen, self.obszar_aktywnej_sali, color=(75, 5, 205), grubosc_linii=2)
+        for sala_obrys in self.obrysy_podgladu_sal:
+            self.draw_obrys(screen, sala_obrys)
+        if self.obrys_aktywnej_sali:
+            self.draw_obrys(screen, self.obrys_aktywnej_sali, color=(75, 5, 205), grubosc_linii=2)
         self.draw_pozycje_obiektow(screen, color=(255,0,0), game_objects=self.pos_szaranczy)
         self.draw_pozycje_obiektow(screen, color=(0,255,0), game_objects=self.pos_kwiatow)
         self.draw_pozycje_obiektow(screen, color=(255,255,0), game_objects=self.pos_graczy)

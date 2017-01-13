@@ -31,6 +31,16 @@ class Hall(ClassRoom):
         self.left_top_hall_wall = None
         self.left_bottom_hall_wall = None
 
+    def daj_obrys_sali(self, skala):
+        obszar_hallu = pygame.Rect(self.hall_glowny.pos[0]*skala, self.hall_glowny.pos[1]*skala,
+                                   self.hall_glowny.room_width*skala, self.hall_glowny.room_length*skala)
+        obszar_korytarza = pygame.Rect(self.korytarz_do_sal.pos[0]*skala, self.korytarz_do_sal.pos[1]*skala,
+                                       self.korytarz_do_sal.room_width*skala, self.korytarz_do_sal.room_length*skala)
+        punkty_obrysu = [obszar_hallu.topleft,
+                         obszar_korytarza.topright, obszar_korytarza.topleft, obszar_korytarza.bottomleft, obszar_korytarza.bottomright,
+                         obszar_hallu.bottomleft, obszar_hallu.bottomright, obszar_hallu.topright]
+        return punkty_obrysu
+
     def daj_obszar_lotu_szaranczy(self):
         return self.hall_glowny.rect_widoku
 
