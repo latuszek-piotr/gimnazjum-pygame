@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 from heroesofpygame.sala import ClassRoom
 from heroesofpygame.door import Door
+from heroesofpygame.hall import Hall
 
 
 class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
@@ -123,6 +124,8 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
         self.korytarz_parteru.wstaw_drzwi(drzwi_lazienka_damska_korytarz_parteru, door_location='top_wall')
         self.korytarz_parteru.wstaw_drzwi(drzwi_lazienka_meska_korytarz_parteru, door_location='top_wall')
 
+        self.hall_parteru = Hall(self.hall_glowny, self.korytarz_parteru)
+
         self.stolowka = ClassRoom(nazwa=u"stołówka", pos=(235,181), room_width=49, room_length=37)
         d_rect = self.stolowka.oblicz_rect_drzwi(door_location='left_wall', door_delta=9, skala=1)
         drzwi_stolowka_hall = Door(d_rect)
@@ -157,7 +160,7 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
                 self.korytarz_szatni,
                 self.szatnia_mala,
                 self.kantorek_wf,
-                self.hall_glowny,
+                # self.hall_glowny, ##
                 self.osiem_a,
                 self.osiem,
                 self.archiwum,
@@ -165,7 +168,8 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
                 self.szostka,
                 self.lazienka_damska,
                 self.lazienka_meska,
-                self.korytarz_parteru,
+                # self.korytarz_parteru, ##
+                self.hall_parteru,
                 self.stolowka,
                 self.sekretariat,
                 self.gabinet_zast_dyrektora,

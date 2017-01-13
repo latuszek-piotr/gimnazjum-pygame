@@ -1,28 +1,35 @@
+# -*- coding: UTF-8 -*-
 import pygame
 import random
 from heroesofpygame.wall import NewWall
 from heroesofpygame.flower import Flower
+from heroesofpygame.sala import ClassRoom
 
+# self.korytarz_parteru = ClassRoom(nazwa="korytarz parteru", pos=(86,199), room_width=82, room_length=19)
+# self.hall_glowny = ClassRoom(nazwa=u"hall główny parteru", pos=(168,135), room_width=67, room_length=120)
 
-class ClassRoom(object):
-    def __init__(self, nazwa, pos, room_width, room_length, wall_width=3, color=(75, 5, 205)):
-        self.nazwa = nazwa
-        self.font = pygame.font.SysFont("comic sans MS", 15, bold=True)
-        self.pos = pos
-        self.room_width = room_width
-        self.room_length = room_length
-        self.wall_width = wall_width
+class Hall(ClassRoom):
+    def __init__(self, hall_glowny, korytarz_do_sal):
+        self.hall_glowny = hall_glowny
+        self.korytarz_do_sal = korytarz_do_sal
+        self.nazwa = "korytarz parteru"
+        self.font = hall_glowny.font
+        self.pos = (korytarz_do_sal.pos[0], hall_glowny.pos[1])
+        self.room_width = hall_glowny.room_width + korytarz_do_sal.room_width
+        self.room_length = hall_glowny.room_length
+        self.wall_width = hall_glowny.wall_width
         self.skala_terenu = 10
         skala = self.skala_terenu
-        self.teren = pygame.Rect(pos[0]*skala, pos[1]*skala, room_width*skala, room_length*skala) # wirtualne wspolrzedne na mapie calosci
+        self.teren = pygame.Rect(self.pos[0]*skala, self.pos[1]*skala, self.room_width*skala, self.room_length*skala) # wirtualne wspolrzedne na mapie calosci
         self.rect_widoku = None  # wspolrzedne wyswietlane
-        self.color = color
+        self.color = hall_glowny.color
         self.skala_widoku = 1.0
-        self.drzwi = []
         self.polozenie_drzwi = []
         self.przelicz_sciany(self.pos, self.room_width, self.room_length)
         self.obszary_kwiatowe = {}  # slownik postaci {nr_oszaru: rect_obszaru}
         self.kwiaty = {}  # slownik postaci {nr_oszaru: obiekt_kwiat}
+        self.left_top_hall_wall = None
+        self.left_bottom_hall_wall = None
 
 
     def skala_widok_teren(self):
@@ -68,16 +75,13 @@ class ClassRoom(object):
         self.obszary_kwiatowe = obszary
 
     def daj_obszar_lotu_szaranczy(self):
-        return self.rect_widoku
+        return self.hall_glowny.rect_widoku
 
     def wylosuj_pozycje_startowa_szaranczy(self):
         rect = self.daj_obszar_lotu_szaranczy()
-        if self.widok_pionowy(): # widok pionowy sali to szarancze w dolnym wierszu
-            przesuniecie = random.randint(1, rect.width - 1)
-            pozycja_startowa = (rect.left + przesuniecie, rect.bottom - 60)
-        else:  # widok poziomy sali to szarancze w prawej kolumnie
-            przesuniecie = random.randint(1, rect.height - 1)
-            pozycja_startowa = (rect.right - 60, rect.top + przesuniecie)
+        # w hallu szarancze zawsze startuja w dolnym wierszu
+        przesuniecie = random.randint(1, rect.width - 1)
+        pozycja_startowa = (rect.left + przesuniecie, rect.bottom - 60)
         return pozycja_startowa
 
     def puste_obszary_kwiatowe(self):
@@ -137,7 +141,9 @@ class ClassRoom(object):
         raise Exception("zla nazwa sciany")
 
     def wszystkie_drzwi(self):
-        return self.drzwi
+        drzwi = self.hall_glowny.drzwi[:]
+        drzwi.extend(self.korytarz_do_sal.drzwi)
+        return drzwi
 
     def oblicz_rect_drzwi(self, door_location, door_delta, skala=1):
         door_delta = door_delta * skala
@@ -146,40 +152,11 @@ class ClassRoom(object):
         return rect
 
     def wstaw_drzwi(self, door, door_location):
-        door.ustaw_w_sali(sala=self)
-        self.drzwi.append(door)
-        wektor_polozenia = (door.rect.left - self.pos[0], door.rect.top - self.pos[1])
-        self.polozenie_drzwi.append((wektor_polozenia, door_location))
+        pass  # nie da sie wstawic drzwi, hall uzywa drzwi z parametrow konstruktora:  hall_glowny i korytarz_do_sal
 
     def przelicz_drzwi(self, skala_widoku):
-        (x_start, y_start) = self.daj_naroznik(ktory='lewy-gorny')
-        for idx, drzwi in enumerate(self.drzwi):
-            (wektor_polozenia, door_location) = self.polozenie_drzwi[idx]
-            wall = self.daj_sciane(nazwa_sciany=door_location)
-            pos_drzwi = [x_start + wektor_polozenia[0]*skala_widoku, y_start + wektor_polozenia[1]*skala_widoku]
-            if drzwi.rect_def.height > drzwi.rect_def.width:  # pionowe drzwi
-                width = self.wall_width + 4
-                height = drzwi.rect_def.height*skala_widoku
-                pos_drzwi[0] = wall.rect.left - 2  # korekta polozenia, dosuniecie drzwi "w sciane"
-            else:
-                width = drzwi.rect_def.width*skala_widoku
-                height = self.wall_width + 4
-                pos_drzwi[1] = wall.rect.top - 2 # korekta polozenia, dosuniecie drzwi "w sciane"
-            drzwi.rect = pygame.Rect(pos_drzwi[0], pos_drzwi[1], width, height)
-
-
-    def przelicz_sciany_wg_widoku(self):
-        self.left_wall = NewWall(self.rect_widoku.topleft,
-                                 self.wall_width, self.rect_widoku.height)
-
-        self.right_wall = NewWall((self.rect_widoku.left+self.rect_widoku.width-self.wall_width, self.rect_widoku.top),
-                                  self.wall_width, self.rect_widoku.height)
-
-        self.top_wall = NewWall((self.rect_widoku.left+self.wall_width, self.rect_widoku.top),
-                                self.rect_widoku.width-2*self.wall_width, self.wall_width)
-
-        self.bottom_wall = NewWall((self.rect_widoku.left+self.wall_width, self.rect_widoku.top+self.rect_widoku.height-self.wall_width),
-                                   self.rect_widoku.width-2*self.wall_width, self.wall_width)
+        self.hall_glowny.przelicz_drzwi(skala_widoku)
+        self.korytarz_do_sal.przelicz_drzwi(skala_widoku)
 
     def przelicz_sciany(self, pos, room_width, room_length):
         self.left_wall = NewWall((pos[0], pos[1]),
@@ -194,8 +171,23 @@ class ClassRoom(object):
         self.bottom_wall = NewWall((pos[0]+self.wall_width, pos[1]+room_length-self.wall_width),
                                    room_width-2*self.wall_width, self.wall_width)
 
+    def przelicz_sciany_styczne(self):
+        lewa_sciana_hallu = self.hall_glowny.daj_sciane('left_wall')
+        prawa_sciana_korytarz = self.korytarz_do_sal.daj_sciane('right_wall')
+        self.left_top_hall_wall = NewWall((lewa_sciana_hallu.pos[0], lewa_sciana_hallu.pos[1]),
+                                          self.wall_width, prawa_sciana_korytarz.pos[1] - lewa_sciana_hallu.pos[1])
+        y_sciany_dolnej = prawa_sciana_korytarz.pos[1] + prawa_sciana_korytarz.length
+        self.left_bottom_hall_wall = NewWall((lewa_sciana_hallu.pos[0], y_sciany_dolnej),
+                                             self.wall_width, lewa_sciana_hallu.pos[1] + lewa_sciana_hallu.length - y_sciany_dolnej)
+
     def walls(self):
-        return [self.left_wall, self.right_wall, self.top_wall, self.bottom_wall]
+        all_walls = [self.hall_glowny.right_wall, self.hall_glowny.top_wall, self.hall_glowny.bottom_wall]
+        if self.left_top_hall_wall is not None:
+            all_walls.append(self.left_top_hall_wall)
+        if self.left_bottom_hall_wall is not None:
+            all_walls.append(self.left_bottom_hall_wall)
+        all_walls.extend([self.korytarz_do_sal.top_wall, self.korytarz_do_sal.left_wall, self.korytarz_do_sal.bottom_wall])
+        return all_walls
 
     def skala_pozioma(self, docelowa_szerokosc):
         return docelowa_szerokosc / float(self.room_width)
@@ -204,60 +196,36 @@ class ClassRoom(object):
         return docelowa_dlugosc / float(self.room_length)
 
     def oblicz_rect_widoku(self, docelowa_szerokosc, docelowa_dlugosc):
-        skala_pion = self.skala_pionowa(docelowa_dlugosc)
-        skala_poziom = self.skala_pozioma(docelowa_szerokosc)
+        dy_korytarz_hall = self.korytarz_do_sal.pos[1] - self.hall_glowny.pos[1]
+        self.hall_glowny.oblicz_rect_widoku(docelowa_szerokosc, docelowa_dlugosc)
+        self.skala_widoku = self.hall_glowny.skala_widoku
+        self.rect_widoku = self.hall_glowny.rect_widoku # TODO - to moze byc inne
 
-        room_width_pion = self.room_width * skala_pion
-        room_length_pion = self.room_length * skala_pion
-        room_width_poziom = self.room_width * skala_poziom
-        room_length_poziom = self.room_length * skala_poziom
-
-        if (room_width_pion <= docelowa_szerokosc) and (room_length_pion <= docelowa_dlugosc):
-            self.skala_widoku = skala_pion
-            roznica_szerokosci = docelowa_szerokosc - room_width_pion
-            poz_x = roznica_szerokosci / 2
-            self.rect_widoku = pygame.Rect(poz_x, 0, room_width_pion, room_length_pion)
-        else:
-            self.skala_widoku = skala_poziom
-            roznica_dlugosci = docelowa_dlugosc - room_length_poziom
-            poz_y = roznica_dlugosci / 2
-            self.rect_widoku = pygame.Rect(0, poz_y, room_width_poziom, room_length_poziom)
-        self.oblicz_obszary_kwiatowe()
+        #TODO oblicz self.korytarz_do_sal
+        korytarz_width = self.korytarz_do_sal.room_width * self.skala_widoku
+        korytarz_length = self.korytarz_do_sal.room_length * self.skala_widoku
+        self.korytarz_do_sal.rect_widoku = pygame.Rect(self.hall_glowny.rect_widoku.left - korytarz_width + 1, dy_korytarz_hall*self.skala_widoku,
+                                                       korytarz_width, korytarz_length)
+        self.hall_glowny.oblicz_obszary_kwiatowe()
+        self.obszary_kwiatowe = self.hall_glowny.obszary_kwiatowe
 
     def przeskaluj(self, docelowa_szerokosc, docelowa_dlugosc):
-        skala_pion = self.skala_pionowa(docelowa_dlugosc)
-        skala_poziom = self.skala_pozioma(docelowa_szerokosc)
-
-        room_width_pion = self.room_width * skala_pion
-        room_length_pion = self.room_length * skala_pion
-        room_width_poziom = self.room_width * skala_poziom
-        room_length_poziom = self.room_length * skala_poziom
-
-        if (room_width_pion <= docelowa_szerokosc) and (room_length_pion <= docelowa_dlugosc):
-            self.skala_widoku = skala_pion
-            roznica_szerokosci = docelowa_szerokosc - room_width_pion
-            poz_x = roznica_szerokosci / 2
-            self.przelicz_sciany((poz_x,0), room_width_pion, room_length_pion)
-        else:
-            self.skala_widoku = skala_poziom
-            roznica_dlugosci = docelowa_dlugosc - room_length_poziom
-            poz_y = roznica_dlugosci / 2
-            self.przelicz_sciany((0,poz_y), room_width_poziom, room_length_poziom)
-        self.przelicz_drzwi(self.skala_widoku)
-
-        # self.obszary_kwiatowe = self.oblicz_obszary_kwiatowe()
-
-
-    def draw_podloga(self, screen):
-        pygame.draw.rect(screen, (0,0,0), self.rect_widoku)
+        self.hall_glowny.przeskaluj(docelowa_szerokosc, docelowa_dlugosc)
+        #TODO przeskaluj self.korytarz_do_sal
+        self.korytarz_do_sal.przelicz_sciany_wg_widoku()
+        self.korytarz_do_sal.przelicz_drzwi(self.skala_widoku)
+        self.przelicz_sciany_styczne()
 
     def draw(self, screen):
-        self.draw_podloga(screen)
+        self.hall_glowny.draw_podloga(screen)
+        self.korytarz_do_sal.draw_podloga(screen)
         for wall in self.walls():
             wall.draw(screen)
         for kwiat in self.kwiaty.values():
             kwiat.draw(screen)
-        for drzwi in self.drzwi:
+        for drzwi in self.hall_glowny.drzwi:
+            drzwi.draw(screen)
+        for drzwi in self.korytarz_do_sal.drzwi:
             drzwi.draw(screen)
         # for nr_obszaru in self.obszary_kwiatowe:
         #     rect = self.obszary_kwiatowe[nr_obszaru]

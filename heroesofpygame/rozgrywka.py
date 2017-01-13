@@ -12,7 +12,6 @@ from heroesofpygame.dawid import Dawid
 from heroesofpygame.szarancza import Szarancza
 
 from heroesofpygame.parter import Parter
-from heroesofpygame.Pietro import Pietro
 from heroesofpygame.mapa import Mapa
 
 from heroesofpygame.udp_broadcast_client_server import NetworkConnection
@@ -64,6 +63,9 @@ class Rozgrywka(StanGry):
         # sala = self.parter.korytarz_szatni
         # sala = self.parter.korytarz_parteru
         sala = self.parter.hall_glowny  # wejscie glowne jest w hallu glownym
+        sala = self.parter.hall_parteru  # wejscie glowne jest w hallu glownym
+        # sala = self.parter.korytarz_parteru
+        # sala = self.parter.sala_gimn
         return sala
 
     def przeskaluj_wszystkie_sale(self, szerokosc, wysokosc):
@@ -76,6 +78,8 @@ class Rozgrywka(StanGry):
         for player_name in self.players:
             all_objects.append(self.players[player_name])
         all_objects.append(self.strzal)
+        all_objects.extend(self.aktywna_sala.walls())
+        all_objects.extend(self.aktywna_sala.wszystkie_drzwi())
         return all_objects
 
     def sprawdz_strzal(self, x, y, kierunek):
@@ -220,8 +224,8 @@ class Rozgrywka(StanGry):
     def zainicjuj_sale(self):
         self.zaatakowane_sale = self.wylosuj_sale_zaatakowane()
         self.aktywna_sala = self.ustaw_sale_startowa()
-        self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
         self.przeskaluj_wszystkie_sale(self.szerokosc, self.wysokosc)
+        self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
         self.mapa.ustaw_aktywna_sale(self.aktywna_sala)
         
     def on_entry(self):
@@ -236,8 +240,6 @@ class Rozgrywka(StanGry):
         self.zainicjuj_gracza(self.aktywna_sala)
 
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
-        self.all_objects.extend(self.aktywna_sala.walls())
-        self.all_objects.extend(self.aktywna_sala.drzwi)
 
         statusbar.resetuj_wynik(self.ilosc_wszystkich_kwiatow(), self.ilosc_wszystkich_szaranczy())
         statusbar.daj_status().nazwa_aktualnej_sali = self.aktywna_sala.nazwa
@@ -321,8 +323,6 @@ class Rozgrywka(StanGry):
                 #TODO szarancze i kwiaty po zmianie sali
 
                 self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
-                self.all_objects.extend(self.aktywna_sala.walls())
-                self.all_objects.extend(self.aktywna_sala.drzwi)
 
                 statusbar.daj_status().nazwa_aktualnej_sali = self.aktywna_sala.nazwa
         return "rozgrywka"
