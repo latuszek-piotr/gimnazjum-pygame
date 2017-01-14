@@ -23,21 +23,6 @@ class Player(Pixel):
     def __str__(self):
         return "%s(x=%.2f, y=%.2f, dir=%s)" % (self.nazwa, self.real_x, self.real_y, self.direction)
 
-    def serialize_for_network(self, action='move'):
-        # Serialize only what is important to send over network.
-        network_record = "x=%s, y=%s, name=%s, action=%s" % (self.rect.x, self.rect.y, self.nazwa, action)
-        return network_record
-
-    @staticmethod
-    def unpack_network_record(network_record):
-        parts = network_record.split(',')
-        #print parts
-        x = int(parts[0].split('=')[1])
-        y = int(parts[1].split('=')[1])
-        name = parts[2].split('=')[1]
-        action = parts[3].split('=')[1]
-        return ((x, y), name, action)
-
     def move_at_direction(self, distance, all_objects_thay_may_colide):
         dx, dy = przesuniecie_w_kierunku(distance, self.direction)
         self.move(dx, dy, all_objects_thay_may_colide)

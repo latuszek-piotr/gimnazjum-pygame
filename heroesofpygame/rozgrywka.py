@@ -14,8 +14,6 @@ from heroesofpygame.szarancza import Szarancza
 from heroesofpygame.parter import Parter
 from heroesofpygame.mapa import Mapa
 
-from heroesofpygame.udp_broadcast_client_server import NetworkConnection
-
 from heroesofpygame.stan_gry import StanGry
 from heroesofpygame import statusbar
 from heroesofpygame.userevents import USEREVENT_PASS_DOOR
@@ -34,7 +32,6 @@ class Rozgrywka(StanGry):
                         "Piotr":  Piotr(),
                        }
         self.active_player = self.players[active_player_name]
-        self.net_connection = NetworkConnection(self.active_player.nazwa)
         # self.player1 = self.players["Wiktor"]
         # self.player2 = self.players["Dominik"]
         # self.player3 = self.players["Dawid"]
@@ -121,37 +118,6 @@ class Rozgrywka(StanGry):
             moved = False  # no move
         if moved:
             active_player.pos_teren = self.aktywna_sala.wylicz_pozycje_w_terenie(active_player.rect.center)
-            self.broadcast_active_player(active_player)
-
-    def broadcast_active_player(self, active_player, action='move', await_confirmation=False):
-        if self.net_connection != None:
-            network_record = active_player.serialize_for_network(action=action)
-            self.net_connection.broadcast(data=network_record, await_confirmation=await_confirmation)
-
-    def handle_remote_player(self):
-        network_data = self.net_connection.receive()
-        # x=363, y=231, name=Wiktor
-
-        if network_data is not None:
-            (pos, name, action) = Player.unpack_network_record(network_data)
-            if name != self.active_player.__class__.__name__:
-                # print "network: %s, %s, %s" % (pos, name, action)
-                if action == 'move':
-                    if name not in self.remote_players:
-                        joining_player = self.players[name]
-                        self.remote_players[name] = joining_player
-                    moved_player = self.remote_players[name]
-                    moved_player.move_to(pos)
-                elif action == 'join':
-                    joining_player = self.players[name]
-                    self.remote_players[name] = joining_player
-                elif action == 'leave':
-                    leaving_player_name = name
-                    del self.remote_players[leaving_player_name]
-
-    def draw_remote(self, screen, remote_players):
-        for player in remote_players.values():
-            player.draw(screen)
 
     def zainicjuj_kwiaty(self, sale):
         self.wszystkie_kwiaty = []
@@ -212,7 +178,6 @@ class Rozgrywka(StanGry):
         self.active_player.pos_teren = sala.wylicz_pozycje_w_terenie(pozycja_startowa_gracza)
         self.active_player.mood = 'happy'
         self.active_player.direction = 0
-        # self.broadcast_active_player(active_player, self.net_connection, action='join', await_confirmation=True)
         self.mapa.ustaw_ilosc_graczy(ilosc_wszystkich_graczy=1)
 
     def zainicjuj_sale(self):
@@ -244,8 +209,6 @@ class Rozgrywka(StanGry):
         statusbar.daj_status().nazwa_aktualnej_sali = ''
 
     def on_clock_tick(self):
-        self.handle_remote_player()
-
         # Move the player if an arrow key is pressed
         self.move_player_using_keyboard(pygame.K_LEFT, pygame.K_RIGHT, pygame.K_UP, pygame.K_DOWN, self.active_player, self.all_objects)
         # rozgrywka.move_player_using_keyboard(pygame.K_a, pygame.K_d, pygame.K_w, pygame.K_s, player2, rozgrywka.all_objects)
@@ -325,7 +288,6 @@ class Rozgrywka(StanGry):
         screen.fill((80,80,80))
         self.aktywna_sala.draw(screen)
         self.active_player.draw(screen)
-        self.draw_remote(screen, self.remote_players)
         # # player1.draw(screen)
         # # player2.draw(screen)
         # # player3.draw(screen)

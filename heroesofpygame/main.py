@@ -92,10 +92,7 @@ while running:
         obecny_stan = zmien_stan_gry(obecny_stan, nowy_stan_gry)
         stan_gry = nowy_stan_gry
 
-
     ################################### Rysowanie planszy gry
 
     obecny_stan.draw(screen)
     pygame.display.flip()
-
-#rozgrywka.broadcast_active_player(rozgrywka.active_player, rozgrywka.net_connection, action='leave')
