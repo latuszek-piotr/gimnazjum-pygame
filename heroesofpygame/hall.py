@@ -65,7 +65,8 @@ class Hall(ClassRoom):
     def daj_losowy_niezjedzony_kwiat(self):
         if self.kwiaty:
             niezjedzone = [kwiat for kwiat in self.kwiaty.values() if not kwiat.zjedzony]
-            return random.choice(niezjedzone)
+            if niezjedzone:
+                return random.choice(niezjedzone)
         return None
 
     def usun_wszystkie_kwiaty(self):

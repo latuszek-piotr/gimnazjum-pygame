@@ -155,8 +155,10 @@ class ClassRoom(object):
         rect = wall.oblicz_rect_drzwi(door_delta=door_delta, skala=skala)
         return rect
 
-    def wstaw_drzwi(self, door, door_location):
-        door.ustaw_w_sali(sala=self)
+    def wstaw_drzwi(self, door, door_location, w_sali=None):
+        if w_sali is None:
+            w_sali = self
+        door.ustaw_w_sali(sala=w_sali)
         self.drzwi.append(door)
         wektor_polozenia = (door.rect.left - self.pos[0], door.rect.top - self.pos[1])
         self.polozenie_drzwi.append((wektor_polozenia, door_location))
