@@ -112,5 +112,9 @@ class Player(Pixel):
     def _draw_moving_direction(self, screen):
         direction_length = self.rect.right - self.rect.left
         dx, dy = przesuniecie_w_kierunku(direction_length, self.direction)
-        # print "Moving object area: {}, moving direction: {} degrees".format(self.rect, self.direction)
-        pygame.draw.lines(screen, self.direction_color, False, [self.rect.center, (self.rect.centerx + dx, self.rect.centery + dy)], 1)
+        arrow_dx1, arrow_dy1 = przesuniecie_w_kierunku(7, self.direction+150)
+        arrow_dx2, arrow_dy2 = przesuniecie_w_kierunku(7, self.direction-150)
+        koniec_strzaly = (self.rect.centerx + dx, self.rect.centery + dy)
+        grot_punkt1 = (koniec_strzaly[0] + arrow_dx1, koniec_strzaly[1] + arrow_dy1)
+        grot_punkt2 = (koniec_strzaly[0] + arrow_dx2, koniec_strzaly[1] + arrow_dy2)
+        pygame.draw.lines(screen, self.direction_color, False, [self.rect.center, koniec_strzaly, grot_punkt1, koniec_strzaly, grot_punkt2], 1)
