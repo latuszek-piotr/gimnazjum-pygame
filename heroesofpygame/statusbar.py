@@ -40,20 +40,20 @@ class StatusBar(object):
         self.pos = pos
         self.size = size
         self.rect = pygame.Rect(pos[0], pos[1], self.size[0], self.size[1])
-        self.rect_lokalizacji = pygame.Rect(pos[0]+10, pos[1]+10, 400, self.size[1]-20)
+        self.rect_lokalizacji = pygame.Rect(pos[0]+10, pos[1]+10, 300, self.size[1]-20)
         self.font = pygame.font.SysFont("comic sans MS", 15, bold=True)
         self.ile_kwiatow = daj_status().ile_kwiatow
         self.ile_szaranczy = daj_status().ile_szaranczy
         self.pionowy = pionowy
-        rozmiar_obszaru = self.rect_lokalizacji.height
-        kwiat_start_pos = (self.rect_lokalizacji.right+15, self.rect_lokalizacji.top)
+        rozmiar_obszaru = self.rect_lokalizacji.height / 1.7
+        kwiat_start_pos = (self.rect_lokalizacji.right+20, self.rect_lokalizacji.top)
         self.obszary_kwiatow = self.oblicz_obszary_statusu(kwiat_start_pos, rozmiar_obszaru, self.ile_kwiatow, pionowy)
         if pionowy:
             bottomleft = self.obszary_kwiatow[-1].bottomleft
             szarancza_start_pos = (bottomleft[0], bottomleft[1] + 10)
         else:
             topright = self.obszary_kwiatow[-1].topright
-            szarancza_start_pos = (topright[0] + 10, topright[1])
+            szarancza_start_pos = (self.rect_lokalizacji.right+20, self.rect_lokalizacji.top+self.rect_lokalizacji.height/2)
         self.obszary_szaranczy = self.oblicz_obszary_statusu(szarancza_start_pos, rozmiar_obszaru, self.ile_szaranczy, pionowy)
         self.szarancza_img = pygame.transform.scale(pygame.image.load(StatusBar.szarancza).convert_alpha(), (int(rozmiar_obszaru*1.9*0.4), int(rozmiar_obszaru*0.4)))
         self.kwiat_img = pygame.transform.scale(pygame.image.load(StatusBar.kwiat).convert_alpha(), (int(rozmiar_obszaru*0.8), int(rozmiar_obszaru*0.8)))
