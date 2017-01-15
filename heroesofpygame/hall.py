@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 import pygame
 import random
+import os
 from heroesofpygame.wall import NewWall
 from heroesofpygame.flower import Flower
 from heroesofpygame.sala import ClassRoom
@@ -9,6 +10,8 @@ from heroesofpygame.sala import ClassRoom
 # self.hall_glowny = ClassRoom(nazwa=u"hall główny parteru", pos=(168,135), room_width=67, room_length=120)
 
 class Hall(ClassRoom):
+    hall_parteru_tlo = os.path.join('grafika', 'sale', 'hall_parteru_tlo.png')
+
     def __init__(self, hall_glowny, korytarz_do_sal):
         self.hall_glowny = hall_glowny
         self.korytarz_do_sal = korytarz_do_sal
@@ -30,6 +33,7 @@ class Hall(ClassRoom):
         self.kwiaty = {}  # slownik postaci {nr_oszaru: obiekt_kwiat}
         self.left_top_hall_wall = None
         self.left_bottom_hall_wall = None
+        self.hall_tlo = None
 
     def daj_obrys_sali(self, skala):
         obszar_hallu = pygame.Rect(self.hall_glowny.pos[0]*skala, self.hall_glowny.pos[1]*skala,
@@ -153,6 +157,8 @@ class Hall(ClassRoom):
         self.hall_glowny.oblicz_obszary_kwiatowe()
         self.obszary_kwiatowe = self.hall_glowny.obszary_kwiatowe
         self.rect_widoku = self.oblicz_rect_widoku_ze_skladowych_sal()
+        self.hall_tlo = pygame.transform.scale(pygame.image.load(Hall.hall_parteru_tlo).convert_alpha(),
+                                               (self.rect_widoku.width, self.rect_widoku.height))
 
     def oblicz_rect_widoku_ze_skladowych_sal(self):
         return pygame.Rect(self.korytarz_do_sal.rect_widoku.left, self.hall_glowny.rect_widoku.top,
@@ -169,8 +175,10 @@ class Hall(ClassRoom):
     def draw(self, screen):
         self.hall_glowny.draw_podloga(screen)
         self.korytarz_do_sal.draw_podloga(screen)
+        screen.blit(self.hall_tlo, [self.rect_widoku.x, self.rect_widoku.y])
+
         for wall in self.walls():
-            wall.draw(screen)
+            wall.draw(screen, color=(0,0,0))
         for kwiat in self.kwiaty.values():
             kwiat.draw(screen)
         for drzwi in self.hall_glowny.drzwi:

@@ -32,8 +32,10 @@ class NewWall(Pixel):
         else:
             return False
 
-    def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.rect)
+    def draw(self, screen, color=None):
+        if color is None:
+            color = self.color
+        pygame.draw.rect(screen, color, self.rect)
 
         for door in self.doors:
             door.draw(screen)

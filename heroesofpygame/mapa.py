@@ -89,7 +89,7 @@ class Mapa(object):
         for sala_obrys in self.obrysy_podgladu_sal:
             self.draw_obrys(screen, sala_obrys)
         if self.obrys_aktywnej_sali:
-            self.draw_obrys(screen, self.obrys_aktywnej_sali, color=(75, 5, 205), grubosc_linii=2)
+            self.draw_obrys(screen, self.obrys_aktywnej_sali, color=(255,255,0), grubosc_linii=2)
         self.draw_pozycje_obiektow(screen, color=(255,0,0), game_objects=self.pos_szaranczy)
         self.draw_pozycje_obiektow(screen, color=(0,255,0), game_objects=self.pos_kwiatow)
         self.draw_pozycje_obiektow(screen, color=(255,255,0), game_objects=self.pos_graczy)
