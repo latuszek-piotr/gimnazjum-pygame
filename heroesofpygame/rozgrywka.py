@@ -140,9 +140,11 @@ class Rozgrywka(StanGry):
         return len(zjedzone)
 
     def reinicjuj_pojedyncza_szarancze(self, szarancza, sala):
-        pozycja_startowa_szaranczy = sala.wylosuj_pozycje_startowa_szaranczy()
-        szarancza.pos = pozycja_startowa_szaranczy
-        szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
+        niezjedzony_kwiat = sala.daj_losowy_niezjedzony_kwiat()
+        if niezjedzony_kwiat:
+            pozycja_startowa_szaranczy = sala.wylosuj_pozycje_startowa_szaranczy()
+            szarancza.pos = pozycja_startowa_szaranczy
+            szarancza.start(niezjedzony_kwiat)
 
     def zainicjuj_szarancze(self, sale):
         self.aktywne_szarancze = []
