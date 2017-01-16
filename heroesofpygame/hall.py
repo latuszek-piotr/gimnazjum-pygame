@@ -185,6 +185,6 @@ class Hall(ClassRoom):
             drzwi.draw(screen)
         for drzwi in self.korytarz_do_sal.drzwi:
             drzwi.draw(screen)
-        # for nr_obszaru in self.obszary_kwiatowe:
-        #     rect = self.obszary_kwiatowe[nr_obszaru]
-        #     pygame.draw.lines(screen, ((nr_obszaru*10)%255, (nr_obszaru*70)%255, (nr_obszaru*30)%255), False, [rect.topleft, rect.bottomleft, rect.bottomright, rect.topright, rect.topleft], 1)
+        for szarancza in self.szarancze_w_sali:
+            if szarancza.is_started():
+                szarancza.draw(screen)

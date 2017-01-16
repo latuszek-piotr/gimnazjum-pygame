@@ -146,6 +146,7 @@ class Rozgrywka(StanGry):
 
     def zainicjuj_szarancze(self, sala):
         self.aktywne_szarancze = []
+        sala.usun_wszystkie_szarancze()
         ilosc_szaranczy = random.randint(1, 11)
         max_ilosc_sal = len(self.parter.sale_do_losowania())
         ilosc_sal_zaatakowanych = random.randint(1, int(max_ilosc_sal*0.75))
@@ -157,7 +158,8 @@ class Rozgrywka(StanGry):
             szarancza = Szarancza(pozycja_startowa_szaranczy)
             szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
             self.aktywne_szarancze.append(szarancza)
-        self.mapa.ustaw_ilosc_szaranczy(self.ilosc_wszystkich_szaranczy())
+            sala.wstaw_szarancze(szarancza)
+        self.mapa.ustaw_szarancze(self.aktywne_szarancze)
 
     def ilosc_wszystkich_szaranczy(self):
         return len(self.aktywne_szarancze)
@@ -181,8 +183,9 @@ class Rozgrywka(StanGry):
         self.mapa.ustaw_ilosc_graczy(ilosc_wszystkich_graczy=1)
 
     def zainicjuj_sale(self):
-        self.zaatakowane_sale = self.wylosuj_sale_zaatakowane()
         self.aktywna_sala = self.ustaw_sale_startowa()
+        self.zaatakowane_sale = self.wylosuj_sale_zaatakowane()
+        self.zaatakowane_sale = [self.aktywna_sala]
         self.przeskaluj_wszystkie_sale(self.szerokosc, self.wysokosc)
         self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
         self.mapa.ustaw_aktywna_sale(self.aktywna_sala)
@@ -224,8 +227,10 @@ class Rozgrywka(StanGry):
 
         for idx, szarancza in enumerate(self.aktywne_szarancze):
             szarancza.update_pozycji_i_kolizji(self.all_objects)
-            szarancza.pos_teren = self.aktywna_sala.wylicz_pozycje_w_terenie(szarancza.rect.center)
-            self.mapa.update_pozycji_szaranczy(idx, szarancza)
+        for sala in self.zaatakowane_sale:
+            for szarancza in sala.szarancze_w_sali:
+                szarancza.pos_teren = sala.wylicz_pozycje_w_terenie(szarancza.rect.center)
+                self.mapa.update_pozycji_szaranczy(szarancza)
 
         statusbar.daj_status().zjedzone_kwiaty = self.ilosc_zjedzonych_kwiatow()
         statusbar.daj_status().zabite_szarancze = self.ilosc_zabitych_szaranczy()
@@ -292,9 +297,7 @@ class Rozgrywka(StanGry):
         # # player2.draw(screen)
         # # player3.draw(screen)
         # # player4.draw(screen)
-        for szarancza in self.aktywne_szarancze:
-            if szarancza.is_started():
-                szarancza.draw(screen)
+
         self.strzal.draw(screen)
         if self.podglad_mapy:
             self.mapa.draw(screen)

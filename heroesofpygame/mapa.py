@@ -11,7 +11,7 @@ class Mapa(object):
         self.indeksy_sal = {sala.nazwa: idx for (idx, sala) in enumerate(sale)}
         self.obszar_mapy = self.obszar_obejmujacy_wszystkie_sale(self.obszary_sal)
         self.obrys_aktywnej_sali = None
-        self.pos_szaranczy = []
+        self.dict_pos_szaranczy = {}
         self.pos_kwiatow = []
         self.pos_graczy = []
 
@@ -33,8 +33,8 @@ class Mapa(object):
         idx_sali = self.indeksy_sal[sala.nazwa]
         self.obrys_aktywnej_sali = self.obrysy_podgladu_sal[idx_sali]
 
-    def ustaw_ilosc_szaranczy(self, ilosc_wszystkich_szaranczy):
-        self.pos_szaranczy = [None for szarancza in range(ilosc_wszystkich_szaranczy)]
+    def ustaw_szarancze(self, wszystkie_szarancze):
+        self.dict_pos_szaranczy = {id(szarancza): None for szarancza in wszystkie_szarancze}
 
     def ustaw_ilosc_kwiatow(self, ilosc_wszystkich_kwiatow):
         self.pos_kwiatow = [None for kwiaty in range(ilosc_wszystkich_kwiatow)]
@@ -42,14 +42,14 @@ class Mapa(object):
     def ustaw_ilosc_graczy(self, ilosc_wszystkich_graczy):
         self.pos_graczy = [None for gracz in range(ilosc_wszystkich_graczy)]
 
-    def update_pozycji_szaranczy(self, idx_szaranczy, szarancza):
+    def update_pozycji_szaranczy(self, szarancza):
         if not self.obrys_aktywnej_sali:
             return
         if (szarancza.stan == "martwa") or (szarancza.stan == "anihilowana"):
-            self.pos_szaranczy[idx_szaranczy] = None
+            self.dict_pos_szaranczy[id(szarancza)] = None
             return
         rect = self.oblicz_rect_pozycji_w_terenie(game_object=szarancza)
-        self.pos_szaranczy[idx_szaranczy] = rect
+        self.dict_pos_szaranczy[id(szarancza)] = rect
 
     def update_pozycji_kwiatu(self, idx_kwiatu, kwiat, sala):
         if kwiat.zjedzony:
@@ -90,6 +90,6 @@ class Mapa(object):
             self.draw_obrys(screen, sala_obrys)
         if self.obrys_aktywnej_sali:
             self.draw_obrys(screen, self.obrys_aktywnej_sali, color=(255,255,0), grubosc_linii=2)
-        self.draw_pozycje_obiektow(screen, color=(255,0,0), game_objects=self.pos_szaranczy)
+        self.draw_pozycje_obiektow(screen, color=(255,0,0), game_objects=self.dict_pos_szaranczy.values())
         self.draw_pozycje_obiektow(screen, color=(0,255,0), game_objects=self.pos_kwiatow)
         self.draw_pozycje_obiektow(screen, color=(255,255,0), game_objects=self.pos_graczy)

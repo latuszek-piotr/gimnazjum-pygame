@@ -23,6 +23,7 @@ class ClassRoom(object):
         self.przelicz_sciany(self.pos, self.room_width, self.room_length)
         self.obszary_kwiatowe = {}  # slownik postaci {nr_oszaru: rect_obszaru}
         self.kwiaty = {}  # slownik postaci {nr_oszaru: obiekt_kwiat}
+        self.szarancze_w_sali = []
 
     def skala_widok_teren(self):
         if self.rect_widoku is None:
@@ -83,6 +84,12 @@ class ClassRoom(object):
             przesuniecie = random.randint(1, rect.height - 1)
             pozycja_startowa = (rect.right - 60, rect.top + przesuniecie)
         return pozycja_startowa
+
+    def usun_wszystkie_szarancze(self):
+        self.szarancze_w_sali = []
+
+    def wstaw_szarancze(self, szarancza):
+        self.szarancze_w_sali.append(szarancza)
 
     def wylosuj_pozycje_startowa_gracza(self):
         przesuniecie = random.randint(10, self.rect_widoku.width - 60)
@@ -268,6 +275,9 @@ class ClassRoom(object):
             kwiat.draw(screen)
         for drzwi in self.drzwi:
             drzwi.draw(screen)
+        for szarancza in self.szarancze_w_sali:
+            if szarancza.is_started():
+                szarancza.draw(screen)
         # for nr_obszaru in self.obszary_kwiatowe:
         #     rect = self.obszary_kwiatowe[nr_obszaru]
         #     pygame.draw.lines(screen, ((nr_obszaru*10)%255, (nr_obszaru*70)%255, (nr_obszaru*30)%255), False, [rect.topleft, rect.bottomleft, rect.bottomright, rect.topright, rect.topleft], 1)
