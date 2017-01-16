@@ -157,10 +157,14 @@ class Rozgrywka(StanGry):
             for nr in range(ilosc_szaranczy_na_sale):
                 pozycja_startowa_szaranczy = sala.wylosuj_pozycje_startowa_szaranczy()
                 szarancza = Szarancza(pozycja_startowa_szaranczy)
-                szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
+                # szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
                 self.aktywne_szarancze.append(szarancza)
                 sala.wstaw_szarancze(szarancza)
         self.mapa.ustaw_szarancze(self.aktywne_szarancze)
+
+    def wystartuj_szarancze_w_aktywnej_sali(self, sala):
+        for szarancza in sala.szarancze_w_sali:
+            szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
 
     def ilosc_wszystkich_szaranczy(self):
         return len(self.aktywne_szarancze)
@@ -197,6 +201,7 @@ class Rozgrywka(StanGry):
         self.zainicjuj_sale()
         self.zainicjuj_kwiaty(self.zaatakowane_sale)
         self.zainicjuj_szarancze(self.zaatakowane_sale)
+        self.wystartuj_szarancze_w_aktywnej_sali(self.aktywna_sala)
         self.zainicjuj_gracza(self.aktywna_sala)
 
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
@@ -279,8 +284,7 @@ class Rozgrywka(StanGry):
                 self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
                 self.wysun_gracza_za_drzwi(self.active_player, move_direction, door)
                 self.mapa.ustaw_aktywna_sale(self.aktywna_sala)
-
-                #TODO szarancze i kwiaty po zmianie sali
+                self.wystartuj_szarancze_w_aktywnej_sali(self.aktywna_sala)
 
                 self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
 

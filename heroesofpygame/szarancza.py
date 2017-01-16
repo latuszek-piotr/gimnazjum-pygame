@@ -32,7 +32,7 @@ class Szarancza(Player):
         self.czas_machniecia_skrzydel = 0.1
         self.odleglosc_do_kwiatu = {'deltaX':0, 'deltaY':0}
         self.kwiat_docelowy = None
-        self.stan = "lecaca"  # mozliwe wartosci: "lecaca", "stojaca", "martwa", "anihilowana"
+        self.stan = "oczekujaca"  # mozliwe wartosci: "oczekujaca", "lecaca", "stojaca", "martwa", "anihilowana"
         self.czas_trafienia = None
 
     def is_started(self):
@@ -50,7 +50,7 @@ class Szarancza(Player):
         self.stan = "lecaca"
 
     def update_pozycji_i_kolizji(self, all_objects_thay_may_colide):
-        if self.stan == "anihilowana":
+        if (self.stan == "anihilowana") or (self.stan == "oczekujaca"):
             return None
         if self.stan == "martwa":
             now = time.time()
@@ -87,7 +87,7 @@ class Szarancza(Player):
             return self.pos
         now = time.time()
         time_delta = now - self.start_time
-        if time_delta < self.czas_dojscia / 2.0:
+        if time_delta < self.czas_dojscia / 1.0:
             pos_x = (self.odleglosc_do_kwiatu['deltaX'] * time_delta / self.czas_dojscia) + self.start_pos[0]
             pos_y = (self.odleglosc_do_kwiatu['deltaY'] * time_delta / self.czas_dojscia) + self.start_pos[1]
             self.pos = (pos_x, pos_y)
@@ -99,7 +99,7 @@ class Szarancza(Player):
         return self.pos
 
     def ktory_obraz(self):
-        if self.stan == "stojaca":
+        if (self.stan == "stojaca") or (self.stan == "oczekujaca"):
             return 3  # Szarancza.stoi
         elif self.stan == "martwa":
             return 4  # odwrocona Szarancza.stoi  # TODO zamienic na zweglona
@@ -115,7 +115,6 @@ class Szarancza(Player):
         if self.stan == "anihilowana":
             return
         # Copy image to screen:
-        # self.biezaca_pozycja()
         image_index = self.ktory_obraz()
         (image, (delta_x, delta_y)) = self.images[image_index]
         pos = (self.pos[0] - delta_x, self.pos[1] + delta_y)
