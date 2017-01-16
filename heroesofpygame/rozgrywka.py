@@ -50,7 +50,7 @@ class Rozgrywka(StanGry):
     def wylosuj_sale_zaatakowane(self):
         sale_mozliwe_do_zaatakowania = self.parter.sale_do_losowania()
         max_ilosc_sal = len(sale_mozliwe_do_zaatakowania)
-        ilosc_sal_zaatakowanych = random.randint(1, int(max_ilosc_sal*0.75))
+        ilosc_sal_zaatakowanych = random.randint(1, int(max_ilosc_sal*0.5))
         zaatakowane_sale = random.sample(sale_mozliwe_do_zaatakowania,  ilosc_sal_zaatakowanych)
         return zaatakowane_sale
     
@@ -144,21 +144,20 @@ class Rozgrywka(StanGry):
         szarancza.pos = pozycja_startowa_szaranczy
         szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
 
-    def zainicjuj_szarancze(self, sala):
+    def zainicjuj_szarancze(self, sale):
         self.aktywne_szarancze = []
-        sala.usun_wszystkie_szarancze()
-        ilosc_szaranczy = random.randint(1, 11)
-        max_ilosc_sal = len(self.parter.sale_do_losowania())
-        ilosc_sal_zaatakowanych = random.randint(1, int(max_ilosc_sal*0.75))
-        zaatakowane_sale = random.sample([1, 2, 3, 4, 5],  3)
-        if ilosc_szaranczy < ilosc_sal_zaatakowanych:
-            ilosc_sal_zaatakowanych = ilosc_szaranczy
-        for nr in range(ilosc_szaranczy):
-            pozycja_startowa_szaranczy = sala.wylosuj_pozycje_startowa_szaranczy()
-            szarancza = Szarancza(pozycja_startowa_szaranczy)
-            szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
-            self.aktywne_szarancze.append(szarancza)
-            sala.wstaw_szarancze(szarancza)
+        ilosc_sal = len(sale)
+        max_ilosc_szaranczy = ilosc_sal * 4
+        # ilosc_szaranczy = random.randint(1, max_ilosc_szaranczy)
+        for sala in sale:
+            sala.usun_wszystkie_szarancze()
+            ilosc_szaranczy_na_sale = random.randint(1, 4)
+            for nr in range(ilosc_szaranczy_na_sale):
+                pozycja_startowa_szaranczy = sala.wylosuj_pozycje_startowa_szaranczy()
+                szarancza = Szarancza(pozycja_startowa_szaranczy)
+                szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
+                self.aktywne_szarancze.append(szarancza)
+                sala.wstaw_szarancze(szarancza)
         self.mapa.ustaw_szarancze(self.aktywne_szarancze)
 
     def ilosc_wszystkich_szaranczy(self):
@@ -185,7 +184,8 @@ class Rozgrywka(StanGry):
     def zainicjuj_sale(self):
         self.aktywna_sala = self.ustaw_sale_startowa()
         self.zaatakowane_sale = self.wylosuj_sale_zaatakowane()
-        self.zaatakowane_sale = [self.aktywna_sala]
+        if self.aktywna_sala not in self.zaatakowane_sale:
+            self.zaatakowane_sale.append(self.aktywna_sala)
         self.przeskaluj_wszystkie_sale(self.szerokosc, self.wysokosc)
         self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
         self.mapa.ustaw_aktywna_sale(self.aktywna_sala)
@@ -193,12 +193,8 @@ class Rozgrywka(StanGry):
     def on_entry(self):
         super(Rozgrywka, self).on_entry()
         self.zainicjuj_sale()
-        sale = self.zaatakowane_sale[:]
-        sale.append(self.aktywna_sala)
-        # sale = [self.aktywna_sala, self.parter.sekretariat]
-        # sale = [self.aktywna_sala]
-        self.zainicjuj_kwiaty(sale)
-        self.zainicjuj_szarancze(self.aktywna_sala)
+        self.zainicjuj_kwiaty(self.zaatakowane_sale)
+        self.zainicjuj_szarancze(self.zaatakowane_sale)
         self.zainicjuj_gracza(self.aktywna_sala)
 
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
