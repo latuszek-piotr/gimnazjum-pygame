@@ -84,7 +84,7 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
         self.osiem_a.wstaw_drzwi(drzwi_osiem_a_osiem, door_location='right_wall')
         self.osiem_a.wstaw_drzwi(drzwi_osiem_a_archiwum, door_location='right_wall')
 
-        self.osiem = ClassRoom(nazwa="sala 8", pos=(40,181), room_width=46, room_length=37)
+        self.osiem = ClassRoom(nazwa="sala 8", pos=(40,181), room_width=46, room_length=37, tlo="sala8_tlo.jpg")
         d_rect = self.osiem.oblicz_rect_drzwi(door_location='right_wall', door_delta=27, skala=1)
         drzwi_osiem_korytarz_parteru = Door(d_rect)
         self.osiem.wstaw_drzwi(drzwi_osiem_korytarz_parteru, door_location='right_wall')

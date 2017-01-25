@@ -14,6 +14,8 @@ class WyborPogromcy(StanGry):
     dawid_smutny = os.path.join('grafika', 'dawid_smutny.png')
     dominik_wesoly = os.path.join('grafika', 'dominik_wesoly.png')
     dominik_smutny = os.path.join('grafika', 'dominik_smutny.png')
+    tlo_pogromcy = os.path.join('grafika', 'tlo_pogromcy.png')
+    tlo_pogromcy_h = os.path.join('grafika', 'tlo_pogromcy_highlighted.png')
 
     def __init__(self, szerokosc, wysokosc):
         super(WyborPogromcy, self).__init__()
@@ -26,8 +28,8 @@ class WyborPogromcy(StanGry):
         self.font = pygame.font.SysFont("comic sans MS", 45, bold=True) #ustawienie czcionki
         self.font_tytulu = pygame.font.SysFont("comic sans MS", 80, bold=True) #ustawienie czcionki
         self.przesuniecie_zdjec = 15
-        szerokosc_zdjec = self.rects_pogromcow[0].width - self.przesuniecie_zdjec*2
-        wysokosc_zdjec = self.rects_pogromcow[0].height - self.przesuniecie_zdjec*2
+        szerokosc_zdjec = int(0.5 * (self.rects_pogromcow[0].width - self.przesuniecie_zdjec*2))
+        wysokosc_zdjec = int(0.5 * (self.rects_pogromcow[0].height - self.przesuniecie_zdjec*2))
         self.weseli = [pygame.transform.scale(pygame.image.load(WyborPogromcy.piotr_wesoly).convert_alpha(), (szerokosc_zdjec, wysokosc_zdjec)),
                        pygame.transform.scale(pygame.image.load(WyborPogromcy.wiktor_wesoly).convert_alpha(), (szerokosc_zdjec, wysokosc_zdjec)),
                        pygame.transform.scale(pygame.image.load(WyborPogromcy.dawid_wesoly).convert_alpha(), (szerokosc_zdjec, wysokosc_zdjec)),
@@ -36,6 +38,9 @@ class WyborPogromcy(StanGry):
                        pygame.transform.scale(pygame.image.load(WyborPogromcy.wiktor_smutny).convert_alpha(), (szerokosc_zdjec, wysokosc_zdjec)),
                        pygame.transform.scale(pygame.image.load(WyborPogromcy.dawid_smutny).convert_alpha(), (szerokosc_zdjec, wysokosc_zdjec)),
                        pygame.transform.scale(pygame.image.load(WyborPogromcy.dominik_smutny).convert_alpha(), (szerokosc_zdjec, wysokosc_zdjec))]
+        self.tlo = pygame.transform.scale(pygame.image.load(WyborPogromcy.tlo_pogromcy).convert_alpha(), (int(szerokosc_zdjec*2.4), wysokosc_zdjec*2))
+        self.tlo_h = pygame.transform.scale(pygame.image.load(WyborPogromcy.tlo_pogromcy_h).convert_alpha(), (int(self.rects_pogromcow[0].width*1.15),
+                                                                                                              self.rects_pogromcow[0].height))
         self.pogromcy = self.smutni[:]
         self.pogromcy_imiona = ["Piotr", "Wiktor", "Dawid", "Dominik"]
         self.wybrany_pogromca = ''
@@ -99,10 +104,20 @@ class WyborPogromcy(StanGry):
         screen.blit(text, pozycja_napisu)
 
     def draw_pogromcy(self, screen):
-        if self.highlighted_rect is not None:
-            pygame.draw.rect(screen, (255,255,0), self.highlighted_rect)
+        # if self.highlighted_rect is not None:
+        #     pygame.draw.rect(screen, (255,255,0), self.highlighted_rect)
         for idx, rect in enumerate(self.rects_pogromcow):
-            screen.blit(self.pogromcy[idx], [rect.x + self.przesuniecie_zdjec, rect.y + self.przesuniecie_zdjec])
+            if (self.highlighted_rect is not None) and (self.highlighted_rect == rect):
+                tlo_img = self.tlo_h
+                t_dx = 0
+            else:
+                tlo_img = self.tlo
+                t_dx = self.przesuniecie_zdjec
+            screen.blit(tlo_img, [rect.x + t_dx, rect.y + self.przesuniecie_zdjec])
+            pogromca_img = self.pogromcy[idx]
+            dx = (rect.width - pogromca_img.get_width()) / 2
+            dy = (rect.height - pogromca_img.get_height()) / 2
+            screen.blit(pogromca_img, [rect.x + dx, rect.y + dy])
 
     def draw(self, screen):
         screen.fill((0, 0, 0))

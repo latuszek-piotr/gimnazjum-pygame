@@ -1,11 +1,12 @@
 import pygame
 import random
+import os
 from heroesofpygame.wall import NewWall
 from heroesofpygame.flower import Flower
 
 
 class ClassRoom(object):
-    def __init__(self, nazwa, pos, room_width, room_length, wall_width=3, color=(75, 5, 205)):
+    def __init__(self, nazwa, pos, room_width, room_length, wall_width=3, color=(75, 5, 205), tlo=None):
         self.nazwa = nazwa
         self.font = pygame.font.SysFont("comic sans MS", 15, bold=True)
         self.pos = pos
@@ -17,6 +18,11 @@ class ClassRoom(object):
         self.teren = pygame.Rect(pos[0]*skala, pos[1]*skala, room_width*skala, room_length*skala) # wirtualne wspolrzedne na mapie calosci
         self.rect_widoku = None  # wspolrzedne wyswietlane
         self.color = color
+        if tlo:
+            self.tlo_plik = os.path.join('grafika', 'sale', tlo)
+        else:
+            self.tlo_plik = None
+        self.tlo_img = None
         self.skala_widoku = 1.0
         self.drzwi = []
         self.polozenie_drzwi = []
@@ -243,6 +249,10 @@ class ClassRoom(object):
             poz_y = roznica_dlugosci / 2
             self.rect_widoku = pygame.Rect(0, poz_y, room_width_poziom, room_length_poziom)
         self.oblicz_obszary_kwiatowe()
+        if self.tlo_plik:
+            self.tlo_img = pygame.transform.scale(pygame.image.load(self.tlo_plik).convert_alpha(),
+                                                  (self.rect_widoku.width, self.rect_widoku.height))
+
 
     def przeskaluj(self, docelowa_szerokosc, docelowa_dlugosc):
         skala_pion = self.skala_pionowa(docelowa_dlugosc)
@@ -266,7 +276,10 @@ class ClassRoom(object):
         self.przelicz_drzwi(self.skala_widoku)
 
     def draw_podloga(self, screen):
-        pygame.draw.rect(screen, (0,0,0), self.rect_widoku)
+        if self.tlo_img:
+            screen.blit(self.tlo_img, [self.rect_widoku.x, self.rect_widoku.y])
+        else:
+            pygame.draw.rect(screen, (0,0,0), self.rect_widoku)
 
     def draw(self, screen):
         self.draw_podloga(screen)
