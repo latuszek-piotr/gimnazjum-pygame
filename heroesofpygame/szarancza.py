@@ -7,10 +7,10 @@ from strzal import Strzal
 
 
 class Szarancza(Player):
-    lot1 = os.path.join('grafika', 'szarancza', 'szarancza_lot1.png')
+    lot1 = os.path.join('grafika', 'szarancza', 'szarancza2_lot1.png')
     lot2 = os.path.join('grafika', 'szarancza', 'szarancza_lot2.png')
-    lot3 = os.path.join('grafika', 'szarancza', 'szarancza_lot3.png')
-    stoi = os.path.join('grafika', 'szarancza', 'szarancza_stoi.png')
+    lot3 = os.path.join('grafika', 'szarancza', 'szarancza2_lot3.png')
+    stoi = os.path.join('grafika', 'szarancza', 'szarancza2_stoi.png')
 
 
     def __init__(self, pos=(440, 120), size=40):

@@ -33,7 +33,7 @@ def resetuj_wynik(ile_kwiatow, ile_szaranczy):
 
 
 class StatusBar(object):
-    szarancza = os.path.join('grafika', 'szarancza', 'szarancza_lot2.png')
+    szarancza = os.path.join('grafika', 'szarancza', 'szarancza2_lot2.png')
     kwiat = os.path.join('grafika', 'status_flower.png')
 
     def __init__(self, pos, size=50, pionowy=True):
