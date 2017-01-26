@@ -6,7 +6,7 @@ from heroesofpygame.hall import Hall
 
 class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
     def __init__(self, wall_width=3, color=(75, 5, 205)):
-        self.sala_gimn = ClassRoom(nazwa="sala gimnastyczna", pos=(73,22), room_width=116, room_length=113)
+        self.sala_gimn = ClassRoom(nazwa="sala gimnastyczna", pos=(73,22), room_width=116, room_length=113, tlo="sala_gimn_tlo.jpg")
         d_rect = self.sala_gimn.oblicz_rect_drzwi(door_location='right_wall', door_delta=10, skala=1)
         drzwi_sala_gimn_korytarz_sali_gimn = Door(d_rect)
         self.sala_gimn.wstaw_drzwi(drzwi_sala_gimn_korytarz_sali_gimn, door_location='right_wall')
