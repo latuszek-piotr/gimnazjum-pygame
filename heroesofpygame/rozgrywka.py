@@ -164,7 +164,8 @@ class Rozgrywka(StanGry):
 
     def wystartuj_szarancze_w_aktywnej_sali(self, sala):
         for szarancza in sala.szarancze_w_sali:
-            szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
+            if szarancza.stan == "oczekujaca":
+                szarancza.start(sala.daj_losowy_niezjedzony_kwiat())
 
     def ilosc_wszystkich_szaranczy(self):
         return len(self.aktywne_szarancze)

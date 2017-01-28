@@ -83,7 +83,7 @@ class Szarancza(Player):
         return odleglosc
 
     def biezaca_pozycja(self):
-        if self.start_time is None:
+        if (self.start_time is None) or (self.stan != "lecaca"):
             return self.pos
         now = time.time()
         time_delta = now - self.start_time
