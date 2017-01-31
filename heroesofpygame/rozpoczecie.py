@@ -33,6 +33,8 @@ class Rozpoczecie(OknoWyboru):
         self.czas_startu_dzwieku = None
         self.czas_startu_video = None
         self.czas_startu_audio = None
+        self.rect_video = self.rect_gameover.inflate(150,50)
+        self.rect_video.move_ip(-330, 50)
         self.dlugosc_video = self.prognoza_video.get_length()
         self.film_wystartowany = False
         self.film_zakonczony = False
@@ -84,7 +86,7 @@ class Rozpoczecie(OknoWyboru):
             self.soundtrack_wystartowany = True
         elif (not self.film_wystartowany) and (time.time() - self.czas_startu_audio > 2.0):
             self.czas_startu_video = time.time()
-            self.prognoza_video.set_display(screen, self.rect_gameover)
+            self.prognoza_video.set_display(screen, self.rect_video)
             self.prognoza_video.play()
             self.film_wystartowany = True
         elif self.czas_startu_video and (time.time() - self.czas_startu_video > self.dlugosc_video):
