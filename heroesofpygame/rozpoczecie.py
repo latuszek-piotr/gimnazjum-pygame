@@ -6,7 +6,9 @@ from heroesofpygame.okno_wyboru import OknoWyboru
 
 class Rozpoczecie(OknoWyboru):
     pygame_logo = os.path.join('grafika', 'pygame_logo.png')
+    sluchawka = os.path.join('grafika', 'sluchawka.png')
     prognoza_szaranczy = os.path.join('film', 'prognoza_szaranczy.mpg')
+    ratujcie_kwiaty_nagranie = os.path.join('dzwiek', 'pani_kowalska_ratujcie_kwiaty.wav')
 
     def __init__(self, szerokosc, wysokosc):
         super(Rozpoczecie, self).__init__(szerokosc, wysokosc, "Heroes of",
@@ -16,8 +18,18 @@ class Rozpoczecie(OknoWyboru):
         self.rect_logo = self.wylicz_rect_logo()
         self.pygame_logo_img = pygame.transform.scale(pygame.image.load(Rozpoczecie.pygame_logo).convert_alpha(),
                                                                         (self.rect_logo.width, self.rect_logo.height))
+        self.rect_sluchawki = self.rect_rozgrywka.inflate(-50, -50)
+        self.sluchawka_img = pygame.transform.scale(pygame.image.load(Rozpoczecie.sluchawka).convert_alpha(),
+                                                                      (self.rect_sluchawki.width,
+                                                                       self.rect_sluchawki.height))
         self.prognoza_video = pygame.movie.Movie(Rozpoczecie.prognoza_szaranczy)
         self.prognoza_soundtrack = pygame.mixer.Sound(os.path.join('film', 'prognoza_szaranczy.wav'))
+        self.dzwiek_ratujcie_kwiaty = pygame.mixer.Sound(Rozpoczecie.ratujcie_kwiaty_nagranie)
+        self.dlugosc_dzwieku = self.dzwiek_ratujcie_kwiaty.get_length()
+        oryginalna_glosnosc = self.dzwiek_ratujcie_kwiaty.get_volume()
+        self.dzwiek_ratujcie_kwiaty.set_volume(oryginalna_glosnosc * 0.2)
+        self.dzwiek_wystartowany = False
+        self.dzwiek_zakonczony = False
         self.czas_startu_video = None
         self.czas_startu_audio = None
         self.dlugosc_video = self.prognoza_video.get_length()
@@ -39,6 +51,10 @@ class Rozpoczecie(OknoWyboru):
         super(Rozpoczecie, self).on_exit()
 
     def on_clock_tick(self):
+        if self.film_zakonczony:
+            if not self.dzwiek_wystartowany:
+                self.dzwiek_wystartowany = True
+                self.dzwiek_ratujcie_kwiaty.play()
         return "rozpoczecie"
 
     def on_event(self, event):
@@ -47,6 +63,9 @@ class Rozpoczecie(OknoWyboru):
             if decyzja == "TAK":
                 return "wybor_pogromcy"
         return "rozpoczecie"
+
+    def draw_sluchawka(self, screen):
+        screen.blit(self.sluchawka_img, self.rect_sluchawki.topleft)
 
     def draw(self, screen):
         self.draw_title(screen)
@@ -63,3 +82,4 @@ class Rozpoczecie(OknoWyboru):
         elif self.czas_startu_video and (time.time() - self.czas_startu_video > self.dlugosc_video):
             self.film_zakonczony = True
             self.draw_button_ok(screen)
+            self.draw_sluchawka(screen)
