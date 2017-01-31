@@ -18,10 +18,7 @@ class Rozpoczecie(OknoWyboru):
         self.rect_logo = self.wylicz_rect_logo()
         self.pygame_logo_img = pygame.transform.scale(pygame.image.load(Rozpoczecie.pygame_logo).convert_alpha(),
                                                                         (self.rect_logo.width, self.rect_logo.height))
-        self.rect_sluchawki = self.rect_rozgrywka.inflate(-50, -50)
-        self.sluchawka_img = pygame.transform.scale(pygame.image.load(Rozpoczecie.sluchawka).convert_alpha(),
-                                                                      (self.rect_sluchawki.width,
-                                                                       self.rect_sluchawki.height))
+        self.sluchawka_img = pygame.image.load(Rozpoczecie.sluchawka).convert_alpha()
         self.prognoza_video = pygame.movie.Movie(Rozpoczecie.prognoza_szaranczy)
         self.prognoza_soundtrack = pygame.mixer.Sound(os.path.join('film', 'prognoza_szaranczy.wav'))
         self.dzwiek_ratujcie_kwiaty = pygame.mixer.Sound(Rozpoczecie.ratujcie_kwiaty_nagranie)
@@ -30,6 +27,7 @@ class Rozpoczecie(OknoWyboru):
         self.dzwiek_ratujcie_kwiaty.set_volume(oryginalna_glosnosc * 0.2)
         self.dzwiek_wystartowany = False
         self.dzwiek_zakonczony = False
+        self.czas_startu_dzwieku = None
         self.czas_startu_video = None
         self.czas_startu_audio = None
         self.dlugosc_video = self.prognoza_video.get_length()
@@ -54,6 +52,7 @@ class Rozpoczecie(OknoWyboru):
         if self.film_zakonczony:
             if not self.dzwiek_wystartowany:
                 self.dzwiek_wystartowany = True
+                self.czas_startu_dzwieku = time.time()
                 self.dzwiek_ratujcie_kwiaty.play()
         return "rozpoczecie"
 
@@ -65,7 +64,9 @@ class Rozpoczecie(OknoWyboru):
         return "rozpoczecie"
 
     def draw_sluchawka(self, screen):
-        screen.blit(self.sluchawka_img, self.rect_sluchawki.topleft)
+        dx = int((self.rect_rozgrywka.width - self.sluchawka_img.get_width()) / 2)
+        dy = int((self.rect_rozgrywka.height - self.sluchawka_img.get_height()) / 2)
+        screen.blit(self.sluchawka_img, (self.rect_rozgrywka.x + dx, self.rect_rozgrywka.y + dy))
 
     def draw(self, screen):
         self.draw_title(screen)
@@ -81,5 +82,9 @@ class Rozpoczecie(OknoWyboru):
             self.film_wystartowany = True
         elif self.czas_startu_video and (time.time() - self.czas_startu_video > self.dlugosc_video):
             self.film_zakonczony = True
-            self.draw_button_ok(screen)
-            self.draw_sluchawka(screen)
+            if self.czas_startu_dzwieku and (time.time() - self.czas_startu_dzwieku > self.dlugosc_dzwieku):
+                self.dzwiek_zakonczony = True
+                self.draw_button_ok(screen)
+            else:
+                self.draw_sluchawka(screen)
+
