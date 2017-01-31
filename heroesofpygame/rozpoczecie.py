@@ -6,6 +6,7 @@ from heroesofpygame.okno_wyboru import OknoWyboru
 
 class Rozpoczecie(OknoWyboru):
     pygame_logo = os.path.join('grafika', 'pygame_logo.png')
+    szkola = os.path.join('grafika', 'szkola.jpg')
     sluchawka = os.path.join('grafika', 'sluchawka.png')
     prognoza_szaranczy = os.path.join('film', 'prognoza_szaranczy.mpg')
     ratujcie_kwiaty_nagranie = os.path.join('dzwiek', 'pani_kowalska_ratujcie_kwiaty.wav')
@@ -19,6 +20,8 @@ class Rozpoczecie(OknoWyboru):
         self.pygame_logo_img = pygame.transform.scale(pygame.image.load(Rozpoczecie.pygame_logo).convert_alpha(),
                                                                         (self.rect_logo.width, self.rect_logo.height))
         self.sluchawka_img = pygame.image.load(Rozpoczecie.sluchawka).convert_alpha()
+        self.szkola_img = pygame.transform.scale(pygame.image.load(Rozpoczecie.szkola).convert(),
+                                                 (self.szerokosc, self.wysokosc))
         self.prognoza_video = pygame.movie.Movie(Rozpoczecie.prognoza_szaranczy)
         self.prognoza_soundtrack = pygame.mixer.Sound(os.path.join('film', 'prognoza_szaranczy.wav'))
         self.dzwiek_ratujcie_kwiaty = pygame.mixer.Sound(Rozpoczecie.ratujcie_kwiaty_nagranie)
@@ -68,6 +71,10 @@ class Rozpoczecie(OknoWyboru):
         dy = int((self.rect_rozgrywka.height - self.sluchawka_img.get_height()) / 2)
         screen.blit(self.sluchawka_img, (self.rect_rozgrywka.x + dx, self.rect_rozgrywka.y + dy))
 
+    def draw_szkola(self, screen):
+        pygame.draw.rect(screen, (0,0,0), self.rect_gameover)
+        screen.blit(self.szkola_img, (0,0))
+
     def draw(self, screen):
         self.draw_title(screen)
         screen.blit(self.pygame_logo_img, self.rect_logo.topleft)
@@ -84,7 +91,8 @@ class Rozpoczecie(OknoWyboru):
             self.film_zakonczony = True
             if self.czas_startu_dzwieku and (time.time() - self.czas_startu_dzwieku > self.dlugosc_dzwieku):
                 self.dzwiek_zakonczony = True
+                self.draw_szkola(screen)
                 self.draw_button_ok(screen)
             else:
+                self.draw_szkola(screen)
                 self.draw_sluchawka(screen)
-
