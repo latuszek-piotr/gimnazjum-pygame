@@ -4,14 +4,7 @@ import random
 
 
 class Flower(object):
-    flowers_img = [  os.path.join('grafika', 'flower.png'),
-                     os.path.join('grafika', 'kwiat.jpg'),
-                     os.path.join('grafika', 'flower1.png'),
-                     os.path.join('grafika', 'flower2.png'),
-                     os.path.join('grafika', 'flower3.png'),
-                     os.path.join('grafika', 'flower4.png'),
-                     os.path.join('grafika', 'kwiat.jpg')]
-
+    flowers_img = [ os.path.join('grafika', 'kwiaty', 'kwiat%d.png' % idx) for idx in range(20)]
 
     def __init__(self, pos, pos_teren, size=50):
         selected_img =random.choice(Flower.flowers_img)
