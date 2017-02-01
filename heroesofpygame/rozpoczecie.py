@@ -7,7 +7,10 @@ from heroesofpygame.okno_wyboru import OknoWyboru
 class Rozpoczecie(OknoWyboru):
     pygame_logo = os.path.join('grafika', 'pygame_logo.png')
     szkola = os.path.join('grafika', 'szkola.jpg')
-    sluchawka = os.path.join('grafika', 'sluchawka.png')
+    sluchawki = [os.path.join('grafika', 'sluchawka0.png'),
+                 os.path.join('grafika', 'sluchawka1.png'),
+                 os.path.join('grafika', 'sluchawka2.png'),
+                 os.path.join('grafika', 'sluchawka3.png')]
     prognoza_szaranczy = os.path.join('film', 'prognoza_szaranczy.mpg')
     ratujcie_kwiaty_nagranie = os.path.join('dzwiek', 'pani_kowalska_ratujcie_kwiaty.wav')
 
@@ -19,7 +22,7 @@ class Rozpoczecie(OknoWyboru):
         self.rect_logo = self.wylicz_rect_logo()
         self.pygame_logo_img = pygame.transform.scale(pygame.image.load(Rozpoczecie.pygame_logo).convert_alpha(),
                                                                         (self.rect_logo.width, self.rect_logo.height))
-        self.sluchawka_img = pygame.image.load(Rozpoczecie.sluchawka).convert_alpha()
+        self.sluchawka_img = [pygame.image.load(img).convert_alpha() for img in Rozpoczecie.sluchawki]
         self.szkola_img = pygame.transform.scale(pygame.image.load(Rozpoczecie.szkola).convert(),
                                                  (self.szerokosc, self.wysokosc))
         self.prognoza_video = pygame.movie.Movie(Rozpoczecie.prognoza_szaranczy)
@@ -68,10 +71,21 @@ class Rozpoczecie(OknoWyboru):
                 return "wybor_pogromcy"
         return "rozpoczecie"
 
+    def ktory_obraz_sluchawki(self):
+        ktora_sluchawka = 0
+        if self.czas_startu_dzwieku:
+            now = time.time()
+            time_delta = now - self.czas_startu_dzwieku
+            ile_klatek_na_sekunde = 5
+            nr_klatki = int(time_delta * ile_klatek_na_sekunde)
+            ktora_sluchawka = nr_klatki % 4
+        return ktora_sluchawka
+
     def draw_sluchawka(self, screen):
-        dx = int((self.rect_rozgrywka.width - self.sluchawka_img.get_width()) / 2)
-        dy = int((self.rect_rozgrywka.height - self.sluchawka_img.get_height()) / 2)
-        screen.blit(self.sluchawka_img, (self.rect_rozgrywka.x + dx, self.rect_rozgrywka.y + dy))
+        sluchawka_img = self.sluchawka_img[self.ktory_obraz_sluchawki()]
+        dx = int((self.rect_rozgrywka.width - sluchawka_img.get_width()) / 2)
+        dy = int((self.rect_rozgrywka.height - sluchawka_img.get_height()) / 2)
+        screen.blit(sluchawka_img, (self.rect_rozgrywka.x + dx, self.rect_rozgrywka.y + dy))
 
     def draw_szkola(self, screen):
         pygame.draw.rect(screen, (0,0,0), self.rect_gameover)
