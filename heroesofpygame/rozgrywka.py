@@ -1,5 +1,6 @@
 import pygame
 import random
+import os
 
 from heroesofpygame.strzal import Strzal
 
@@ -20,6 +21,8 @@ from heroesofpygame.userevents import USEREVENT_PASS_DOOR
 
 
 class Rozgrywka(StanGry):
+    drzwi_nagranie = os.path.join('dzwiek', 'drzwi.wav')
+
     def __init__(self, szerokosc, wysokosc, active_player_name):
         super(Rozgrywka, self).__init__()
         self.szerokosc = szerokosc
@@ -46,6 +49,8 @@ class Rozgrywka(StanGry):
         self.all_objects = self.obiekty_mogace_wchodzic_w_kolizje()
         self.wszystkie_kwiaty = []
         self.statusbar = None
+        self.dzwiek_przejscia_drzwi = pygame.mixer.Sound(Rozgrywka.drzwi_nagranie)
+        self.dlugosc_dzwieku_drzwi = self.dzwiek_przejscia_drzwi.get_length()
 
     def wylosuj_sale_zaatakowane(self):
         sale_mozliwe_do_zaatakowania = self.parter.sale_do_losowania()
@@ -284,6 +289,7 @@ class Rozgrywka(StanGry):
                 self.aktywna_sala = sasiednia
                 self.aktywna_sala.przeskaluj(self.szerokosc, self.wysokosc)
                 self.wysun_gracza_za_drzwi(self.active_player, move_direction, door)
+                self.dzwiek_przejscia_drzwi.play()
                 self.mapa.ustaw_aktywna_sale(self.aktywna_sala)
                 self.wystartuj_szarancze_w_aktywnej_sali(self.aktywna_sala)
 
