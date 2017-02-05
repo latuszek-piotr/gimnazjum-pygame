@@ -22,7 +22,7 @@ from heroesofpygame.userevents import USEREVENT_PASS_DOOR
 
 class Rozgrywka(StanGry):
     drzwi_nagranie = os.path.join('dzwiek', 'drzwi.wav')
-    szarancza_nagranie = os.path.join('dzwiek', 'szarancza_tlo_muzyczne.wav')
+    bebny_nagranie = os.path.join('dzwiek', 'bebny_afrykanskie.wav')
 
     def __init__(self, szerokosc, wysokosc, active_player_name):
         super(Rozgrywka, self).__init__()
@@ -52,7 +52,7 @@ class Rozgrywka(StanGry):
         self.statusbar = None
         self.dzwiek_przejscia_drzwi = pygame.mixer.Sound(Rozgrywka.drzwi_nagranie)
         self.dlugosc_dzwieku_drzwi = self.dzwiek_przejscia_drzwi.get_length()
-        self.tlo_muzyczne = pygame.mixer.Sound(Rozgrywka.szarancza_nagranie)
+        self.tlo_muzyczne = pygame.mixer.Sound(Rozgrywka.bebny_nagranie)
         glosnosc = self.tlo_muzyczne.get_volume()
         self.tlo_muzyczne.set_volume(glosnosc * 0.7)
 
@@ -219,7 +219,7 @@ class Rozgrywka(StanGry):
         statusbar.resetuj_wynik(self.ilosc_wszystkich_kwiatow(), self.ilosc_wszystkich_szaranczy())
         statusbar.daj_status().nazwa_aktualnej_sali = self.aktywna_sala.nazwa
         self.statusbar = statusbar.StatusBar(pos=(0,self.wysokosc+1), size=(self.szerokosc,70), pionowy=False)
-        self.sound_channel_1 = self.tlo_muzyczne.play(-1)
+        self.tlo_muzyczne.play(-1)
 
     def on_exit(self):
         super(Rozgrywka, self).on_exit()

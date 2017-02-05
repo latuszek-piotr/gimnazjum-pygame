@@ -16,6 +16,7 @@ class WyborPogromcy(StanGry):
     dominik_smutny = os.path.join('grafika', 'dominik_smutny.png')
     tlo_pogromcy = os.path.join('grafika', 'tlo_pogromcy.png')
     tlo_pogromcy_h = os.path.join('grafika', 'tlo_pogromcy_highlighted.png')
+    szarancza_nagranie = os.path.join('dzwiek', 'szarancza_tlo_muzyczne.wav')
 
     def __init__(self, szerokosc, wysokosc):
         super(WyborPogromcy, self).__init__()
@@ -41,6 +42,9 @@ class WyborPogromcy(StanGry):
         self.tlo = pygame.transform.scale(pygame.image.load(WyborPogromcy.tlo_pogromcy).convert_alpha(), (int(szerokosc_zdjec*2.4), wysokosc_zdjec*2))
         self.tlo_h = pygame.transform.scale(pygame.image.load(WyborPogromcy.tlo_pogromcy_h).convert_alpha(), (int(self.rects_pogromcow[0].width*1.15),
                                                                                                               self.rects_pogromcow[0].height))
+        self.tlo_muzyczne = pygame.mixer.Sound(WyborPogromcy.szarancza_nagranie)
+        glosnosc = self.tlo_muzyczne.get_volume()
+        self.tlo_muzyczne.set_volume(glosnosc * 0.9)
         self.pogromcy = self.smutni[:]
         self.pogromcy_imiona = ["Piotr", "Wiktor", "Dawid", "Dominik"]
         self.wybrany_pogromca = ''
@@ -64,10 +68,12 @@ class WyborPogromcy(StanGry):
         super(WyborPogromcy, self).on_entry()
         self.wybrany_pogromca = ''
         statusbar.daj_status().active_player_name = ''
+        self.tlo_muzyczne.play(-1)
 
     def on_exit(self):
         super(WyborPogromcy, self).on_exit()
         statusbar.daj_status().active_player_name = self.wybrany_pogromca
+        self.tlo_muzyczne.stop()
 
     def on_clock_tick(self):
         return "wybor_pogromcy"
