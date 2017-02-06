@@ -17,6 +17,7 @@ class WyborPogromcy(StanGry):
     tlo_pogromcy = os.path.join('grafika', 'tlo_pogromcy.png')
     tlo_pogromcy_h = os.path.join('grafika', 'tlo_pogromcy_highlighted.png')
     szarancza_nagranie = os.path.join('dzwiek', 'szarancza_tlo_muzyczne.wav')
+    szarancza_film = os.path.join('film', 'szarancza.mpg')
 
     def __init__(self, szerokosc, wysokosc):
         super(WyborPogromcy, self).__init__()
@@ -42,6 +43,8 @@ class WyborPogromcy(StanGry):
         self.tlo = pygame.transform.scale(pygame.image.load(WyborPogromcy.tlo_pogromcy).convert_alpha(), (int(szerokosc_zdjec*2.4), wysokosc_zdjec*2))
         self.tlo_h = pygame.transform.scale(pygame.image.load(WyborPogromcy.tlo_pogromcy_h).convert_alpha(), (int(self.rects_pogromcow[0].width*1.15),
                                                                                                               self.rects_pogromcow[0].height))
+        self.szarancza_video = pygame.movie.Movie(WyborPogromcy.szarancza_film)
+        self.film_wystartowany = False
         self.tlo_muzyczne = pygame.mixer.Sound(WyborPogromcy.szarancza_nagranie)
         glosnosc = self.tlo_muzyczne.get_volume()
         self.tlo_muzyczne.set_volume(glosnosc * 0.9)
@@ -69,11 +72,14 @@ class WyborPogromcy(StanGry):
         self.wybrany_pogromca = ''
         statusbar.daj_status().active_player_name = ''
         self.tlo_muzyczne.play(-1)
+        self.film_wystartowany = False
 
     def on_exit(self):
         super(WyborPogromcy, self).on_exit()
         statusbar.daj_status().active_player_name = self.wybrany_pogromca
         self.tlo_muzyczne.stop()
+        self.szarancza_video.stop()
+        self.film_wystartowany = False
 
     def on_clock_tick(self):
         return "wybor_pogromcy"
@@ -104,14 +110,14 @@ class WyborPogromcy(StanGry):
                     self.wybrany_pogromca = self.pogromcy_imiona[idx]
 
     def draw_title(self, screen):
-        text = self.font_tytulu.render(self.tytul_okna, False, (255,0,0))
+        wyrazy = self.tytul_okna.split()
         (width, height) = self.font_tytulu.size(self.tytul_okna)
-        pozycja_napisu = (self.rect_tytulu.centerx - width/2, self.rect_tytulu.centery - height/2)
-        screen.blit(text, pozycja_napisu)
+        for idx, wyraz in enumerate(wyrazy):
+            text = self.font_tytulu.render(wyraz, False, (255,0,0))
+            pozycja_napisu = (100 + idx * 100, idx * int(0.8 *height))
+            screen.blit(text, pozycja_napisu)
 
     def draw_pogromcy(self, screen):
-        # if self.highlighted_rect is not None:
-        #     pygame.draw.rect(screen, (255,255,0), self.highlighted_rect)
         for idx, rect in enumerate(self.rects_pogromcow):
             if (self.highlighted_rect is not None) and (self.highlighted_rect == rect):
                 tlo_img = self.tlo_h
@@ -119,14 +125,22 @@ class WyborPogromcy(StanGry):
             else:
                 tlo_img = self.tlo
                 t_dx = self.przesuniecie_zdjec
-            screen.blit(tlo_img, [rect.x + t_dx, rect.y + self.przesuniecie_zdjec])
+            screen.blit(tlo_img, [rect.x + t_dx, rect.y + self.przesuniecie_zdjec + 80])
             pogromca_img = self.pogromcy[idx]
             dx = (rect.width - pogromca_img.get_width()) / 2
             dy = (rect.height - pogromca_img.get_height()) / 2
-            screen.blit(pogromca_img, [rect.x + dx, rect.y + dy])
+            screen.blit(pogromca_img, [rect.x + dx, rect.y + dy + 80])
 
     def draw(self, screen):
-        screen.fill((0, 0, 0))
+        if not self.film_wystartowany:
+            screen.fill((0, 0, 0))
+            video_rect = pygame.Rect(self.szerokosc-450, 0, 450, 300)
+            self.szarancza_video.set_display(screen, video_rect)
+            self.szarancza_video.play()
+            self.film_wystartowany = True
+        else:
+            rect_pogromcow = pygame.Rect(0, 301, self.szerokosc, self.wysokosc-300+100)
+            pygame.draw.rect(screen, (0, 0, 0), rect_pogromcow)
         self.draw_title(screen)
         self.draw_pogromcy(screen)
 
