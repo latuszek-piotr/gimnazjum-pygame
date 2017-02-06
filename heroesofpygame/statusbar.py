@@ -38,7 +38,8 @@ class StatusBar(object):
     lot1 = os.path.join('grafika', 'szarancza', 'szarancza2_lot1.png')
     lot2 = os.path.join('grafika', 'szarancza', 'szarancza2_lot2.png')
     lot3 = os.path.join('grafika', 'szarancza', 'szarancza2_lot3.png')
-    kwiat = os.path.join('grafika', 'status_flower.png')
+    kwiat = os.path.join('grafika', 'kwiaty', 'status_flower.png')
+    kwiat_zjedzony = os.path.join('grafika', 'kwiaty', 'status_flower_zjedzony.png')
 
     def __init__(self, pos, size=50, pionowy=True):
         self.pos = pos
@@ -66,6 +67,7 @@ class StatusBar(object):
         self.czas_machniecia_skrzydel = 0.1
         self.start_time = time.time()
         self.kwiat_img = pygame.transform.scale(pygame.image.load(StatusBar.kwiat).convert_alpha(), (int(rozmiar_obszaru*0.8), int(rozmiar_obszaru*0.8)))
+        self.kwiat_zjedzony_img = pygame.transform.scale(pygame.image.load(StatusBar.kwiat_zjedzony).convert_alpha(), (int(rozmiar_obszaru*0.8), int(rozmiar_obszaru*0.8)))
 
     def oblicz_obszary_statusu(self, start_pos, wielkosc_obszaru, ile_obszarow, pionowy=True):
         (x_start, y_start) = start_pos
@@ -104,11 +106,10 @@ class StatusBar(object):
             dx = (rect.width - self.kwiat_img.get_width()) / 2
             dy = (rect.height - self.kwiat_img.get_height()) / 2
             img_pos = (rect.left+dx, rect.top+dy)
-            screen.blit(self.kwiat_img, img_pos)
             if idx < daj_status().zjedzone_kwiaty:
-                img_rect = self.kwiat_img.get_rect().move(img_pos)
-                pygame.draw.lines(screen, (255,0,0), False, [img_rect.topleft, img_rect.bottomright], 4)
-                pygame.draw.lines(screen, (255,0,0), False, [img_rect.bottomleft, img_rect.topright], 4)
+                screen.blit(self.kwiat_zjedzony_img, img_pos)
+            else:
+                screen.blit(self.kwiat_img, img_pos)
 
     def ktory_obraz(self):
         now = time.time()
