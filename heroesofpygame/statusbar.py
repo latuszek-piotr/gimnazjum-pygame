@@ -34,9 +34,9 @@ def resetuj_wynik(ile_kwiatow, ile_szaranczy):
 
 
 class StatusBar(object):
-    szarancza = os.path.join('grafika', 'szarancza', 'szarancza2_lot2.png')
+    szarancza = os.path.join('grafika', 'szarancza', 'szarancza_martwa_ikona.png')
     lot1 = os.path.join('grafika', 'szarancza', 'szarancza2_lot1.png')
-    lot2 = szarancza
+    lot2 = os.path.join('grafika', 'szarancza', 'szarancza2_lot2.png')
     lot3 = os.path.join('grafika', 'szarancza', 'szarancza2_lot3.png')
     kwiat = os.path.join('grafika', 'status_flower.png')
 
@@ -125,9 +125,6 @@ class StatusBar(object):
             img_pos = (rect.left+dx, rect.top+dy)
             if idx < daj_status().zabite_szarancze:
                 screen.blit(self.szarancza_img, img_pos)
-                img_rect = self.szarancza_img.get_rect().move(img_pos)
-                pygame.draw.lines(screen, (255,0,0), False, [img_rect.topleft, img_rect.bottomright], 4)
-                pygame.draw.lines(screen, (255,0,0), False, [img_rect.bottomleft, img_rect.topright], 4)
             else:
                 image_index = self.ktory_obraz()
                 image_index = (image_index + idx) % 3

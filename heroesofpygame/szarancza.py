@@ -11,6 +11,7 @@ class Szarancza(Player):
     lot2 = os.path.join('grafika', 'szarancza', 'szarancza_lot2.png')
     lot3 = os.path.join('grafika', 'szarancza', 'szarancza2_lot3.png')
     stoi = os.path.join('grafika', 'szarancza', 'szarancza2_stoi.png')
+    martwa = os.path.join('grafika', 'szarancza', 'szarancza_martwa.png')
 
 
     def __init__(self, pos=(440, 120), size=40):
@@ -18,14 +19,14 @@ class Szarancza(Player):
         super(Szarancza, self).__init__(pos, size_do_kolizji)
         self.mood = 'happy'
         szarancza_stojaca = pygame.transform.scale(pygame.image.load(Szarancza.stoi).convert_alpha(), (int(size*1.9), size))
+        szarancza_martwa = pygame.transform.scale(pygame.image.load(Szarancza.martwa).convert_alpha(), (int(size*1.9), size))
         self.images = [
                        (pygame.transform.scale(pygame.image.load(Szarancza.lot1).convert_alpha(), (int(size*2.0), int(size*1.8))), (size*0.1, -size*0.6)),
                        (pygame.transform.scale(pygame.image.load(Szarancza.lot2).convert_alpha(), (int(size*2.0), size)), (0, 0)),
                        (pygame.transform.scale(pygame.image.load(Szarancza.lot3).convert_alpha(), (int(size*1.9), int(size*1.3))), (0, 0)),
                        (szarancza_stojaca, (0, 0)),
-                       (pygame.transform.flip(szarancza_stojaca, False, True), (0, 0)),
+                       (szarancza_martwa, (0, 0)),
                       ]
-        # self.images[3][0] = pygame.transform.flip(self.images[3][0], False, True)
         self.dzwiek_zjadania = pygame.mixer.Sound('dzwiek/dzwiek_walki/szarancza_zjada_kwiat.wav')
         self.start_time = None
         self.czas_dojscia = 10
