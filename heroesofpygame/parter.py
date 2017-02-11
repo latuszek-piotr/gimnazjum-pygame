@@ -85,7 +85,7 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
         d_rect = self.hall_glowny.oblicz_rect_drzwi(door_location='bottom_wall', door_delta=40, skala=1, door_length = 15)
         drzwi_zhallu_na_zewnatrz = Door(d_rect)
 
-        self.osiem_a = ClassRoom(nazwa="sala 8a", pos=(10,181), room_width=30, room_length=74)
+        self.osiem_a = ClassRoom(nazwa="sala 8a", pos=(10,181), room_width=30, room_length=74, tlo="sala8a_tlo.jpg")
         d1_rect = self.osiem_a.oblicz_rect_drzwi(door_location='right_wall', door_delta=20, skala=1)
         d2_rect = self.osiem_a.oblicz_rect_drzwi(door_location='right_wall', door_delta=50, skala=1)
         drzwi_osiem_a_osiem = Door(d1_rect)
