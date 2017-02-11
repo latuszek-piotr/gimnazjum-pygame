@@ -3,8 +3,9 @@ from pixel import Pixel
 
 
 class Door(Pixel):
-    def __init__(self, rect, color=(255, 0, 0)):
+    def __init__(self, rect, color=(255, 255, 255)):
         self.color = color
+        self.kolor_drzwi_zamknietych = (85, 170, 255)
         self.rect = rect
         self.rect_def = rect.copy()  # definicja rect w momencie utworzenia drzwi
         self.sala_1 = None
@@ -32,3 +33,9 @@ class Door(Pixel):
             return self.sala_2
         else:
             return self.sala_1
+
+    def draw(self, screen):
+        if (self.sala_1 is None) or (self.sala_2 is None):
+            pygame.draw.rect(screen, self.kolor_drzwi_zamknietych, self.rect)
+        else:
+            pygame.draw.rect(screen, self.color, self.rect)

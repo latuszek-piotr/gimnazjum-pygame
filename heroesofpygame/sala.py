@@ -163,10 +163,10 @@ class ClassRoom(object):
     def wszystkie_drzwi(self):
         return self.drzwi
 
-    def oblicz_rect_drzwi(self, door_location, door_delta, skala=1):
+    def oblicz_rect_drzwi(self, door_location, door_delta, skala=1, door_length = 5):
         door_delta = door_delta * skala
         wall = self.daj_sciane(nazwa_sciany=door_location)
-        rect = wall.oblicz_rect_drzwi(door_delta=door_delta, skala=skala)
+        rect = wall.oblicz_rect_drzwi(door_delta=door_delta, skala=skala, door_length = door_length)
         return rect
 
     def wstaw_drzwi(self, door, door_location, w_sali=None):
