@@ -103,14 +103,14 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
         drzwi_szostka_korytarz_parteru = Door(d_rect)
         self.szostka.wstaw_drzwi(drzwi_szostka_korytarz_parteru, door_location='top_wall')
 
-        self.lazienka_damska = ClassRoom(nazwa=u"łazienka damska", pos=(86,181), room_width=41, room_length=18)
+        self.lazienka_damska = ClassRoom(nazwa=u"łazienka damska", pos=(86,181), room_width=41, room_length=18, tlo="lazienka_damska_tlo.jpg")
         d_rect = self.lazienka_damska.oblicz_rect_drzwi(door_location='bottom_wall', door_delta=4, skala=1)
         drzwi_lazienka_damska_korytarz_parteru = Door(d_rect)
         self.lazienka_damska.wstaw_drzwi(drzwi_lazienka_damska_korytarz_parteru, door_location='bottom_wall')
 
         self.lazienka_damska_pom_gospodarcze = ClassRoom(nazwa=u"pomieszczenie gospodarcze 1", pos=(104,194), room_width=23, room_length=5)
 
-        self.lazienka_meska = ClassRoom(nazwa=u"łazienka męska", pos=(127,181), room_width=41, room_length=18)
+        self.lazienka_meska = ClassRoom(nazwa=u"łazienka męska", pos=(127,181), room_width=41, room_length=18, tlo="lazienka_meska_tlo.jpg")
         d_rect = self.lazienka_meska.oblicz_rect_drzwi(door_location='bottom_wall', door_delta=28, skala=1)
         drzwi_lazienka_meska_korytarz_parteru = Door(d_rect)
         self.lazienka_meska.wstaw_drzwi(drzwi_lazienka_meska_korytarz_parteru, door_location='bottom_wall')
