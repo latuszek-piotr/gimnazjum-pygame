@@ -21,7 +21,7 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
         self.korytarz_sali_gimn.wstaw_drzwi(drzwi_korytarz_sali_gimn_hall, door_location='bottom_wall')
         self.korytarz_sali_gimn.wstaw_drzwi(drzwi_sala_gimn_korytarz_sali_gimn, door_location='left_wall')
 
-        self.sala_23 = ClassRoom(nazwa="sala 23", pos=(207,22), room_width=30, room_length=40)
+        self.sala_23 = ClassRoom(nazwa="sala 23", pos=(207,22), room_width=30, room_length=40, tlo="sala_23_tlo.jpg")
         d_rect = self.sala_23.oblicz_rect_drzwi(door_location='left_wall', door_delta=10, skala=1)
         drzwi_korytarz_sali_gimn_sala_zabaw = Door(d_rect)
         self.sala_23.wstaw_drzwi(drzwi_korytarz_sali_gimn_sala_zabaw, door_location='left_wall')
