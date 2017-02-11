@@ -21,17 +21,25 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
         self.korytarz_sali_gimn.wstaw_drzwi(drzwi_korytarz_sali_gimn_hall, door_location='bottom_wall')
         self.korytarz_sali_gimn.wstaw_drzwi(drzwi_sala_gimn_korytarz_sali_gimn, door_location='left_wall')
 
-        self.sala_zabaw = ClassRoom(nazwa="sala zabaw", pos=(207,22), room_width=30, room_length=40)
-        d_rect = self.sala_zabaw.oblicz_rect_drzwi(door_location='left_wall', door_delta=10, skala=1)
+        self.sala_23 = ClassRoom(nazwa="sala 23", pos=(207,22), room_width=30, room_length=40)
+        d_rect = self.sala_23.oblicz_rect_drzwi(door_location='left_wall', door_delta=10, skala=1)
         drzwi_korytarz_sali_gimn_sala_zabaw = Door(d_rect)
-        self.sala_zabaw.wstaw_drzwi(drzwi_korytarz_sali_gimn_sala_zabaw, door_location='left_wall')
+        self.sala_23.wstaw_drzwi(drzwi_korytarz_sali_gimn_sala_zabaw, door_location='left_wall')
         self.korytarz_sali_gimn.wstaw_drzwi(drzwi_korytarz_sali_gimn_sala_zabaw, door_location='right_wall')
 
-        self.szatnia_gimn = ClassRoom(nazwa="szatnia gimnastyczna", pos=(207,62), room_width=30, room_length=33)
-        d_rect = self.szatnia_gimn.oblicz_rect_drzwi(door_location='left_wall', door_delta=10, skala=1)
-        drzwi_korytarz_sali_gimn_szatnia_gimn = Door(d_rect)
-        self.szatnia_gimn.wstaw_drzwi(drzwi_korytarz_sali_gimn_szatnia_gimn, door_location='left_wall')
-        self.korytarz_sali_gimn.wstaw_drzwi(drzwi_korytarz_sali_gimn_szatnia_gimn, door_location='right_wall')
+        self.szatnia_gimn_dziewczat = ClassRoom(nazwa=u"szatnia gimnastyczna dziewcząt", pos=(207,62), room_width=30, room_length=16,
+                                                tlo="szatnia_gimn_tlo.jpg")
+        d_rect = self.szatnia_gimn_dziewczat.oblicz_rect_drzwi(door_location='left_wall', door_delta=5, skala=1)
+        drzwi_korytarz_sali_gimn_szatnia_gimn_dz = Door(d_rect)
+        self.szatnia_gimn_dziewczat.wstaw_drzwi(drzwi_korytarz_sali_gimn_szatnia_gimn_dz, door_location='left_wall')
+        self.korytarz_sali_gimn.wstaw_drzwi(drzwi_korytarz_sali_gimn_szatnia_gimn_dz, door_location='right_wall')
+
+        self.szatnia_gimn_chlopcow = ClassRoom(nazwa=u"szatnia gimnastyczna chłopców", pos=(207,78), room_width=30, room_length=17,
+                                               tlo="szatnia_gimn_tlo.jpg")
+        d_rect = self.szatnia_gimn_chlopcow.oblicz_rect_drzwi(door_location='left_wall', door_delta=5, skala=1)
+        drzwi_korytarz_sali_gimn_szatnia_gimn_ch = Door(d_rect)
+        self.szatnia_gimn_chlopcow.wstaw_drzwi(drzwi_korytarz_sali_gimn_szatnia_gimn_ch, door_location='left_wall')
+        self.korytarz_sali_gimn.wstaw_drzwi(drzwi_korytarz_sali_gimn_szatnia_gimn_ch, door_location='right_wall')
 
         self.biblioteka = ClassRoom(nazwa="biblioteka", pos=(207,95), room_width=30, room_length=40)
         d_rect = self.biblioteka.oblicz_rect_drzwi(door_location='left_wall', door_delta=27, skala=1)
@@ -94,7 +102,7 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
         self.archiwum = ClassRoom(nazwa="archiwum", pos=(40,218), room_width=21, room_length=37)
         self.archiwum.wstaw_drzwi(drzwi_osiem_a_archiwum, door_location='left_wall')
 
-        self.siodemka = ClassRoom(nazwa="sala 7", pos=(61,218), room_width=52, room_length=37)
+        self.siodemka = ClassRoom(nazwa=u"sala zerówki", pos=(61,218), room_width=52, room_length=37, tlo="zerowka_tlo.jpg")
         d_rect = self.siodemka.oblicz_rect_drzwi(door_location='top_wall', door_delta=42, skala=1)
         drzwi_siodemka_korytarz_parteru = Door(d_rect)
         self.siodemka.wstaw_drzwi(drzwi_siodemka_korytarz_parteru, door_location='top_wall')
@@ -164,8 +172,9 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
     def sale(self):
         return [self.sala_gimn,
                 self.korytarz_sali_gimn,
-                self.sala_zabaw,
-                self.szatnia_gimn,
+                self.sala_23,
+                self.szatnia_gimn_dziewczat,
+                self.szatnia_gimn_chlopcow,
                 self.biblioteka,
                 self.szatnia_duza,
                 self.korytarz_szatni,
@@ -193,8 +202,9 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
         '''Tylko te sale w ktorych chcemy rozlokowywac kwiaty i szarancze'''
         return [self.sala_gimn,
                 # self.korytarz_sali_gimn,  # tam jest za wasko
-                self.sala_zabaw,
-                self.szatnia_gimn,
+                self.sala_23,
+                self.szatnia_gimn_dziewczat,
+                self.szatnia_gimn_chlopcow,
                 self.biblioteka,
                 self.szatnia_duza,
                 # self.korytarz_szatni, # tam jest wasko
