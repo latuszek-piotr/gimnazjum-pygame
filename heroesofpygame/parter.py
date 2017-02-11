@@ -99,7 +99,7 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
         self.osiem.wstaw_drzwi(drzwi_osiem_korytarz_parteru, door_location='right_wall')
         self.osiem.wstaw_drzwi(drzwi_osiem_a_osiem, door_location='left_wall')
 
-        self.archiwum = ClassRoom(nazwa="archiwum", pos=(40,218), room_width=21, room_length=37)
+        self.archiwum = ClassRoom(nazwa="archiwum", pos=(40,218), room_width=21, room_length=37, tlo="archiwum_tlo.jpg")
         self.archiwum.wstaw_drzwi(drzwi_osiem_a_archiwum, door_location='left_wall')
 
         self.siodemka = ClassRoom(nazwa=u"sala zerówki", pos=(61,218), room_width=52, room_length=37, tlo="zerowka_tlo.jpg")
