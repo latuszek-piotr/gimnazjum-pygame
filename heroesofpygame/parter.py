@@ -103,15 +103,19 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
         drzwi_szostka_korytarz_parteru = Door(d_rect)
         self.szostka.wstaw_drzwi(drzwi_szostka_korytarz_parteru, door_location='top_wall')
 
-        self.lazienka_damska = ClassRoom(nazwa=u"łazienka damska", pos=(86,181), room_width=36, room_length=18)
+        self.lazienka_damska = ClassRoom(nazwa=u"łazienka damska", pos=(86,181), room_width=41, room_length=18)
         d_rect = self.lazienka_damska.oblicz_rect_drzwi(door_location='bottom_wall', door_delta=4, skala=1)
         drzwi_lazienka_damska_korytarz_parteru = Door(d_rect)
         self.lazienka_damska.wstaw_drzwi(drzwi_lazienka_damska_korytarz_parteru, door_location='bottom_wall')
 
-        self.lazienka_meska = ClassRoom(nazwa=u"łazienka męska", pos=(122,181), room_width=46, room_length=18)
-        d_rect = self.lazienka_meska.oblicz_rect_drzwi(door_location='bottom_wall', door_delta=30, skala=1)
+        self.lazienka_damska_pom_gospodarcze = ClassRoom(nazwa=u"pomieszczenie gospodarcze 1", pos=(104,194), room_width=23, room_length=5)
+
+        self.lazienka_meska = ClassRoom(nazwa=u"łazienka męska", pos=(127,181), room_width=41, room_length=18)
+        d_rect = self.lazienka_meska.oblicz_rect_drzwi(door_location='bottom_wall', door_delta=28, skala=1)
         drzwi_lazienka_meska_korytarz_parteru = Door(d_rect)
         self.lazienka_meska.wstaw_drzwi(drzwi_lazienka_meska_korytarz_parteru, door_location='bottom_wall')
+
+        self.lazienka_meska_pom_gospodarcze = ClassRoom(nazwa=u"pomieszczenie gospodarcze 2", pos=(127,194), room_width=23, room_length=5)
 
         self.korytarz_parteru = ClassRoom(nazwa="korytarz parteru", pos=(86,199), room_width=82, room_length=19)
         d1_rect = self.korytarz_parteru.oblicz_rect_drzwi(door_location='top_wall', door_delta=21, skala=1)
@@ -173,7 +177,9 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
                 self.siodemka,
                 self.szostka,
                 self.lazienka_damska,
+                self.lazienka_damska_pom_gospodarcze,
                 self.lazienka_meska,
+                self.lazienka_meska_pom_gospodarcze,
                 # self.korytarz_parteru, ##
                 self.hall_parteru,
                 self.stolowka,
