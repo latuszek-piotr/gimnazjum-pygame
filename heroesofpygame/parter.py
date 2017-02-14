@@ -164,7 +164,8 @@ class Parter(object): #TODO bottom i up nie dziela!(niewyswietla drzwi)
         self.sekretariat.wstaw_drzwi(drzwi_sekretariat_gabinet_zast_dyrektora, door_location='right_wall')
         self.gabinet_zast_dyrektora.wstaw_drzwi(drzwi_sekretariat_gabinet_zast_dyrektora, door_location='left_wall')
 
-        self.gabinet_dyrektora = ClassRoom(nazwa="gabinet dyrektora", pos=(268,218), room_width=16, room_length=37)
+        self.gabinet_dyrektora = ClassRoom(nazwa="gabinet dyrektora", pos=(268,218), room_width=16, room_length=37,
+                                           tlo="gabinet_dyrektora_tlo.jpg")
         d_rect = self.gabinet_dyrektora.oblicz_rect_drzwi(door_location='left_wall', door_delta=15, skala=1)
         drzwi_gabinet_zast_dyrektora_gabinet_dyrektora = Door(d_rect)
         self.gabinet_zast_dyrektora.wstaw_drzwi(drzwi_gabinet_zast_dyrektora_gabinet_dyrektora, door_location='right_wall')
