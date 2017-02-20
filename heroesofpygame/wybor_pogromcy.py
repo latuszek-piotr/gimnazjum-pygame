@@ -23,7 +23,6 @@ class WyborPogromcy(StanGry):
         super(WyborPogromcy, self).__init__()
         self.szerokosc = szerokosc
         self.wysokosc = wysokosc
-        self.tytul_okna = u"Wybierz pogromcę szarańczy"
         self.rect_tytulu = self.wylicz_rect_tytulu()
         self.rects_pogromcow = self.wylicz_rects_pogromcow()
         self.highlighted_rect = None
@@ -44,6 +43,8 @@ class WyborPogromcy(StanGry):
         self.tlo_h = pygame.transform.scale(pygame.image.load(WyborPogromcy.tlo_pogromcy_h).convert_alpha(), (int(self.rects_pogromcow[0].width*1.15),
                                                                                                               self.rects_pogromcow[0].height))
         self.szarancza_video = pygame.movie.Movie(WyborPogromcy.szarancza_film)
+        self.video_szerokosc = 450
+        self.video_wysokosc = 300
         self.film_wystartowany = False
         self.tlo_muzyczne = pygame.mixer.Sound(WyborPogromcy.szarancza_nagranie)
         glosnosc = self.tlo_muzyczne.get_volume()
@@ -110,11 +111,12 @@ class WyborPogromcy(StanGry):
                     self.wybrany_pogromca = self.pogromcy_imiona[idx]
 
     def draw_title(self, screen):
-        wyrazy = self.tytul_okna.split()
-        (width, height) = self.font_tytulu.size(self.tytul_okna)
+        wyrazy = ["Wybierz", u"pogromcę szarańczy"]
         for idx, wyraz in enumerate(wyrazy):
             text = self.font_tytulu.render(wyraz, False, (255,0,0))
-            pozycja_napisu = (100 + idx * 100, idx * int(0.8 *height))
+            (width, height) = self.font_tytulu.size(wyraz)
+            x = (self.szerokosc-self.video_szerokosc)/2 - width/2
+            pozycja_napisu = (x, idx * height + int(0.5 *height))
             screen.blit(text, pozycja_napisu)
 
     def draw_pogromcy(self, screen):
@@ -134,7 +136,7 @@ class WyborPogromcy(StanGry):
     def draw(self, screen):
         if not self.film_wystartowany:
             screen.fill((0, 0, 0))
-            video_rect = pygame.Rect(self.szerokosc-450, 0, 450, 300)
+            video_rect = pygame.Rect(self.szerokosc-self.video_szerokosc, 0, self.video_szerokosc, self.video_wysokosc)
             self.szarancza_video.set_display(screen, video_rect)
             self.szarancza_video.play()
             self.film_wystartowany = True
